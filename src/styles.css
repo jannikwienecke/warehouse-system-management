@@ -1,0 +1,26 @@
+.App {
+  /* font-family: Roboto; */
+  font-family: "Roboto", sans-serif;
+  text-align: center;
+}
+
+.formInput > div:first-child {
+  border: 0.04rem solid #cecece !important;
+  transition: 0.5s !important;
+  border-radius: 0.4rem !important;
+  width: 95% !important;
+  text-align: center !important;
+  letter-spacing: 0.1rem !important;
+  font-weight: bold !important;
+  background-color: transparent !important;
+  margin-right: 1rem !important;
+  font-size: 1rem !important;
+}
+
+/* table tr:last-child td:first-child {
+  border-bottom-left-radius: 10px;
+}
+
+table tr:last-child td:last-child {
+  border-bottom-right-radius: 10px;
+} */
