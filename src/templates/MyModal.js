@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 import styled from "styled-components";
 import { Button } from "react-bootstrap";
-import ModularModal from "./modal/Modal";
+import ModularModal from "../components/modal/Modal";
 
 const MyModal = () => {
   const [visible, setVisible] = useState(false);

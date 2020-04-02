@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import Popup from "./popup/Popup";
+import Popup from "../components/popup/Popup";
 import { Button } from "react-bootstrap";
 
 const MyPopup = () => {

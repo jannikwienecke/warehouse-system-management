@@ -17,7 +17,8 @@ const ModularForm = props => {
     requiredArguments,
     authFuncArr,
     arrBtns,
-    headline
+    headline,
+    colorScheme
   } = props;
 
   const setInitialState = () => {
@@ -41,8 +42,12 @@ const ModularForm = props => {
   return (
     <Form>
       <Header>
-        <Headline>{headline}</Headline>
-        <ButtonElement arrBtns={arrBtns} formFunc={formFunc} />
+        <Headline scheme={colorScheme}>{headline}</Headline>
+        <ButtonElement
+          scheme={colorScheme}
+          arrBtns={arrBtns}
+          formFunc={formFunc}
+        />
       </Header>
 
       <FormElement
@@ -50,6 +55,7 @@ const ModularForm = props => {
         arrInput={arrInput}
         errors={errors}
         values={values}
+        scheme={colorScheme}
       />
     </Form>
   );
@@ -66,11 +72,18 @@ const Headline = styled.div`
   font-size: 2.5rem;
   /* padding: 1rem; */
   text-align: left;
+
+  ${({ scheme }) =>
+    scheme === "dark" &&
+    `
+  color: #3f3f3f;
+`}
 `;
 
 export default ModularForm;
 ModularForm.propTypes = {
   headline: PropTypes.string,
+  colorScheme: PropTypes.string,
   arrInput: PropTypes.arrayOf(
     PropTypes.shape({
       name: PropTypes.string.isRequired,

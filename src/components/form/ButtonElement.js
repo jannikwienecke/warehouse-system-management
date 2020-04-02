@@ -2,10 +2,8 @@ import React from "react";
 import { Button } from "react-bootstrap";
 import styled from "styled-components";
 
-const ButtonElement = ({ arrBtns, formFunc }) => {
+const ButtonElement = ({ arrBtns, formFunc, scheme }) => {
   if (!arrBtns) return <></>;
-
-  console.log("variant", arrBtns);
 
   const btns = arrBtns.btns.map((btn, index) => (
     <Btn key={index}>

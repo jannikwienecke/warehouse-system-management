@@ -1,7 +1,7 @@
 import React from "react";
 
-import ModularForm from "./form/ModularForm";
-import FormCard from "./form/FormCard";
+import ModularForm from "../components/form/ModularForm";
+import FormCard from "../components/form/FormCard";
 
 const employee = [
   { value: "chocolate", label: "Chocolate" },

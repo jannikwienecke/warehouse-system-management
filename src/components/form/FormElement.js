@@ -14,7 +14,7 @@ const employee = [
   { value: "vanilla", label: "Vanilla" }
 ];
 
-const FormElement = ({ arrInput, formFunc, values, errors }) => {
+const FormElement = ({ arrInput, formFunc, values, errors, scheme }) => {
   if (!arrInput) return <></>;
 
   const formElements = arrInput.map(input => {
@@ -24,22 +24,34 @@ const FormElement = ({ arrInput, formFunc, values, errors }) => {
     }
     return (
       <InputHolder size={input.size}>
+        {input.label ? input.label : ""}
         {input.type === "input" ? (
-          <SelectInput input={input} values={values} formFunc={formFunc} />
+          <SelectInput
+            input={input}
+            values={values}
+            formFunc={formFunc}
+            errors={errors}
+          />
         ) : (
-          <StandardInput input={input} values={values} formFunc={formFunc} />
+          <StandardInput
+            scheme={scheme}
+            input={input}
+            values={values}
+            formFunc={formFunc}
+            errors={errors}
+          />
         )}
 
-        <Form.Text className="text-muted">
+        {/* <Form.Text className="text-muted">
           {!errors[input.name] ? input.text : errors[input.name]}
-        </Form.Text>
+        </Form.Text> */}
       </InputHolder>
     );
   });
 
   return (
     <>
-      <FormHolder>{formElements}</FormHolder>;
+      <FormHolder>{formElements}</FormHolder>
     </>
   );
 };

@@ -1,20 +1,38 @@
 import React from "react";
+import ReactDOM from "react-dom";
+import {
+  HashRouter as Router,
+  Route,
+  Switch,
+  Redirect
+} from "react-router-dom";
+
 import "./styles.css";
-import MyForm from "./MyForm";
-import MyTable from "./MyTable";
+import MyForm from "./templates/MyForm";
+import MyTable from "./templates/MyTable";
 import styled from "styled-components";
 import { Button } from "react-bootstrap";
-import MyPopup from "./MyPopup";
-import MyModal from "./MyModal";
+import MyPopup from "./templates/MyPopup";
+import MyModal from "./templates/MyModal";
+import { MyLayout } from "./MyLayout";
+import { PageRouter } from "./PageRouter";
+import { Dashboard } from "./einlagerung/Dashboard";
 
 export default function App() {
   return (
-    <div className="App">
-      <MyPopup />
+    <Router>
+      <div className="App">
+        {/* <MyPopup />
       <MyModal />
       <MyForm />
-      <MyTable />
-    </div>
+      <MyTable /> */}
+        <Switch>
+          <PageRouter exact path="/" component={Dashboard} />
+          <PageRouter exact path="/table" component={MyTable} />
+        </Switch>
+        {/* <MyLayout /> */}
+      </div>
+    </Router>
   );
 }
 

@@ -1,8 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-const StandardInput = ({ input, values, formFunc }) => {
-  console.log("inout sixe", input);
+const StandardInput = ({ input, values, formFunc, scheme, errors }) => {
   return (
     <InputElement
       type={input.type}
@@ -10,8 +9,10 @@ const StandardInput = ({ input, values, formFunc }) => {
       placeholder={input.placeHolder ? input.placeHolder : input.name}
       onChange={formFunc.handleChange}
       onBlur={formFunc.handleBlur}
-      defaultValue={input.defaultValue}
+      defaultValue={input.default}
       disabled={input.disable && true}
+      scheme={scheme}
+      error={errors[input.name]}
     />
   );
 };
@@ -32,6 +33,19 @@ const InputElement = styled.input`
 
   background-color: transparent;
   color: #efefef;
+
+
+    ${({ error }) =>
+      error &&
+      `
+border: 1px solid red;
+`}
+
+  ${({ scheme }) =>
+    scheme === "dark" &&
+    `
+color: #3f3f3f;
+`}
 
   :hover {
     border: 0.1rem solid green;

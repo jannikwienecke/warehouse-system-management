@@ -1,6 +1,6 @@
 import React from "react";
-import ModularTable from "./table/ModularTable";
-import { data, columns } from "./table/data";
+import ModularTable from "../components/table/ModularTable";
+import { data, columns } from "../components/table/data";
 
 const MyTable = () => {
   return (

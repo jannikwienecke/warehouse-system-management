@@ -27,5 +27,5 @@ const ModularModal = ({ children, headline, close, visible, btnArr }) => {
 export default ModularModal;
 
 const ContentAlertBox = styled.div`
-  padding: 1rem;
+  padding: 2rem;
 `;
