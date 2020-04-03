@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { Header } from "../components/header/Header";
 import { ButtonSelection } from "../components/button/ButtonSelection";
-import { NeueEinlagerung } from "./NeueEinlagerung";
+import { NeueEinlagerung } from "./neueEinlagerung/NeueEinlagerung";
 import {
   SUB_PAGES,
   NEUE_EINLAGERUNG,
@@ -30,7 +30,7 @@ export const Dashboard = () => {
 
       <DashboardWrapper>
         {SUB_PAGES.map((page, index) => (
-          <ButtonSelection onClick={() => setType(page.name)}>
+          <ButtonSelection key={index} onClick={() => setType(page.name)}>
             {page.name}
           </ButtonSelection>
         ))}

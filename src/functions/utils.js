@@ -8,3 +8,7 @@ export const getDateString = date => {
 
   return `${year}-${month}-${day}`;
 };
+
+export const sum = arr => {
+  return arr.reduce((pv, cv) => pv + cv, 0);
+};

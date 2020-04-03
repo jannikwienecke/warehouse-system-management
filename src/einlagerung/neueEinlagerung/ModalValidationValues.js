@@ -1,44 +1,28 @@
-import React, { useState } from "react";
-import { Header } from "../components/header/Header";
-import { ButtonPageNav } from "../components/button/ButtonPageNav";
-import { Navigation } from "../components/navigation/Navigation";
-import { SUB_PAGES } from "./data";
-import Form from "./Form";
-import { Container } from "../components/Container/Container";
-import { Button } from "react-bootstrap";
-import ModularModal from "../components/modal/Modal";
+import React, { useState, useEffect } from "react";
+import ModularModal from "../../components/modal/Modal";
 import styled from "styled-components";
 
-export const NeueEinlagerung = ({ setType, type }) => {
-  const [values, setValues] = useState(null);
-
-  return (
-    <>
-      <Modal values={values} setValues={setValues} />
-      <Header>Neue Einlagerung</Header>
-      <Navigation>
-        <ButtonPageNav onClick={() => setType(null)}>Zurück</ButtonPageNav>
-
-        {SUB_PAGES.filter(page => page.name !== type).map((page, index) => (
-          <ButtonPageNav onClick={() => setType(page.name)}>
-            {page.name}
-          </ButtonPageNav>
-        ))}
-      </Navigation>
-
-      <Container>
-        <Form setValues={setValues} />
-      </Container>
-    </>
-  );
+export const ModalValidationValues = props => {
+  return <Modal {...props} />;
 };
 
-const Modal = ({ setValues, values }) => {
+const Modal = ({ setValues, values, validate }) => {
+  const [showModal, setShowModal] = useState(false);
+
+  useEffect(() => {
+    if (values) setShowModal(true);
+  }, values);
+
+  const _validate = () => {
+    setShowModal(false);
+    validate(true);
+  };
+
   return (
     <>
       <ModularModal
         close={() => setValues(false)}
-        visible={values}
+        visible={showModal}
         headline="Eingaben Korrekt?"
         btnArr={[
           {
@@ -49,7 +33,7 @@ const Modal = ({ setValues, values }) => {
           {
             text: "OK",
             variant: "dark",
-            func: () => console.log("CLICK OK")
+            func: _validate
           }
         ]}
       >

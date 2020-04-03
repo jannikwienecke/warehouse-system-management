@@ -4,8 +4,13 @@ import styled from "styled-components";
 
 const ModularModal = ({ children, headline, close, visible, btnArr }) => {
   const btnList = () => {
-    return btnArr.map(btn => (
-      <Button className={"mr-1 ml-1"} variant={btn.variant} onClick={btn.func}>
+    return btnArr.map((btn, index) => (
+      <Button
+        key={index}
+        className={"mr-1 ml-1"}
+        variant={btn.variant}
+        onClick={btn.func}
+      >
         {btn.text}
       </Button>
     ));

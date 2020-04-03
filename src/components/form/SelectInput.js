@@ -17,20 +17,49 @@ const errorStyles = {
 
 const SelectInput = ({ input, values, formFunc, errors }) => {
   return (
-    <Select
-      components={makeAnimated()}
-      className="formInput"
-      name={input.name}
-      options={input.options}
-      value={values.name}
-      onBlur={formFunc.handleBlur}
-      onChange={data => formFunc.handleInputChange(data, input.name)}
-      isMulti={input.multiSelect}
-      defaultValue={input.defaultValue}
-      isDisabled={input.disable && true}
-      placeholder={input.placeholder ? input.placeholder : ""}
-      styles={errors[input.name] ? errorStyles : {}}
-    />
+    <>
+      <Select
+        components={makeAnimated()}
+        className="formInput"
+        name={input.name}
+        options={input.options}
+        value={values.name}
+        onBlur={formFunc.handleBlur}
+        onChange={data => formFunc.handleInputChange(data, input.name)}
+        isMulti={input.multiSelect}
+        defaultValue={input.defaultValue}
+        isDisabled={input.disable && true}
+        placeholder={input.placeholder ? input.placeholder : ""}
+        styles={errors[input.name] ? errorStyles : {}}
+      />
+
+      {/* <InputLabel htmlFor={input.name}>Age</InputLabel>
+      <Select
+        style={{ width: "100%" }}
+        labelId="demo-simple-select-helper-label"
+        id="demo-simple-select-helper"
+        value={10}
+        onChange={() => console.log("sekect....")}
+        placeholder="HALLo"
+        inputProps={{
+          name: input.name,
+          id: input.name
+        }}
+      >
+        {input.options.map((option, index) => {
+          console.log("option", option);
+
+          return (
+            <MenuItem key={index} value={option.value}>
+              {option.label}
+            </MenuItem>
+          );
+        })}
+
+        {/* <MenuItem value={10}>Ten</MenuItem> */}
+      {/* <MenuItem value={20}>Twenty</MenuItem> */}
+      {/* <MenuItem value={30}>Thirty</MenuItem> */}
+    </>
   );
 };
 

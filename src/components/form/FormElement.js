@@ -17,13 +17,13 @@ const employee = [
 const FormElement = ({ arrInput, formFunc, values, errors, scheme }) => {
   if (!arrInput) return <></>;
 
-  const formElements = arrInput.map(input => {
+  const formElements = arrInput.map((input, index) => {
     if (!input.name || !input.type) {
       console.log(ERROR_MISSING_DATA);
       throw new Error("ERROR - No Name or Type");
     }
     return (
-      <InputHolder size={input.size}>
+      <InputHolder key={index} size={input.size}>
         {input.label ? input.label : ""}
         {input.type === "input" ? (
           <SelectInput

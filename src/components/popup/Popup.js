@@ -25,8 +25,10 @@ const Popup = ({
   close
 }) => {
   const btnList = () => {
-    return btnArr.map(btn => (
-      <PopupHeaderBtn onClick={() => btn.Func}>{btn.text}</PopupHeaderBtn>
+    return btnArr.map((btn, index) => (
+      <PopupHeaderBtn key={index} onClick={() => btn.func()}>
+        {btn.text}
+      </PopupHeaderBtn>
     ));
   };
 

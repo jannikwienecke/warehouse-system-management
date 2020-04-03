@@ -1,9 +1,9 @@
 import React from "react";
 
-import ModularForm from "../components/form/ModularForm";
-import FormCard from "../components/form/FormCard";
+import ModularForm from "../../components/form/ModularForm";
+import FormCard from "../../components/form/FormCard";
 import styled from "styled-components";
-import { getDateString } from "../functions/utils";
+import { getDateString } from "../../functions/utils";
 
 const employee = [
   { value: "1", label: "Fricke, Torben" },
@@ -71,7 +71,8 @@ const FormElement = ({ setValues }) => {
             size: 10
           },
           {
-            name: "Anzahl [Stück]",
+            name: "quantity",
+            placeholder: "Anzahl [Stück]",
             type: "number",
             size: 10
           },
@@ -89,7 +90,7 @@ const FormElement = ({ setValues }) => {
           }
         ]}
         submitFunc={data => setValues(data)}
-        requiredArguments={["Lieferant", "Chargennummer"]}
+        requiredArguments={[]}
         arrBtns={{
           btns: [
             {

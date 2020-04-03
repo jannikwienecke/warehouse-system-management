@@ -10,6 +10,8 @@ export const PageRouter = ({
   noMargin,
   ...rest
 }) => {
+  console.log("THIS PAGE ROUTER RUNS ALWAYS!!!");
+
   return (
     <Route
       {...rest}

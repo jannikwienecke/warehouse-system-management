@@ -25,7 +25,7 @@ const ModularForm = props => {
     var state = {};
     arrInput.forEach((element, index) => {
       if (element.type === "button") return;
-      state[element.name] = element.defaultValue;
+      state[element.name] = element.default;
     });
     return state;
   };
@@ -87,7 +87,7 @@ ModularForm.propTypes = {
   arrInput: PropTypes.arrayOf(
     PropTypes.shape({
       name: PropTypes.string.isRequired,
-      size: PropTypes.string
+      size: PropTypes.number
     })
   ),
   submitFunc: PropTypes.func,

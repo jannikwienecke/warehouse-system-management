@@ -79,9 +79,10 @@ export const PopupUpperContent = styled.div`
 `;
 
 export const PopupHeaderText = styled.div`
-  font-size: 2rem;
-  line-height: 3.5rem;
+  font-size: 2.4rem;
+  line-height: 4rem;
   color: #fff;
+  padding: 1.5rem 0.5rem 1.5rem 0.5rem;
 `;
 
 export const PopupHeaderTextSmall = styled.div`
@@ -93,7 +94,7 @@ export const PopupHeaderTextSmall = styled.div`
 `;
 
 export const PopupHeaderBtn = styled.button`
-  font-size: 0.7rem;
+  font-size: 0.9rem;
   background: transparent;
   border: 0;
   box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.3);

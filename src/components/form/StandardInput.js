@@ -6,13 +6,14 @@ const StandardInput = ({ input, values, formFunc, scheme, errors }) => {
     <InputElement
       type={input.type}
       name={input.name}
-      placeholder={input.placeHolder ? input.placeHolder : input.name}
+      placeholder={input.placeholder ? input.placeholder : input.name}
       onChange={formFunc.handleChange}
       onBlur={formFunc.handleBlur}
       defaultValue={input.default}
       disabled={input.disable && true}
       scheme={scheme}
       error={errors[input.name]}
+      max={input.max}
     />
   );
 };
@@ -27,10 +28,11 @@ const InputElement = styled.input`
   color: #444;
   font-weight: 700;
   text-transform: uppercase;
-  text-align: center;
+  text-align: left;
   border-radius: 0.4rem;
   border: 0.04rem solid #cecece;
-
+      position: relative;
+    right: 1%;
   background-color: transparent;
   color: #efefef;
 
