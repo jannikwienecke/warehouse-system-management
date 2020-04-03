@@ -40,4 +40,9 @@ const TableRow = styled.tr`
   &:nth-child(2n) {
     background-color: #fafafa;
   }
+
+  :hover {
+    background: #eeeeee;
+    cursor: pointer;
+  }
 `;

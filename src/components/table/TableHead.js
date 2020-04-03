@@ -8,10 +8,6 @@ const TableHead = ({ headerGroups }) => {
       {headerGroups.map(headerGroup => (
         <TableRow {...headerGroup.getHeaderGroupProps()}>
           {headerGroup.headers.map(column => {
-            // Add the sorting props to control sorting. For this example
-            // we can add them into the header props
-            console.log("column", column);
-
             return (
               <TableHeadInner
                 {...column.getHeaderProps(column.getSortByToggleProps())}

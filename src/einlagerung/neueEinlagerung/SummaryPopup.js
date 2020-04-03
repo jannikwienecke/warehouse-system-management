@@ -4,6 +4,7 @@ import Popup from "../../components/popup/Popup";
 import { Button } from "react-bootstrap";
 import { Redirect } from "react-router";
 import styled from "styled-components";
+import { translate } from "../../functions/utils";
 
 const SummaryPopup = ({ summary, cancel, approve, approveAndPrint }) => {
   const [visible, setVisible] = useState(false);
@@ -21,7 +22,7 @@ const SummaryPopup = ({ summary, cancel, approve, approveAndPrint }) => {
     <>
       <Popup
         visible={visible}
-        close={() => setVisible(false)}
+        close={() => cancel(true)}
         marginTop="2rem"
         height={"700px"}
         heightHeader="35%"
@@ -72,8 +73,15 @@ const Summary = ({ summary }) => {
         if (key === "bridges") {
           var Items = val.map((bridge, index) => (
             <Item key={index}>
-              {index + 1}. Brücke: Nr. {bridge.bridgeNumber} - Anzahl:{" "}
+              {index + 1} - {bridge.bridgeNumber.label}: Anzahl:{" "}
               {bridge.quantity}
+            </Item>
+          ));
+        } else if (key === "rows") {
+          var Items = val.map((row, index) => (
+            <Item key={index}>
+              {index + 1} - Reihe: {row.label} - Halle: {row.storage} - Anzahl:{" "}
+              {row.quantity}
             </Item>
           ));
         } else {
@@ -86,7 +94,7 @@ const Summary = ({ summary }) => {
           }
           var Items = [
             <Item key={0}>
-              {key}: {text}
+              {translate(key)}: {text}
             </Item>
           ];
         }

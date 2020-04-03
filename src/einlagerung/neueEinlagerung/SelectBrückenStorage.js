@@ -3,19 +3,36 @@ import styled from "styled-components";
 import FormCard from "../../components/form/FormCard";
 import ModularForm from "../../components/form/ModularForm";
 import FormBridge from "./FormBridge";
-import { sum } from "../../functions/utils";
+import { sum, mockAPI } from "../../functions/utils";
+
+const testBridges = [
+  { value: "1", label: "Brücke Nr. 1" },
+  { value: "2", label: "Brücke Nr. 138" },
+  { value: "3", label: "Brücke Nr. 231" }
+];
 
 export const SelectBrückenStorage = ({ values, completeData }) => {
   const [show, setShow] = useState(false);
   const [bridges, setBridges] = useState([]);
   const [bridge, setBridge] = useState(null);
+  const [openBridges, setOpenBridges] = useState(null);
 
   useEffect(() => {
     setTimeout(() => setShow(true), 1000);
+    mockAPI(testBridges).then(res => setOpenBridges(res.data));
   }, []);
 
   useEffect(() => {
-    if (bridge) validateQuantityBridge();
+    if (bridge) {
+      console.log("br === ", bridge);
+
+      setOpenBridges(
+        openBridges.filter(
+          bridge_ => bridge_.value !== bridge.bridgeNumber.value
+        )
+      );
+      validateQuantityBridge();
+    }
   }, [bridge]);
 
   const getMissingQuantity = () => {
@@ -41,6 +58,8 @@ export const SelectBrückenStorage = ({ values, completeData }) => {
     }
   };
 
+  console.log("open br == ", openBridges);
+
   if (!show) return <></>;
   return (
     <div>
@@ -48,6 +67,7 @@ export const SelectBrückenStorage = ({ values, completeData }) => {
         max={getMissingQuantity()}
         bridgeCounter={bridges.length + 1}
         setBridge={setBridge}
+        openBridges={openBridges}
       />
     </div>
   );

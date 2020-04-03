@@ -1,9 +1,57 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled, { keyframes, css } from "styled-components";
 import { SelectBrückenStorage } from "./SelectBrückenStorage";
+import { SelectStorageRow } from "./SelectStorageRow";
+import { mockAPI, copy } from "../../functions/utils";
+
+const sortRows = rows => {
+  return rows.sort((a, b) => {
+    if (a.isEmpty) return -1;
+    if (a.open <= b.open) return 1;
+    else return -1;
+  });
+};
+const testRows = [
+  { value: "1", label: "C42", storage: 3, open: 10, isEmpty: false },
+  { value: "2", label: "C38", storage: 3, open: 100, isEmpty: true },
+  { value: "3", label: "B4", storage: 2, open: 1, isEmpty: false },
+  { value: "4", label: "D22", storage: 4, open: 500, isEmpty: true }
+];
 
 const SelectStorage = props => {
   const [choise, setChoise] = useState(null);
+  const [openRows, setOpenRows] = useState();
+  const [filterdRows, setFilteredRows] = useState();
+  const [selectedRows, setSelelectedRows] = useState(null);
+
+  useEffect(() => {
+    mockAPI(testRows).then(res => setOpenRows(sortRows(res.data)));
+  }, []);
+
+  useEffect(() => {
+    if (choise) _filterRows();
+  }, [choise, openRows]);
+
+  useEffect(() => {
+    if (selectedRows) removeRowFromOpenRows();
+  }, [selectedRows]);
+
+  const removeRowFromOpenRows = () => {
+    const selectedRowValues = selectedRows.map(row => row.value);
+    setOpenRows(openRows.filter(row => !selectedRowValues.includes(row.value)));
+    console.log("HIER sel", selectedRowValues);
+  };
+
+  const _filterRows = () => {
+    const rows = openRows
+      .filter(row => row.storage === choise)
+      .map(row => {
+        row.isEmpty = row.isEmpty ? "Ja" : "Nein";
+        return row;
+      });
+
+    setFilteredRows(rows);
+  };
 
   return (
     <>
@@ -23,6 +71,16 @@ const SelectStorage = props => {
       </OptionWrapper>
 
       {choise === 1 && <SelectBrückenStorage {...props} />}
+      {choise > 1 && (
+        <SelectStorageRow
+          goBack={() => setChoise(null)}
+          {...props}
+          selectedStorage={choise}
+          selectedRows={selectedRows}
+          setSelelectedRows={setSelelectedRows}
+          filteredRows={filterdRows}
+        />
+      )}
     </>
   );
 };

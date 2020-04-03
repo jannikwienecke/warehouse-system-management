@@ -3,6 +3,7 @@ import styled from "styled-components";
 import FormCard from "../../components/form/FormCard";
 import ModularForm from "../../components/form/ModularForm";
 import ModularModal from "../../components/modal/Modal";
+import { mockAPI } from "../../functions/utils";
 
 const FormBridge = props => {
   return (
@@ -16,7 +17,7 @@ const Wrapper = styled.div`
   margin: 5rem 0;
 `;
 
-const FormElement = ({ setBridge, bridgeCounter, max }) => {
+const FormElement = ({ setBridge, bridgeCounter, max, openBridges }) => {
   const [modal, showModal] = useState(null);
   const [error, setError] = useState(null);
 
@@ -29,9 +30,12 @@ const FormElement = ({ setBridge, bridgeCounter, max }) => {
       setError(`Die maximale Anzahl ist ${max}`);
     }
   };
+
+  if (!openBridges) return <></>;
   return (
     <>
       <ErrorModal error={error} setError={setError} />
+      <OpenQuantity>Offene Anzahl: {max}</OpenQuantity>
       <FormCard width={90} marginTop={2} color="white">
         <ModularForm
           headline={`${bridgeCounter}. Brücke auswählen`}
@@ -40,8 +44,9 @@ const FormElement = ({ setBridge, bridgeCounter, max }) => {
             {
               placeholder: "Brückenummer",
               name: "bridgeNumber",
-              type: "number",
-              size: 4
+              type: "input",
+              size: 4,
+              options: openBridges
             },
             {
               name: "quantity",
@@ -100,3 +105,9 @@ const ErrorModal = ({ error, setError }) => {
     </>
   );
 };
+
+const OpenQuantity = styled.div`
+  font-size: 1.5rem;
+  font-weight: bold;
+  letter-spacing: 0.15rem;
+`;

@@ -42,7 +42,7 @@ const Popup = ({
       >
         <PopupCardWrapper marginTop={marginTop} height={height}>
           <PopupUpper color={color} height={heightHeader}>
-            <CloseBtn onClick={close}>CLOSE</CloseBtn>
+            {close && <CloseBtn onClick={close}>CLOSE</CloseBtn>}
             <PopupUpperContent>
               <PopupHeaderText>{headline}</PopupHeaderText>
 
