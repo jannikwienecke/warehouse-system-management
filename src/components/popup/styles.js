@@ -1,15 +1,15 @@
 import posed from "react-pose";
-import styled from "styled-components";
+import styled, { keyframes, css } from "styled-components";
 
 var Box_ = {};
 Box_.Container = posed.div({
   visible: {
     opacity: 1,
-    transition: { type: "spring", stiffness: 100 }
+    transition: { type: "spring", stiffness: 100 },
   },
   hidden: {
-    opacity: 0
-  }
+    opacity: 0,
+  },
 });
 Box_.Style = {};
 export const Box = Box_;
@@ -31,12 +31,18 @@ export const PopupCardWrapper = styled.div`
   background: #f5f5f5;
   box-shadow: 0 30px 10px 0 rgba(0, 0, 0, 0.3);
   border-radius: 20px;
-  font-family: unset;
   display: block;
   margin: 20px auto;
   margin-bottom: 2rem;
   transition: 1s;
   height: 530px;
+  opacity: 0;
+
+    ${({ visible }) =>
+      visible &&
+      `
+    opacity: 1;
+`}
 
   ${({ marginTop }) =>
     marginTop &&

@@ -2,19 +2,19 @@ export const navListArr = [
   {
     header: { text: "Einlagerung" },
     children: [
-      { name: "Casual", url: "/table" },
+      { name: "Menu", url: "/einlagerung" },
       { name: "Footbal", url: "/" },
       { name: "Jordan" },
-      { name: "Lager" }
-    ]
+      { name: "Lager" },
+    ],
   },
   {
     header: { text: "Auslagerungen" },
     children: [
-      { name: "Casual" },
+      { name: "Menu", url: "/auslagerung" },
       { name: "Footbal" },
       { name: "Jordan" },
-      { name: "Lager" }
-    ]
-  }
+      { name: "Lager" },
+    ],
+  },
 ];

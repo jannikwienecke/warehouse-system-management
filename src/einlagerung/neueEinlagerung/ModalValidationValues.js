@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import ModularModal from "../../components/modal/Modal";
 import styled from "styled-components";
 
-export const ModalValidationValues = props => {
+export const ModalValidationValues = (props) => {
   return <Modal {...props} />;
 };
 
@@ -11,30 +11,35 @@ const Modal = ({ setValues, values, validate }) => {
 
   useEffect(() => {
     if (values) setShowModal(true);
-  }, values);
+  }, [values]);
 
   const _validate = () => {
     setShowModal(false);
     validate(true);
   };
 
+  const _cancel = () => {
+    setShowModal(false);
+    setValues(false);
+  };
+
   return (
     <>
       <ModularModal
-        close={() => setValues(false)}
+        close={() => _cancel}
         visible={showModal}
         headline="Eingaben Korrekt?"
         btnArr={[
           {
             text: "Cancel",
             variant: "outline-dark",
-            func: () => setValues(false)
+            func: _cancel,
           },
           {
             text: "OK",
             variant: "dark",
-            func: _validate
-          }
+            func: _validate,
+          },
         ]}
       >
         <FormResult values={values} />
@@ -46,7 +51,7 @@ const Modal = ({ setValues, values, validate }) => {
 const FormResult = ({ values }) => {
   return (
     <ListWrapper>
-      {Object.keys(values).map(key => {
+      {Object.keys(values).map((key) => {
         const val = values[key];
         if (val && typeof val == "object" && "value" in val) {
           var text = `${val.value} - ${val.label}`;

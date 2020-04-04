@@ -4,28 +4,29 @@ import { SelectBrückenStorage } from "./SelectBrückenStorage";
 import { SelectStorageRow } from "./SelectStorageRow";
 import { mockAPI, copy } from "../../functions/utils";
 
-const sortRows = rows => {
+const sortRows = (rows) => {
   return rows.sort((a, b) => {
     if (a.isEmpty) return -1;
     if (a.open <= b.open) return 1;
     else return -1;
   });
 };
+
 const testRows = [
   { value: "1", label: "C42", storage: 3, open: 10, isEmpty: false },
   { value: "2", label: "C38", storage: 3, open: 100, isEmpty: true },
   { value: "3", label: "B4", storage: 2, open: 1, isEmpty: false },
-  { value: "4", label: "D22", storage: 4, open: 500, isEmpty: true }
+  { value: "4", label: "D22", storage: 4, open: 500, isEmpty: true },
 ];
 
-const SelectStorage = props => {
+const SelectStorage = (props) => {
   const [choise, setChoise] = useState(null);
   const [openRows, setOpenRows] = useState();
   const [filterdRows, setFilteredRows] = useState();
   const [selectedRows, setSelelectedRows] = useState(null);
 
   useEffect(() => {
-    mockAPI(testRows).then(res => setOpenRows(sortRows(res.data)));
+    mockAPI(testRows).then((res) => setOpenRows(sortRows(res.data)));
   }, []);
 
   useEffect(() => {
@@ -37,15 +38,16 @@ const SelectStorage = props => {
   }, [selectedRows]);
 
   const removeRowFromOpenRows = () => {
-    const selectedRowValues = selectedRows.map(row => row.value);
-    setOpenRows(openRows.filter(row => !selectedRowValues.includes(row.value)));
-    console.log("HIER sel", selectedRowValues);
+    const selectedRowValues = selectedRows.map((row) => row.value);
+    setOpenRows(
+      openRows.filter((row) => !selectedRowValues.includes(row.value))
+    );
   };
 
   const _filterRows = () => {
     const rows = openRows
-      .filter(row => row.storage === choise)
-      .map(row => {
+      .filter((row) => row.storage === choise)
+      .map((row) => {
         row.isEmpty = row.isEmpty ? "Ja" : "Nein";
         return row;
       });
@@ -162,10 +164,7 @@ const StorageOption = styled.div`
     css`
       animation: ${keyFrame} 1.5s ease-in-out forwards;
       animation-iteration-count: 1;
-    `}
-  
-  
-      :hover {
+    `} :hover {
     box-shadow: 2px 4px 8px 1px rgba(0, 0, 0, 0.2);
     font-weight: 900;
     font-size: 1.25rem;

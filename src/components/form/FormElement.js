@@ -11,7 +11,7 @@ const ERROR_MISSING_DATA = "NICHT ALLE NÖTIGEN DATEN ÜBERGEBEN";
 const employee = [
   { value: "chocolate", label: "Chocolate" },
   { value: "strawberry", label: "Strawberry" },
-  { value: "vanilla", label: "Vanilla" }
+  { value: "vanilla", label: "Vanilla" },
 ];
 
 const FormElement = ({ arrInput, formFunc, values, errors, scheme }) => {

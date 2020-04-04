@@ -10,9 +10,9 @@ const errorStyles = {
   control: (provided, state) => {
     return {
       ...provided,
-      border: "0.5px solid red !important"
+      border: "0.5px solid red !important",
     };
-  }
+  },
 };
 
 const SelectInput = ({ input, values, formFunc, errors }) => {
@@ -25,9 +25,9 @@ const SelectInput = ({ input, values, formFunc, errors }) => {
         options={input.options}
         value={values.name}
         onBlur={formFunc.handleBlur}
-        onChange={data => formFunc.handleInputChange(data, input.name)}
+        onChange={(data) => formFunc.handleInputChange(data, input.name)}
         isMulti={input.multiSelect}
-        defaultValue={input.defaultValue}
+        defaultValue={input.default}
         isDisabled={input.disable && true}
         placeholder={input.placeholder ? input.placeholder : ""}
         styles={errors[input.name] ? errorStyles : {}}

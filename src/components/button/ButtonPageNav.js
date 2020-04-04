@@ -1,13 +1,13 @@
 import React from "react";
 import styled from "styled-components";
 
-export const ButtonPageNav = props => {
+export const ButtonPageNav = (props) => {
   return <Button {...props}>{props.children}</Button>;
 };
 
 const Button = styled.button`
 margin: 1rem .5rem 1rem .5rem;
-width: 11rem;
+width: 12rem;
 padding: .5rem;
 background: transparent;
 border: .5px solid #333;

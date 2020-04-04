@@ -4,7 +4,7 @@ import {
   HashRouter as Router,
   Route,
   Switch,
-  Redirect
+  Redirect,
 } from "react-router-dom";
 
 import "./styles.css";
@@ -17,6 +17,8 @@ import MyModal from "./templates/MyModal";
 import { MyLayout } from "./MyLayout";
 import { PageRouter } from "./PageRouter";
 import { Dashboard } from "./einlagerung/Dashboard";
+import { DashboardAuslagerung } from "./auslagerung/DashboardAuslagerung";
+import CreateTour from "./auslagerung/createTour/CreateTour";
 
 export default function App() {
   return (
@@ -28,6 +30,14 @@ export default function App() {
       <MyTable /> */}
         <Switch>
           <PageRouter exact path="/" component={Dashboard} />
+
+          <PageRouter
+            exact
+            path="/auslagerung"
+            component={DashboardAuslagerung}
+          />
+          <PageRouter exact path="/einlagerung" component={Dashboard} />
+
           <PageRouter exact path="/table" component={MyTable} />
         </Switch>
         {/* <MyLayout /> */}

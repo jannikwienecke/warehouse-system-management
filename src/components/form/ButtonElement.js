@@ -5,6 +5,8 @@ import styled from "styled-components";
 const ButtonElement = ({ arrBtns, formFunc, scheme }) => {
   if (!arrBtns) return <></>;
 
+  console.log("schemess", scheme);
+
   const btns = arrBtns.btns.map((btn, index) => (
     <Btn key={index}>
       <Button
@@ -25,10 +27,9 @@ const ButtonElement = ({ arrBtns, formFunc, scheme }) => {
 export default ButtonElement;
 
 const BtnContainer = styled.div`
-  margin-top: .8rem;
+  margin-top: 0.8rem;
   /* margin-left: 23.8rem; */
 
-  
   display: flex;
   justify-content: flex-start;
 
@@ -37,11 +38,6 @@ const BtnContainer = styled.div`
     `
     justify-content: ${justifyContent}
   `}
-
-  /* ${({ position }) =>
-    position &&
-    `
-  `} */
 `;
 
 const Btn = styled.div`

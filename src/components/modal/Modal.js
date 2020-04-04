@@ -10,6 +10,7 @@ const ModularModal = ({ children, headline, close, visible, btnArr }) => {
         className={"mr-1 ml-1"}
         variant={btn.variant}
         onClick={btn.func}
+        style={btn.style}
       >
         {btn.text}
       </Button>

@@ -2,6 +2,8 @@ import React from "react";
 import styled from "styled-components";
 
 const StandardInput = ({ input, values, formFunc, scheme, errors }) => {
+  console.log("scheme", scheme);
+
   return (
     <InputElement
       type={input.type}
@@ -14,6 +16,7 @@ const StandardInput = ({ input, values, formFunc, scheme, errors }) => {
       scheme={scheme}
       error={errors[input.name]}
       max={input.max}
+      style={input.style}
     />
   );
 };
@@ -31,25 +34,23 @@ const InputElement = styled.input`
   text-align: left;
   border-radius: 0.4rem;
   border: 0.04rem solid #cecece;
-      position: relative;
-    right: 1%;
+  position: relative;
+  right: 1%;
   background-color: transparent;
   color: #efefef;
 
-
-    ${({ error }) =>
-      error &&
-      `
+  ${({ error }) =>
+    error &&
+    `
 border: 1px solid red;
 `}
 
   ${({ scheme }) =>
-    scheme === "dark" &&
+    scheme === "grey" &&
     `
-color: #3f3f3f;
-`}
+        color: #3f51b5;
 
-  :hover {
+`} :hover {
     border: 0.1rem solid green;
   }
 
@@ -60,4 +61,13 @@ color: #3f3f3f;
   ::placeholder {
     color: #888;
     opacity: 0.7;
+    font-size: 1.1rem;
+
+    ${({ scheme }) =>
+      scheme === "grey" &&
+      `
+        color: #3f51b5;
+
+`}
+  }
 `;

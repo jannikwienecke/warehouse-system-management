@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ButtonSelection } from "../../components/button/ButtonSelection";
 import ModularTable from "../../components/table/ModularTable";
 import styled from "styled-components";
 import { sum } from "../../functions/utils";
-
+import { SuccessScreen } from "../../common/SuccessScreen";
 export const SelectStorageRow = ({
   goBack,
   values,
@@ -11,15 +11,25 @@ export const SelectStorageRow = ({
   selectedStorage,
   filteredRows,
   selectedRows,
-  setSelelectedRows
+  setSelelectedRows,
 }) => {
+  const [successScreen, showSuccessScreen] = useState(null);
+
   const handleAllSelected = (row, openQuantity) => {
     row.quantity = openQuantity;
     values["rows"] = selectedRows ? [...selectedRows, row] : [row];
     completeData(values);
   };
 
-  const handleNotAllSelected = row => {
+  useEffect(() => {
+    if (successScreen) {
+      setTimeout(() => {
+        showSuccessScreen(false);
+      }, 1500);
+    }
+  }, [successScreen]);
+
+  const handleNotAllSelected = (row) => {
     row.quantity = row.open;
 
     if (selectedRows) {
@@ -27,9 +37,11 @@ export const SelectStorageRow = ({
     } else {
       setSelelectedRows([row]);
     }
+
+    showSuccessScreen(true);
   };
 
-  const handleRowClick = row => {
+  const handleRowClick = (row) => {
     row = row.original;
     const openQuantity = getOpenQuantity();
 
@@ -42,7 +54,7 @@ export const SelectStorageRow = ({
 
   const getOpenQuantity = () => {
     if (selectedRows) {
-      const quantitySelected = selectedRows.map(row => row.quantity);
+      const quantitySelected = selectedRows.map((row) => row.quantity);
 
       return parseInt(values.quantity) - sum(quantitySelected);
     } else {
@@ -50,6 +62,10 @@ export const SelectStorageRow = ({
     }
   };
 
+  if (successScreen) {
+    const text = `Offene Anzahl ${getOpenQuantity()}`;
+    return <SuccessScreen text={text} />;
+  }
   return (
     <>
       <Wrapper>
@@ -71,16 +87,14 @@ export const SelectStorageRow = ({
 
 const TableOpenRows = ({ filteredRows, handleRowClick, selectedStorage }) => {
   if (!filteredRows) return <></>;
-  console.log("selected", selectedStorage);
 
   return (
     <>
       <ModularTable
         data={filteredRows}
         columns={columns}
-        paginatonFunc={data => console.log(data)}
         pagination={true}
-        handleClick={rowData => handleRowClick(rowData)}
+        handleClick={(rowData) => handleRowClick(rowData)}
       />
     </>
   );
@@ -89,24 +103,24 @@ const TableOpenRows = ({ filteredRows, handleRowClick, selectedStorage }) => {
 export const columns = [
   {
     Header: "ID",
-    accessor: "value" // accessor is the "key" in the data
+    accessor: "value", // accessor is the "key" in the data
   },
   {
     Header: "Reihe",
-    accessor: "label"
+    accessor: "label",
   },
   {
     Header: "Lager",
-    accessor: "storage"
+    accessor: "storage",
   },
   {
     Header: "Verfügbar",
-    accessor: "open"
+    accessor: "open",
   },
   {
     Header: "Leer?",
-    accessor: "isEmpty"
-  }
+    accessor: "isEmpty",
+  },
 ];
 
 const Wrapper = styled.div`

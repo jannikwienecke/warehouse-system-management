@@ -10,7 +10,7 @@ import FormElement from "./FormElement";
 import styled from "styled-components";
 import FormCard from "./FormCard";
 
-const ModularForm = props => {
+const ModularForm = (props) => {
   var {
     arrInput,
     submitFunc,
@@ -18,7 +18,7 @@ const ModularForm = props => {
     authFuncArr,
     arrBtns,
     headline,
-    colorScheme
+    colorScheme,
   } = props;
 
   const setInitialState = () => {
@@ -78,6 +78,12 @@ const Headline = styled.div`
     `
   color: #3f3f3f;
 `}
+
+  ${({ scheme }) =>
+    scheme === "grey" &&
+    `
+  color: #3f51b5;
+`}
 `;
 
 export default ModularForm;
@@ -87,7 +93,7 @@ ModularForm.propTypes = {
   arrInput: PropTypes.arrayOf(
     PropTypes.shape({
       name: PropTypes.string.isRequired,
-      size: PropTypes.number
+      size: PropTypes.number,
     })
   ),
   submitFunc: PropTypes.func,
@@ -100,9 +106,9 @@ ModularForm.propTypes = {
         size: PropTypes.number,
         variant: PropTypes.string,
         text: PropTypes.string,
-        isSubmitFunc: PropTypes.bool
+        isSubmitFunc: PropTypes.bool,
       })
     ),
-    position: PropTypes.string
-  })
+    position: PropTypes.string,
+  }),
 };

@@ -12,10 +12,8 @@ const Pagination = ({
   pageIndex,
   canNextPage,
   pageCount,
-  setPageSize
+  setPageSize,
 }) => {
-  console.log("next page", pageIndex);
-
   return (
     <PaginationWrapper>
       <PageNumber>
@@ -45,7 +43,7 @@ const Pagination = ({
         <PageInput
           type="number"
           defaultValue={pageIndex + 1}
-          onChange={e => {
+          onChange={(e) => {
             const page = e.target.value ? Number(e.target.value) - 1 : 0;
             gotoPage(page);
           }}
@@ -53,11 +51,11 @@ const Pagination = ({
         />
         <PageSelect
           value={pageSize}
-          onChange={e => {
+          onChange={(e) => {
             setPageSize(Number(e.target.value));
           }}
         >
-          {[10, 20, 30, 40, 50].map(pageSize => (
+          {[10, 20, 30, 40, 50].map((pageSize) => (
             <option key={pageSize} value={pageSize}>
               Show {pageSize}
             </option>

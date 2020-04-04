@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 import {
   useTable,
-  usePagination
+  usePagination,
   // useFilters,
   // useSortBy,
   // useExpanded,
@@ -15,23 +15,24 @@ import { IndeterminateCheckbox } from "./Checkbox";
 
 import {
   useRowSelect,
-  useSortBy
+  useSortBy,
 } from "react-table/dist/react-table.development";
 
-const ModularTable = props => {
+const ModularTable = (props) => {
   const { data, columns, paginatonFunc, rowSelection } = props;
+
   const tableProps = useTable(
     {
       columns,
       data,
-      initialState: { pageIndex: 0 }
+      initialState: { pageIndex: 0 },
     },
     useSortBy,
     useRowSelect,
     usePagination,
-    hooks => {
+    (hooks) => {
       rowSelection &&
-        hooks.visibleColumns.push(columns => [
+        hooks.visibleColumns.push((columns) => [
           {
             id: "selection",
             Header: ({ getToggleAllRowsSelectedProps }) => (
@@ -43,9 +44,9 @@ const ModularTable = props => {
               <div>
                 <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
               </div>
-            )
+            ),
           },
-          ...columns
+          ...columns,
         ]);
     }
   );
@@ -54,7 +55,7 @@ const ModularTable = props => {
     if (!paginatonFunc) return;
     paginatonFunc({
       selectedIds: tableProps.selectedRowIds,
-      selectedRows: tableProps.selectedFlatRows
+      selectedRows: tableProps.selectedFlatRows,
     });
   }, [tableProps.selectedRowIds]);
 
@@ -69,5 +70,5 @@ ModularTable.propTypes = {
   pagination: PropTypes.bool,
   paginatonFunc: PropTypes.func,
   rowSelection: PropTypes.bool,
-  handleClick: PropTypes.func
+  handleClick: PropTypes.func,
 };

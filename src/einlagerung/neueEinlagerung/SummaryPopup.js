@@ -30,16 +30,16 @@ const SummaryPopup = ({ summary, cancel, approve, approveAndPrint }) => {
         btnArr={[
           {
             func: () => approve(true),
-            text: "Abschließen"
+            text: "Abschließen",
           },
           {
             func: () => approveAndPrint(true),
-            text: "Abschlißen und Auftrag Drucken"
+            text: "Abschlißen und Auftrag Drucken",
           },
           {
             func: () => cancel(true),
-            text: "Einlagerung Abbrechen"
-          }
+            text: "Einlagerung Abbrechen",
+          },
         ]}
       >
         <Content summary={summary} />
@@ -50,8 +50,6 @@ const SummaryPopup = ({ summary, cancel, approve, approveAndPrint }) => {
 export default SummaryPopup;
 
 const Content = ({ summary }) => {
-  console.log("SUMMARY", summary);
-
   return (
     <Wrapper>
       <Summary summary={summary} />
@@ -67,7 +65,7 @@ const Wrapper = styled.div`
 const Summary = ({ summary }) => {
   return (
     <ListWrapper>
-      {Object.keys(summary).map(key => {
+      {Object.keys(summary).map((key) => {
         const val = summary[key];
 
         if (key === "bridges") {
@@ -95,7 +93,7 @@ const Summary = ({ summary }) => {
           var Items = [
             <Item key={0}>
               {translate(key)}: {text}
-            </Item>
+            </Item>,
           ];
         }
 

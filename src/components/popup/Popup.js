@@ -10,7 +10,7 @@ import {
   PopupLowerCard,
   Box,
   Layover,
-  PopupUpperContent
+  PopupUpperContent,
 } from "./styles";
 
 const Popup = ({
@@ -22,7 +22,7 @@ const Popup = ({
   headline,
   btnArr,
   visible,
-  close
+  close,
 }) => {
   const btnList = () => {
     return btnArr.map((btn, index) => (
@@ -32,7 +32,6 @@ const Popup = ({
     ));
   };
 
-  if (!visible) return <></>;
   return (
     <Layover>
       <Box.Container
@@ -40,7 +39,11 @@ const Popup = ({
         className="box"
         pose={visible ? "visible" : "hidden"}
       >
-        <PopupCardWrapper marginTop={marginTop} height={height}>
+        <PopupCardWrapper
+          visible={visible}
+          marginTop={marginTop}
+          height={height}
+        >
           <PopupUpper color={color} height={heightHeader}>
             {close && <CloseBtn onClick={close}>CLOSE</CloseBtn>}
             <PopupUpperContent>
@@ -68,9 +71,9 @@ Popup.propTypes = {
   btnArr: PropTypes.arrayOf(
     PropTypes.shape({
       func: PropTypes.func.isRequired,
-      text: PropTypes.string.isRequired
+      text: PropTypes.string.isRequired,
     })
   ),
   close: PropTypes.func.isRequired,
-  visible: PropTypes.bool.isRequired
+  visible: PropTypes.bool.isRequired,
 };
