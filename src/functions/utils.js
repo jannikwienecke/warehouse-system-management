@@ -1,4 +1,4 @@
-export const getDateString = date => {
+export const getDateString = (date) => {
   var month = date.getMonth();
   var year = date.getFullYear();
   var day = date.getDay();
@@ -9,33 +9,40 @@ export const getDateString = date => {
   return `${year}-${month}-${day}`;
 };
 
-export const sum = arr => {
+export const sum = (arr) => {
   return arr.reduce((pv, cv) => pv + cv, 0);
 };
 
-export const mockAPI = data => {
-  return new Promise(resolve => {
+export const mockAPI = (data, time) => {
+  time = time ? time : 100;
+  return new Promise((resolve) => {
     setTimeout(() => {
       resolve({
         status: "ok",
-        data
+        data,
       });
-    }, 100);
+    }, time);
   });
 };
 
-export const copy = obj => {
+export const copy = (obj) => {
   return JSON.parse(JSON.stringify(obj));
 };
 
 const dictonary = {
-  quantity: "Anzahl"
+  quantity: "Anzahl",
 };
 
-export const translate = text => {
+export const translate = (text) => {
   if (text in dictonary) {
     return dictonary[text];
   }
 
   return text;
+};
+
+export const setArrInputSize = (arr, size) => {
+  arr.forEach((input) => {
+    input.size = size;
+  });
 };

@@ -9,7 +9,7 @@ export const Sidebar = ({ close }) => {
   const [lastVisible, setLastVisible] = useState(null);
   const [redirect, setRedirect] = useState(null);
 
-  const closeItemMenu = item => {
+  const closeItemMenu = (item) => {
     if (item === isVisible) {
       setIsVisible(false);
       setLastVisible(item);
@@ -18,7 +18,7 @@ export const Sidebar = ({ close }) => {
     }
   };
 
-  const validateIsVisible = item => {
+  const validateIsVisible = (item) => {
     if (isVisible === null) return null;
 
     if (isVisible === false) {
@@ -62,11 +62,7 @@ export const Sidebar = ({ close }) => {
       setRedirect(null);
     }, 2);
 
-    console.log("hier ...", lastVisible, isVisible);
-
     if (isVisible !== null) {
-      console.log("set bacl");
-
       setIsVisible(null);
     }
     return <Redirect to={redirect.url} />;

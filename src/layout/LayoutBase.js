@@ -6,7 +6,7 @@ import { Content } from "./Content";
 import { FaBars } from "react-icons/fa";
 
 export const LayoutBase = ({ width, children }) => {
-  const [isVisible, setIsVisible] = useState(true);
+  const [isVisible, setIsVisible] = useState(false);
 
   return (
     <Layout>
@@ -96,5 +96,5 @@ const SidebarWrapper = styled.div`
 `;
 
 LayoutBase.propTypes = {
-  width: PropTypes.number
+  width: PropTypes.number,
 };

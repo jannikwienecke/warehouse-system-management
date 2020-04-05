@@ -3,10 +3,6 @@ import Select from "react-select";
 import makeAnimated from "react-select/animated";
 
 const errorStyles = {
-  // option: (provided, state) => ({
-  //   ...provided,
-  //   borderBottom: '1px dotted #eee',
-  // }),
   control: (provided, state) => {
     return {
       ...provided,
@@ -16,6 +12,31 @@ const errorStyles = {
 };
 
 const SelectInput = ({ input, values, formFunc, errors }) => {
+  const _parse = () => {
+    input.options.map((option) => {
+      option["value"] = option[input.identifier];
+      option["label"] = option[input.labelName];
+      return option;
+    });
+  };
+
+  if (input.identifier) _parse();
+
+  const hasError = () => {
+    const name = input.name;
+    if (errors[name]) {
+      return true;
+    }
+
+    const hasFormValidationErr = input.error;
+    if (hasFormValidationErr) {
+      const nameInErrorList = input.error.nameList.includes(name);
+      if (nameInErrorList) {
+        return true;
+      }
+    }
+  };
+
   return (
     <>
       <Select
@@ -30,35 +51,8 @@ const SelectInput = ({ input, values, formFunc, errors }) => {
         defaultValue={input.default}
         isDisabled={input.disable && true}
         placeholder={input.placeholder ? input.placeholder : ""}
-        styles={errors[input.name] ? errorStyles : {}}
+        styles={hasError() ? errorStyles : {}}
       />
-
-      {/* <InputLabel htmlFor={input.name}>Age</InputLabel>
-      <Select
-        style={{ width: "100%" }}
-        labelId="demo-simple-select-helper-label"
-        id="demo-simple-select-helper"
-        value={10}
-        onChange={() => console.log("sekect....")}
-        placeholder="HALLo"
-        inputProps={{
-          name: input.name,
-          id: input.name
-        }}
-      >
-        {input.options.map((option, index) => {
-          console.log("option", option);
-
-          return (
-            <MenuItem key={index} value={option.value}>
-              {option.label}
-            </MenuItem>
-          );
-        })}
-
-        {/* <MenuItem value={10}>Ten</MenuItem> */}
-      {/* <MenuItem value={20}>Twenty</MenuItem> */}
-      {/* <MenuItem value={30}>Thirty</MenuItem> */}
     </>
   );
 };

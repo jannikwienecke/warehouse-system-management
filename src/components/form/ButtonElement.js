@@ -5,14 +5,13 @@ import styled from "styled-components";
 const ButtonElement = ({ arrBtns, formFunc, scheme }) => {
   if (!arrBtns) return <></>;
 
-  console.log("schemess", scheme);
-
   const btns = arrBtns.btns.map((btn, index) => (
     <Btn key={index}>
       <Button
         variant={btn.variant}
         onClick={btn.isSubmitFunc ? formFunc.handleSubmit : btn.func}
         size={btn.size}
+        disabled={btn.disabled}
       >
         {btn.text ? btn.text : "Bestätigen"}
       </Button>

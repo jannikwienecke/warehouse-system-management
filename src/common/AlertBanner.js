@@ -1,7 +1,8 @@
 import React from "react";
+import PropTypes from "prop-types";
 import styled from "styled-components";
 
-export const Alert = (props) => {
+export const AlertBanner = (props) => {
   const { err, warning, msg } = props;
 
   return (
@@ -10,6 +11,17 @@ export const Alert = (props) => {
     </AlertWrapper>
   );
 };
+
+AlertBanner.propTypes = {
+  err: PropTypes.string,
+  warning: PropTypes.string,
+  msg: PropTypes.string,
+};
+
+// FormCard.propTypes = {
+//   width: PropTypes.number,
+//   headline: PropTypes.string
+// };
 
 const AlertWrapper = styled.div`
 position: absolute;

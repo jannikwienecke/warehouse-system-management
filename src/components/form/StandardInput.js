@@ -2,7 +2,20 @@ import React from "react";
 import styled from "styled-components";
 
 const StandardInput = ({ input, values, formFunc, scheme, errors }) => {
-  console.log("scheme", scheme);
+  const hasError = () => {
+    const name = input.name;
+    if (errors[name]) {
+      return true;
+    }
+
+    const hasFormValidationErr = input.error;
+    if (hasFormValidationErr) {
+      const nameInErrorList = input.error.nameList.includes(name);
+      if (nameInErrorList) {
+        return true;
+      }
+    }
+  };
 
   return (
     <InputElement
@@ -14,7 +27,7 @@ const StandardInput = ({ input, values, formFunc, scheme, errors }) => {
       defaultValue={input.default}
       disabled={input.disable && true}
       scheme={scheme}
-      error={errors[input.name]}
+      error={hasError()}
       max={input.max}
       style={input.style}
     />
