@@ -9,14 +9,13 @@ export const INPUT = {
     identifier: "id",
     labelName: "name",
     placeholder: "Kunde",
-    setOptions: (options, name) => options[name],
-    func: (name) =>
-      mockAPI(customers).then((res) => {
-        return {
-          data: res.data,
-          name: name,
-        };
-      }),
+    setOptions: (options) => options[INPUT.customers.name],
+    func: (state) => {
+      return {
+        name: INPUT.customers.name,
+        data: state.base[INPUT.customers.name],
+      };
+    },
   },
   products: {
     type: "input",
@@ -25,14 +24,23 @@ export const INPUT = {
     labelName: "name",
     placeholder: "Produkt",
     setOptions: (options, name) => options[name],
+    //   func: (state) => {
+    //     return {
+    //       name: INPUT.products.name,
+    //       data: state.base[INPUT.products.name],
+    //     };
+    //   },
+    // },
+
     func: (name) =>
-      mockAPI(products).then((res) => {
+      mockAPI(products, 2000).then((res) => {
         return {
           data: res.data,
-          name: name,
+          name: INPUT.products.name,
         };
       }),
   },
+
   dateStart: {
     name: "dateStart",
     placeholder: "Datum Beginn",
@@ -49,9 +57,11 @@ export const INPUT = {
 
 var ValidationException = {};
 var ParseException = {};
+var BreakException = {};
 export const EXCEPTIONS = {
   ValidationException,
   ParseException,
+  BreakException,
 };
 
 export const COLUMNS = {

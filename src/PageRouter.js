@@ -15,7 +15,7 @@ export const PageRouter = ({
   return (
     <Route
       {...rest}
-      render={props => {
+      render={(props) => {
         return (
           <MyLayout>
             <Component {...props} />

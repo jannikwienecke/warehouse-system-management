@@ -21,8 +21,8 @@ export const Table = ({ tableData, columnsArr }) => {
     setColumns(columns_);
   };
 
-  if (!tableData) {
-    return <Loader marginTop="5rem" />;
+  if (!tableData || !columns) {
+    return <Loader marginTop="5rem" time={1000} />;
   }
 
   return (
