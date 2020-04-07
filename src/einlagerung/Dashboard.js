@@ -1,10 +1,8 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import { Header } from "../components/header/Header";
-import { ButtonSelection } from "../components/button/ButtonSelection";
+import React from "react";
 import { NeueEinlagerung } from "./neueEinlagerung/NeueEinlagerung";
 import { OffeneEinlagerungen } from "./offeneEinlagerung/OffeneEinlagerungen";
 import { AlleEinlagerungen } from "./alleEinlagerungen/AlleEinlagerungen";
+import Dashboard from "../baseComponents/Dashboard";
 
 import {
   SUB_PAGES,
@@ -13,35 +11,18 @@ import {
   ALLE_EINLAGERUNGEN,
 } from "./data";
 
-const COMPONENTS = {
+const components = {
   [NEUE_EINLAGERUNG.name]: NeueEinlagerung,
   [OFFENE_EINLAGERUNGEN.name]: OffeneEinlagerungen,
   [ALLE_EINLAGERUNGEN.name]: AlleEinlagerungen,
 };
 
-export const Dashboard = () => {
-  const [type, setType] = useState(null);
-
-  if (type) {
-    const page = SUB_PAGES.find((page) => page.name === type);
-    const Component = COMPONENTS[page.name];
-    return <Component setType={setType} type={type} />;
-  }
+export const DashboardEinlagerung = () => {
   return (
-    <>
-      <Header>Lager Einlagerung</Header>
-
-      <DashboardWrapper>
-        {SUB_PAGES.map((page, index) => (
-          <ButtonSelection key={index} onClick={() => setType(page.name)}>
-            {page.name}
-          </ButtonSelection>
-        ))}
-      </DashboardWrapper>
-    </>
+    <Dashboard
+      header="EINLAGERUNG"
+      sub_pages={SUB_PAGES}
+      components={components}
+    />
   );
 };
-
-const DashboardWrapper = styled.div`
-  margin-top: 3rem;
-`;

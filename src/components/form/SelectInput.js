@@ -14,12 +14,18 @@ const errorStyles = {
 const SelectInput = ({ input, values, formFunc, errors }) => {
   const _parse = () => {
     // console.log("input = ", input);
+    // console.log("options= ", input.options);
 
     input.options.map((option) => {
       option["value"] = option[input.identifier];
       option["label"] = option[input.labelName];
       return option;
     });
+
+    if (input.default && typeof input.default === "object") {
+      input.default["value"] = input.default[input.identifier];
+      input.default["label"] = input.default[input.labelName];
+    }
   };
 
   if (input.identifier) _parse();

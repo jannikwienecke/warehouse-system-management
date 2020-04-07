@@ -35,7 +35,7 @@ export const PopupCardWrapper = styled.div`
   margin: 20px auto;
   margin-bottom: 2rem;
   transition: 1s;
-  height: 530px;
+  min-height: 400px;
   opacity: 0;
 
     ${({ visible }) =>
@@ -88,7 +88,7 @@ export const PopupHeaderText = styled.div`
   font-size: 2.4rem;
   line-height: 4rem;
   color: #fff;
-  padding: 1.5rem 0.5rem 1.5rem 0.5rem;
+  padding: 2rem 0.5rem 0.5rem 0.5rem;
 `;
 
 export const PopupHeaderTextSmall = styled.div`

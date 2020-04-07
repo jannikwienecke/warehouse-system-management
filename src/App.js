@@ -17,15 +17,20 @@ import MyPopup from "./templates/MyPopup";
 import MyModal from "./templates/MyModal";
 import { MyLayout } from "./MyLayout";
 import { PageRouter } from "./PageRouter";
-import { Dashboard } from "./einlagerung/Dashboard";
+import { DashboardEinlagerung } from "./einlagerung/Dashboard";
 import { DashboardAuslagerung } from "./auslagerung/DashboardAuslagerung";
 import CreateTour from "./auslagerung/createTour/CreateTour";
 import store from "./store";
-import { fetchCustomer, fetchProducts } from "./baseComponents/store/actions";
+import {
+  fetchCustomer,
+  fetchProducts,
+  fetchStorage,
+  fetchEmployees,
+} from "./baseComponents/store/actions";
 
 const initializeData = () => {
   // const dispatch = useDispatch();
-  const funcArr = [fetchCustomer, fetchProducts];
+  const funcArr = [fetchCustomer, fetchProducts, fetchStorage, fetchEmployees];
   funcArr.forEach((func) => {
     store.dispatch(func());
   });
@@ -46,14 +51,18 @@ export default function App() {
       <MyForm />
       <MyTable /> */}
           <Switch>
-            <PageRouter exact path="/" component={Dashboard} />
+            <PageRouter exact path="/" component={DashboardEinlagerung} />
 
             <PageRouter
               exact
               path="/auslagerung"
               component={DashboardAuslagerung}
             />
-            <PageRouter exact path="/einlagerung" component={Dashboard} />
+            <PageRouter
+              exact
+              path="/einlagerung"
+              component={DashboardEinlagerung}
+            />
 
             <PageRouter exact path="/table" component={MyTable} />
           </Switch>

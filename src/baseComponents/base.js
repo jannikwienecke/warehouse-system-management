@@ -2,12 +2,27 @@ import { customers, products } from "../testData";
 import { mockAPI } from "../functions/utils";
 export const IDENTIFIER = ["id", "value"];
 
+// const FIELDS
 export const INPUT = {
+  storage: {
+    type: "input",
+    name: "storage",
+    identifier: "row_id",
+    labelName: "row_name",
+    placeholder: "Lagerplatz",
+    setOptions: (options) => options[INPUT.storage.name],
+    func: (state) => {
+      return {
+        name: INPUT.storage.name,
+        data: state.base[INPUT.storage.name],
+      };
+    },
+  },
   customers: {
     type: "input",
     name: "customers",
-    identifier: "id",
-    labelName: "name",
+    identifier: "customer_id",
+    labelName: "customer_name",
     placeholder: "Kunde",
     setOptions: (options) => options[INPUT.customers.name],
     func: (state) => {
@@ -17,6 +32,21 @@ export const INPUT = {
       };
     },
   },
+  employees: {
+    type: "input",
+    name: "employees",
+    identifier: "employee_id",
+    labelName: "employee_name",
+    placeholder: "Mitarbeiter",
+    setOptions: (options) => options[INPUT.employees.name],
+    func: (state) => {
+      return {
+        name: INPUT.employees.name,
+        data: state.base[INPUT.employees.name],
+      };
+    },
+  },
+
   products: {
     type: "input",
     name: "products",
@@ -33,7 +63,7 @@ export const INPUT = {
     // },
 
     func: (name) =>
-      mockAPI(products, 2000).then((res) => {
+      mockAPI(products, 500).then((res) => {
         return {
           data: res.data,
           name: INPUT.products.name,
@@ -53,6 +83,18 @@ export const INPUT = {
     type: "date",
     size: 6,
   },
+  quantity: {
+    name: "quantity",
+    placeholder: "Anzahl",
+    type: "number",
+    size: 6,
+  },
+  notes: {
+    name: "notes",
+    placeholder: "Anmerkungen",
+    type: "text",
+    size: 6,
+  },
 };
 
 var ValidationException = {};
@@ -69,7 +111,7 @@ export const COLUMNS = {
   customer: ["Kunden ID", "customer_id"],
   product: ["Produkt ID", "product_id"],
   quantity: ["Stück", "quantity"],
-  einlagerer: ["Einlagerer", "einlagerer_name"],
+  einlagerer: ["Mitarbeiter", "employee_name"],
   storage: ["Lager", "storage"],
   row: ["Lagerplatz", "row_name"],
 };

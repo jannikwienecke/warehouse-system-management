@@ -15,12 +15,12 @@ export const customers = [
   {
     id: 1,
     customer_id: "37HOSTIE",
-    name: "Stitebel Eltron",
+    customer_name: "Stitebel Eltron",
   },
   {
     id: 2,
     customer_id: "57ERAST00",
-    name: "AST",
+    customer_name: "AST",
   },
 ];
 
@@ -32,8 +32,8 @@ export const einlagerungen = [
     product_name: "Flachkannen",
     quantity: 300,
     datetime: "2020-04-03 16:01:00",
-    einlagerer_name: "Fricke, Torben",
-    einlagerer_id: 1,
+    employee_name: "Fricke, Torben",
+    employee_id: 1,
     storage: "Halle 2",
     row_name: "C42",
     row_id: 1,
@@ -46,8 +46,8 @@ export const einlagerungen = [
     product_name: "Polykanister EVOH",
     quantity: 260,
     datetime: "2020-04-03 14:01:00",
-    einlagerer_name: "Fricke, Torben",
-    einlagerer_id: 1,
+    employee_name: "Fricke, Torben",
+    employee_id: 1,
     storage: "Halle 3 / Halle 2",
     row_name: "C38",
     row_id: 2,
@@ -60,11 +60,44 @@ export const einlagerungen = [
     product_name: "Sickenfässer Palettiert",
     quantity: 192,
     datetime: "2020-04-03 14:01:00",
-    einlagerer_id: null,
-    einlagerer_name: null,
+    employee_id: null,
+    employee_name: null,
     storage: "Brücke",
     row_name: "Br. 122",
     row_id: 3,
     notes: "",
   },
+];
+
+export const storage = [
+  {
+    row_id: 1,
+    row_name: "C42",
+    storage: 3,
+    open: 10,
+    isEmpty: false,
+    isFull: false,
+  },
+  {
+    row_id: 2,
+    row_name: "C38",
+    storage: 3,
+    open: 100,
+    isEmpty: true,
+    isFull: false,
+  },
+  {
+    row_id: 4,
+    row_name: "D22",
+    storage: 4,
+    open: 500,
+    isEmpty: true,
+    isFull: false,
+  },
+];
+
+export const employees = [
+  { employee_id: "1", employee_name: "Fricke, Torben" },
+  { employee_id: "2", employee_name: "Jagata, Maurice" },
+  { employe__id: "3", employee_name: "Sylla, Ibrahima" },
 ];

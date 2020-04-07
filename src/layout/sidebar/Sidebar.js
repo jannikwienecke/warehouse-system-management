@@ -35,8 +35,8 @@ export const Sidebar = ({ close }) => {
   const listItems = () => {
     return navListArr.map((el, key) => (
       <sb.ListRow key={key}>
-        <sb.ListHeader onClick={() => closeItemMenu(key)}>
-          <h5>
+        <sb.ListHeader>
+          <h5 onClick={() => closeItemMenu(key)}>
             {el.header.text}{" "}
             <sb.IconHeader>
               <FaCaretDown />{" "}

@@ -8,6 +8,7 @@ const StandardInput = ({ input, values, formFunc, scheme, errors }) => {
       return true;
     }
 
+    // debugger;
     const hasFormValidationErr = input.error;
     if (hasFormValidationErr) {
       const nameInErrorList = input.error.nameList.includes(name);
@@ -50,7 +51,7 @@ const InputElement = styled.input`
   position: relative;
   right: 1%;
   background-color: transparent;
-  color: #efefef;
+  // color: #efefef;
 
   ${({ error }) =>
     error &&
@@ -74,7 +75,7 @@ border: 1px solid red;
   ::placeholder {
     color: #888;
     opacity: 0.7;
-    font-size: 1.1rem;
+    font-size: 1rem;
 
     ${({ scheme }) =>
       scheme === "grey" &&

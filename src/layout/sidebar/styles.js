@@ -47,14 +47,14 @@ sb["ListItemWrapper"] = styled.div`
   ${({ isVisible }) =>
     isVisible &&
     css`
-      animation: ${sb.openKeyFrame} 1s ease-in-out forwards;
+      animation: ${sb.openKeyFrame} 0.5s ease-in-out forwards;
       animation-iteration-count: 1;
     `}
 
   ${({ isVisible }) =>
     isVisible === false &&
     css`
-      animation: ${sb.closeKeyFrame} 1s ease-in-out;
+      animation: ${sb.closeKeyFrame} 0.5s ease-in-out;
       animation-iteration-count: 1;
     `}
 `;
@@ -65,6 +65,7 @@ sb["ListItem"] = styled.div`
   :hover {
     background: rgb(63, 81, 181, 0.8);
     color: #fff;
+    cursor: pointer;
   }
 `;
 
@@ -81,12 +82,14 @@ sb["ListRow"] = styled.div`
   padding-bottom: 3%;
 
   :hover {
-    cursor: pointer;
+    // cursor: pointer;
     background: #fafafa;
   }
 `;
 
-sb["ListHeader"] = styled.div``;
+sb["ListHeader"] = styled.div`
+  cursor: pointer;
+`;
 sb["CloseSidebarWrapper"] = styled.div``;
 
 sb["CloseSidebarBtn"] = styled.button`

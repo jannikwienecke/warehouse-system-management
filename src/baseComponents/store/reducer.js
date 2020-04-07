@@ -1,8 +1,15 @@
-import { SET_CUSTOMER, SET_PRODUCTS } from "./types";
+import {
+  SET_CUSTOMER,
+  SET_PRODUCTS,
+  SET_STORAGE,
+  SET_EMPLOYEES,
+} from "./types";
 
 const initialState = {
+  storage: null,
   customers: null,
   products: null,
+  employees: null,
 };
 
 export default function (state = initialState, action) {
@@ -17,6 +24,18 @@ export default function (state = initialState, action) {
       return {
         ...state,
         products: action.payload,
+      };
+
+    case SET_STORAGE:
+      return {
+        ...state,
+        storage: action.payload,
+      };
+
+    case SET_EMPLOYEES:
+      return {
+        ...state,
+        employees: action.payload,
       };
 
     default:

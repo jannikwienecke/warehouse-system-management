@@ -1,3 +1,5 @@
+import {} from "../testData";
+
 const SET_AUSLAGERUNGEN = "SET_AUSLAGERUNGEN";
 
 const initialState = {

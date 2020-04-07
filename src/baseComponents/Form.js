@@ -32,7 +32,7 @@ export const Form = (props) => {
     }
     var optionMissing = false;
     arrInput.forEach((input) => {
-      const options = optionsObj[input.name];
+      var options = optionsObj[input.name];
       if (!options && input.type === "input") {
         optionMissing = true;
       }
@@ -41,12 +41,10 @@ export const Form = (props) => {
       setOptionsLoaded(true);
       setLoading(false);
     } else {
-      // console.log("s");
-
       setLoading(true);
       setTimeout(() => {
         runFetchDataFunctions();
-      }, 500);
+      }, 100);
     }
   };
 
@@ -58,12 +56,12 @@ export const Form = (props) => {
         options.forEach((option) => {
           if (!option) return;
           if (!option || !option.data) {
-            console.log("OPTION EMPTY = ", option);
-
             return;
           }
-          console.log("arrinput", arrInput);
-          console.log("option", option);
+          const input = arrInput.find((input) => input.name === option.name);
+          if (input.filter) {
+            option.data = input.filter(option.data);
+          }
 
           obj[option.name] = option.data;
         });
@@ -118,14 +116,13 @@ export const Form = (props) => {
   };
 
   const formValidation = (data) => {
-    if (middlewareValidation) {
+    if (middlewareValidation && middlewareValidation.length > 0) {
       runMiddleware(middlewareValidation, data);
-    }
-
-    if (middlewareParse) {
+    } else if (middlewareParse && middlewareParse.length > 0) {
       runMiddleware(middlewareParse, data);
+    } else {
+      props.apiFunc(dispatch, data);
     }
-    props.apiFunc(dispatch, data);
   };
 
   const allOptionsAreSet = () => {
@@ -158,24 +155,19 @@ export const Form = (props) => {
   );
 };
 
-const FormElement = ({
-  formValidation,
-  error,
-  isLoading,
-  arrInput,
-  optionsObj,
-  formTitle,
-  requiredArguments,
-  colorScheme,
-  btnSize,
-  btnVariant,
-  btnText,
-  btnPosition,
-  formColor,
-  formTopMargin,
-  formWidth,
-  optionsLoaded,
-}) => {
+const FormElement = (props) => {
+  const {
+    arrInput,
+    optionsLoaded,
+    isLoading,
+    optionsObj,
+    cardWrapper,
+    error,
+    formWidth,
+    formTopMargin,
+    formColor,
+  } = props;
+
   const [optionsReady, setOptionsReady] = useState(false);
 
   useEffect(() => {
@@ -202,36 +194,62 @@ const FormElement = ({
       </>
     );
 
+  arrInput.forEach((input) => {
+    input.error = error;
+  });
   return (
     <>
       {error && <AlertBanner err={error.msg} />}
-      <FormCard
-        width={formWidth ? formWidth : 90}
-        marginTop={formTopMargin ? formTopMargin : 2}
-        color={formColor ? formColor : "#e3e3e3"}
-      >
-        <ModularForm
-          requiredArguments={requiredArguments}
-          colorScheme={colorScheme ? colorScheme : "grey"}
-          headline={formTitle}
-          arrInput={arrInput}
-          submitFunc={(data) => formValidation(data)}
-          arrBtns={{
-            btns: [
-              {
-                size: btnSize ? btnSize : "md",
-                variant: btnVariant ? btnVariant : "dark",
-                text: btnText ? btnText : "Suchen",
-                isSubmitFunc: true,
-                disabled: isLoading,
-              },
-            ],
-
-            justifyContent: "flex-end",
-            position: btnPosition ? btnPosition : "top",
-          }}
-        />
-      </FormCard>
+      {cardWrapper ? (
+        <FormCard
+          width={formWidth ? formWidth : 90}
+          marginTop={formTopMargin ? formTopMargin : 2}
+          color={formColor ? formColor : "#e3e3e3"}
+        >
+          <FormRaw {...props} />
+        </FormCard>
+      ) : (
+        <FormRaw {...props} />
+      )}
     </>
+  );
+};
+
+const FormRaw = ({
+  formValidation,
+  isLoading,
+  arrInput,
+  formTitle,
+  requiredArguments,
+  colorScheme,
+  btnSize,
+  btnVariant,
+  btnText,
+  btnPosition,
+  formColor,
+  optionsLoaded,
+}) => {
+  return (
+    <ModularForm
+      requiredArguments={requiredArguments}
+      colorScheme={colorScheme ? colorScheme : "grey"}
+      headline={formTitle}
+      arrInput={arrInput}
+      submitFunc={(data) => formValidation(data)}
+      arrBtns={{
+        btns: [
+          {
+            size: btnSize ? btnSize : "md",
+            variant: btnVariant ? btnVariant : "dark",
+            text: btnText ? btnText : "Suchen",
+            isSubmitFunc: true,
+            disabled: isLoading,
+          },
+        ],
+
+        justifyContent: "flex-end",
+        position: btnPosition ? btnPosition : "top",
+      }}
+    />
   );
 };

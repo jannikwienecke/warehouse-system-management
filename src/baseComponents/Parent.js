@@ -1,48 +1,21 @@
 import React, { useState, useEffect } from "react";
-
+import PropTypes from "prop-types";
 import { HeaderElement } from "../common/HeaderElement";
 import { Form } from "../baseComponents/Form";
 import { Table } from "../baseComponents/Table";
 import { useSelector, useDispatch } from "react-redux";
 import { EXCEPTIONS } from "./base";
-import { copy } from "../functions/utils";
+import { copy, traceDataName, getDataByTrace } from "../functions/utils";
 import { Loader } from "../common/Loader";
 
-const traceDataName = (state, toFind, traceKeys) => {
-  if (!state || typeof state !== "object" || state.length) {
-    traceKeys = [];
-    return;
-  }
-
-  var keys = Object.keys(state, keys);
-  var found = false;
-
-  if (keys.includes(toFind)) {
-    EXCEPTIONS.BreakException = { trace: [...traceKeys] };
-    throw EXCEPTIONS.BreakException;
-  }
-
-  keys.forEach((key) => {
-    var sub_state = state[key];
-    traceDataName(sub_state, toFind, [...traceKeys, key]);
-  });
-};
-
-const getDataByTrace = (state, dataName, trace) => {
-  var sub_state = null;
-  trace.forEach((key) => {
-    sub_state = state[key];
-  });
-  return sub_state[dataName];
-};
-
-const setStateByKeyName = (state, dataName) => {
+const setStateByKeyName = (state, component) => {
+  if (!component || !component.dataName) return false;
   try {
-    traceDataName(state, dataName, []);
+    traceDataName(state, component.dataName, []);
     return null;
   } catch (e) {
     if (e === EXCEPTIONS.BreakException) {
-      return getDataByTrace(state, dataName, e.trace);
+      return getDataByTrace(state, component.dataName, e.trace);
     } else {
       throw e;
     }
@@ -59,16 +32,16 @@ export const Parent = (props) => {
   const dispatch = useDispatch();
 
   const tableData = useSelector((state) =>
-    setStateByKeyName(state, props.table.dataName)
+    setStateByKeyName(state, props.table)
   );
-
-  useEffect(() => {
-    if (apiRequest) makeApiRequest();
-  }, [apiRequest]);
 
   useEffect(() => {
     runInitFunctions();
   }, []);
+
+  useEffect(() => {
+    if (apiRequest) makeApiRequest();
+  }, [apiRequest]);
 
   useEffect(() => {
     if (tableData) {
@@ -95,19 +68,50 @@ export const Parent = (props) => {
 
   return (
     <>
-      <HeaderElement setType={setType} type={type} sub_pages={sub_pages} />
+      {props.header && (
+        <HeaderElement
+          setType={props.header.setType}
+          type={props.header.type}
+          sub_pages={props.header.sub_pages}
+        />
+      )}
 
-      <Form
-        {...props.form}
-        isLoading={isLoading}
-        setApiRequest={setApiRequest}
-        setLoading={setFormLoading}
-      />
+      {props.form && (
+        <Form
+          {...props.form}
+          isLoading={formLoading}
+          setApiRequest={setApiRequest}
+          setLoading={setFormLoading}
+        />
+      )}
 
-      {/* <Table {...props.table} tableData={tableData} /> */}
-      {!formLoading && <Table {...props.table} tableData={tableData} />}
+      {!formLoading && props.table && (
+        <Table {...props.table} tableData={tableData} />
+      )}
 
       {formLoading && <Loader marginTop="5rem" />}
+
+      {!formLoading && props.children}
     </>
   );
+};
+
+Parent.propTypes = {
+  name: PropTypes.string,
+  type: PropTypes.string,
+  setType: PropTypes.func.isRequired,
+  sub_pages: PropTypes.arrayOf(PropTypes.string),
+  table: PropTypes.shape({
+    columnArr: PropTypes.array.isRequired,
+    dataName: PropTypes.string.isRequired,
+    initFunc: PropTypes.func.isRequired,
+  }),
+
+  form: PropTypes.shape({
+    title: PropTypes.string.isRequired,
+    arrInput: PropTypes.array.isRequired,
+    middlewareValidation: PropTypes.arrayOf(PropTypes.func),
+    middlewareParse: PropTypes.arrayOf(PropTypes.func),
+    apiFunc: PropTypes.func.isRequired,
+  }),
 };

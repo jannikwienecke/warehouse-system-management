@@ -3,8 +3,8 @@ import { Header } from "../../components/header/Header";
 import { Navigation } from "../../components/navigation/Navigation";
 import { ButtonPageNav } from "../../components/button/ButtonPageNav";
 import { SUB_PAGES } from "../data";
-import { fetchAuslagerungen } from "./store";
 import { useDispatch } from "react-redux";
+import { fetchAuslagerungen } from "../store";
 
 export const NeueAuslagerung = ({ setType, type }) => {
   const dispatch = useDispatch();

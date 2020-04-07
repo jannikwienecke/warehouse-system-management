@@ -24,7 +24,7 @@ const SummaryPopup = ({ summary, cancel, approve, approveAndPrint }) => {
         visible={visible}
         close={() => cancel(true)}
         marginTop="2rem"
-        height={"700px"}
+        // height={"80vh"}
         heightHeader="35%"
         headline="Einlagerung Überprüfen"
         btnArr={[

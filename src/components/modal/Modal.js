@@ -21,7 +21,7 @@ const ModularModal = ({ children, headline, close, visible, btnArr }) => {
     <>
       <Modal show={visible} onHide={close} animation={true}>
         <ContentAlertBox>
-          <h3>{headline.toUpperCase()}</h3>
+          {headline && <h3>{headline.toUpperCase()}</h3>}
           {children}
           {btnList()}
         </ContentAlertBox>
