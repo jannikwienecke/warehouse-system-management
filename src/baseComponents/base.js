@@ -143,4 +143,6 @@ export const COLUMNS = {
   open: ["Verfügbar", "open"],
   isEmptyRow: ["Leer?", "isEmpty"],
   isFullRow: ["Voll?", "isFull"],
+  tour: ["Tour Nr.", "tour_id"],
+  driver: ["Fahrer", "employee_id"],
 };

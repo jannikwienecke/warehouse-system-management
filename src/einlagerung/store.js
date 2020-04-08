@@ -1,25 +1,55 @@
-import { einlagerungen, storage } from "../testData";
+import axios from "axios";
+import { einlagerungen, storage, REM } from "../testData";
 import {
   SET_STORAGE_BRIDGES,
   SET_STORAGE,
 } from "../baseComponents/store/types";
 
 const SET_EINLAGERUNGEN = "SET_EINLAGERUNGEN";
+const SET_EINLAGERUNGEN_FULFILLED = "SET_EINLAGERUNGEN_FULFILLED";
 const SELECT_BRIDGE = "SELECT_BRIDGE";
+const IS_DOG = "IS_DOG";
 
 const initialState = {
+  fetching: null,
   einlagerungen: null,
+  dog: null,
+  error: false,
 };
 
 // -------------------------REDUCER--------------------------------
 // ---------------------------------------------------------------
 
 export default function (state = initialState, action) {
+  // console.log("ACTION REDUCER == ", action);
+
+  if (action.type.includes("_PENDING")) {
+    return {
+      ...state,
+      fetching: true,
+    };
+  }
+
   switch (action.type) {
     case SET_EINLAGERUNGEN:
       return {
         ...state,
         einlagerungen: action.payload,
+        fetching: false,
+      };
+
+    case IS_DOG + "_FULFILLED":
+      return {
+        ...state,
+        dog: action.payload,
+        fetching: false,
+      };
+
+    case IS_DOG + "_REJECTED":
+      return {
+        ...state,
+        fetching: false,
+        error: action.payload,
       };
     default:
       return state;
@@ -28,9 +58,24 @@ export default function (state = initialState, action) {
 
 // -------------------------ACTIONS--------------------------------
 // ---------------------------------------------------------------
+const APPENDIX = "einlagerung";
 
 export const fetchEinlagerungen = () => (dispatch, getState) => {
-  dispatch({ type: SET_EINLAGERUNGEN, payload: einlagerungen });
+  const url = "https://dog.ceo/api/breeds/image/randomm";
+
+  console.log("fetch einlagerungen....");
+
+  const res = dispatch({
+    type: IS_DOG,
+    payload: axios.get(url),
+    dataName: "message",
+    APPENDIX,
+  });
+
+  dispatch({
+    type: SET_EINLAGERUNGEN,
+    payload: einlagerungen,
+  });
 };
 
 export const selectBridge = (storageBridges, selectedBridge, values) => (

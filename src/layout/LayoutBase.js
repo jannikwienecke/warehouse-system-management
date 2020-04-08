@@ -1,28 +1,63 @@
-import React, { useState } from "react";
+import React, { useState, useReducer, useEffect, useRef } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { Sidebar } from "./sidebar/Sidebar";
 import { Content } from "./Content";
 import { FaBars } from "react-icons/fa";
+import { useSelector } from "react-redux";
+import { AlertBanner } from "../common/AlertBanner";
+import { copy } from "../functions/utils";
+
+const useErrors = () => {
+  const [errorQueue, setErrorQueue] = useState([]);
+  const error = useSelector((state) => state.base.error);
+
+  useEffect(() => {
+    if (error) {
+      setErrorQueue([...errorQueue, error]);
+    }
+  }, [error]);
+
+  var errorBanners = errorQueue.map((err) => {
+    if (!err) return <></>;
+    const msg = `Status: ${err.code} - ${err.message}`;
+
+    return <AlertBanner err={msg} />;
+  });
+
+  return { errorBanners };
+};
 
 export const LayoutBase = ({ width, children }) => {
   const [isVisible, setIsVisible] = useState(false);
+  const { errorBanners } = useErrors();
 
   return (
-    <Layout>
-      <OpenSidebarBtn isVisible={isVisible} onClick={() => setIsVisible(true)}>
-        <FaBars />
-      </OpenSidebarBtn>
+    <>
+      {errorBanners.length > 0 && <ErrorWrapper>{errorBanners}</ErrorWrapper>}
 
-      <ContentWrapper width={width} isVisible={isVisible}>
-        <Content width={90}>{children}</Content>
-      </ContentWrapper>
-      <SidebarWrapper width={100 - width} isVisible={isVisible}>
-        <Sidebar close={() => setIsVisible(false)} />
-      </SidebarWrapper>
-    </Layout>
+      <Layout>
+        <OpenSidebarBtn
+          isVisible={isVisible}
+          onClick={() => setIsVisible(true)}
+        >
+          <FaBars />
+        </OpenSidebarBtn>
+
+        <ContentWrapper width={width} isVisible={isVisible}>
+          <Content width={90}>{children}</Content>
+        </ContentWrapper>
+        <SidebarWrapper width={100 - width} isVisible={isVisible}>
+          <Sidebar close={() => setIsVisible(false)} />
+        </SidebarWrapper>
+      </Layout>
+    </>
   );
 };
+
+const ErrorWrapper = styled.div`
+  position: absolute;
+`;
 
 const OpenSidebarBtn = styled.div`
   color: #3f51b5;

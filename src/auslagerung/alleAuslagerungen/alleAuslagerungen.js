@@ -1,23 +1,20 @@
 import React, { useState, useEffect } from "react";
-
 import { SUB_PAGES } from "../data";
 import { mockAPI, setArrInputSize } from "../../functions/utils";
 import { INPUT, COLUMNS } from "../../baseComponents/base";
 import { endGreaterStart, extractIdentifier } from "../../functions/middleware";
 import { Parent } from "../../baseComponents/Parent";
-import { fetchEinlagerungen } from "../store";
+import { fetchAuslagerungen } from "../store";
 import { useDispatch } from "react-redux";
-import { Redirect } from "react-router";
-import ModularModal from "../../components/modal/Modal";
 
 const columns = [
+  COLUMNS.tour,
   COLUMNS.datetime,
   COLUMNS.customer,
   COLUMNS.product,
   COLUMNS.quantity,
-  COLUMNS.einlagerer,
-  COLUMNS.storage,
   COLUMNS.row,
+  COLUMNS.driver,
 ];
 
 const arrInput = [
@@ -29,31 +26,24 @@ const arrInput = [
 
 setArrInputSize(arrInput, 6);
 
-export const AlleEinlagerungen = ({ setType, type }) => {
-  // console.log("RUN----------------------------------");
-
+export const AlleAuslagerungen = ({ setType, type }) => {
   return (
     <>
       <Parent
         header={{
-          name: "Alle Einlagerungen",
+          name: "Alle Auslagerunge",
           setType: setType,
           type: type,
           sub_pages: SUB_PAGES,
         }}
         table={{
           columnsArr: columns,
-          dataName: "einlagerungen",
-          initFunc: (dispatch) => dispatch(fetchEinlagerungen()),
+          dataName: "auslagerungen",
+          initFunc: (dispatch) => dispatch(fetchAuslagerungen()),
           middleware: [(data) => console.log("DATA VALIDATION")],
-          // clickRow: {
-          //   func: (rowData) => <Test name="MY NAME" rowData={rowData} />,
-          //   baseComponent: {
-          //     type: "Modal",
-          //   },
-          // },
+
           clickRow: {
-            func: (rowData) => <Test name="MY NAME" rowData={rowData} />,
+            func: (rowData) => <DetailView rowData={rowData} />,
             baseComponent: {
               type: "Popup",
               settings: {
@@ -64,7 +54,7 @@ export const AlleEinlagerungen = ({ setType, type }) => {
           },
         }}
         form={{
-          formTitle: "Einlagerungen Suchen",
+          formTitle: "Auslagerungen Suchen",
           arrInput: arrInput,
           middlewareValidation: [endGreaterStart],
           middlewareParse: [extractIdentifier],
@@ -72,7 +62,7 @@ export const AlleEinlagerungen = ({ setType, type }) => {
           cardWrapper: true,
           apiFunc: (dispatch, parameter) => {
             return mockAPI({}, parameter, 1000).then((res) =>
-              dispatch(fetchEinlagerungen)
+              dispatch(fetchAuslagerungen)
             );
           },
         }}
@@ -81,16 +71,14 @@ export const AlleEinlagerungen = ({ setType, type }) => {
   );
 };
 
-const Test = ({ name, rowData, isSubmitted }) => {
-  console.log("ROW DATA TEST= ", rowData);
-
+const DetailView = ({ name, rowData, isSubmitted }) => {
   useEffect(() => {
     console.log("SUBMIT FUNC", rowData);
   }, [isSubmitted]);
 
   return (
     <>
-      <h1>Einlagerung</h1>
+      <h1>Zusammenfassung Auslagerung</h1>
       <h3>Kunde : {rowData.original.customer_id}</h3>
     </>
   );

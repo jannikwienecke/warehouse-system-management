@@ -6,6 +6,7 @@
   "main": "src/index.js",
   "dependencies": {
     "@material-ui/core": "^4.9.8",
+    "axios": "^0.19.2",
     "node-sass": "^4.13.1",
     "react": "16.12.0",
     "react-bootstrap": "1.0.0",
@@ -21,6 +22,8 @@
     "react-table": "7.0.0",
     "redux": "^4.0.5",
     "redux-devtools-extension": "^2.13.8",
+    "redux-logger": "^3.0.6",
+    "redux-promise-middleware": "^6.1.2",
     "redux-thunk": "^2.3.0",
     "styled-components": "5.0.1"
   },

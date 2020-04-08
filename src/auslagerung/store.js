@@ -1,4 +1,4 @@
-import {} from "../testData";
+import { auslagerungen } from "../testData";
 
 const SET_AUSLAGERUNGEN = "SET_AUSLAGERUNGEN";
 
@@ -26,5 +26,5 @@ export default function (state = initialState, action) {
 // ---------------------------------------------------------------
 
 export const fetchAuslagerungen = () => (dispatch, getState) => {
-  dispatch({ type: SET_AUSLAGERUNGEN, payload: [1, 2, 3] });
+  dispatch({ type: SET_AUSLAGERUNGEN, payload: auslagerungen });
 };

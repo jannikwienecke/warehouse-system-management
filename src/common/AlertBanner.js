@@ -1,12 +1,19 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 
 export const AlertBanner = (props) => {
   const { err, warning, msg } = props;
+  const [destroy, setDestroy] = useState(null);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setDestroy(true);
+    }, 5000);
+  }, []);
 
   return (
-    <AlertWrapper {...props}>
+    <AlertWrapper onClick={() => setDestroy(true)} destroy={destroy} {...props}>
       {err} {warning} {msg}
     </AlertWrapper>
   );
@@ -24,20 +31,26 @@ AlertBanner.propTypes = {
 // };
 
 const AlertWrapper = styled.div`
-position: absolute;
+position: relative;
 background: red;
-height: 3rem;
-width: 75%;
+width: 100%;
 top: 0;
 left: 0;
 text-align: left;
-padding: 0.6rem;
+padding: 0.8rem 0.1rem 0.8rem 0.6rem ;
 padding-left: 8rem;
 background: #ef5350;
 
 color: #fff;
 font-size: 1.05rem;
 font-weight: bold;
+
+${({ destroy }) =>
+  destroy &&
+  `
+  display: none;
+
+ `}
 
 ${({ err }) =>
   err &&
