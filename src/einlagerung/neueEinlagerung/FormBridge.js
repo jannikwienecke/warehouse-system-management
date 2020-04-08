@@ -3,9 +3,12 @@ import styled from "styled-components";
 import FormCard from "../../components/form/FormCard";
 import ModularForm from "../../components/form/ModularForm";
 import ModularModal from "../../components/modal/Modal";
-import { mockAPI } from "../../functions/utils";
+import { mockAPI, setArrInputSize } from "../../functions/utils";
+import { Parent } from "../../baseComponents/Parent";
+import { INPUT, EXCEPTIONS } from "../../baseComponents/base";
+import { extractIdentifier } from "../../functions/middleware";
 
-const FormBridge = props => {
+const FormBridge = (props) => {
   return (
     <Wrapper>
       <FormElement {...props} />
@@ -21,14 +24,23 @@ const FormElement = ({ setBridge, bridgeCounter, max, openBridges }) => {
   const [modal, showModal] = useState(null);
   const [error, setError] = useState(null);
 
-  const validate = data => {
-    data.quantity = parseInt(data.quantity);
+  const validateMaxValue = (data) => {
+    console.log("VALIDATE MAX VALUE...", data);
+    console.log("max = ", max);
 
-    if (data.quantity <= max) {
-      setBridge(data);
-    } else {
+    if (parseInt(data.quantity) > max) {
       setError(`Die maximale Anzahl ist ${max}`);
+      EXCEPTIONS.ValidationException["msg"] = "Anzahl zu hoch";
+      EXCEPTIONS.ValidationException["nameList"] = ["quantity"];
+
+      throw EXCEPTIONS.ValidationException;
     }
+  };
+
+  const arrInput = [INPUT.quantity, INPUT.notes, INPUT.storageBridges];
+  setArrInputSize(arrInput, 10);
+  INPUT.storageBridges.filter = (storageBridges) => {
+    return storageBridges.filter((bridge) => bridge.isEmpty === true);
   };
 
   if (!openBridges) return <></>;
@@ -36,49 +48,19 @@ const FormElement = ({ setBridge, bridgeCounter, max, openBridges }) => {
     <>
       <ErrorModal error={error} setError={setError} />
       <OpenQuantity>Offene Anzahl: {max}</OpenQuantity>
-      <FormCard width={90} marginTop={2} color="white">
-        <ModularForm
-          headline={`${bridgeCounter}. Brücke auswählen`}
-          colorScheme="dark"
-          arrInput={[
-            {
-              placeholder: "Brückenummer",
-              name: "bridgeNumber",
-              type: "input",
-              size: 4,
-              options: openBridges
-            },
-            {
-              name: "quantity",
-              placeholder: "Anzahl [Stück]",
-              type: "number",
-              size: 4,
-              max: max
-            },
 
-            {
-              name: "Anmerkungen",
-              type: "text",
-              size: 4
-            }
-          ]}
-          submitFunc={data => validate(data)}
-          requiredArguments={["bridgeNumber"]}
-          arrBtns={{
-            btns: [
-              {
-                size: "md",
-                variant: "dark",
-                text: "Weiter",
-                isSubmitFunc: true
-              }
-            ],
-
-            justifyContent: "flex-end",
-            position: "top"
-          }}
-        />
-      </FormCard>
+      <Parent
+        form={{
+          formTitle: `${bridgeCounter}. Brücke auswählen`,
+          arrInput: arrInput,
+          middlewareValidation: [validateMaxValue],
+          middlewareParse: [extractIdentifier],
+          requiredArguments: [INPUT.storageBridges.name],
+          cardWrapper: true,
+          btnText: "Bestätigen",
+          apiFunc: (dispatch, parameter) => setBridge(parameter),
+        }}
+      />
     </>
   );
 };
@@ -96,8 +78,8 @@ const ErrorModal = ({ error, setError }) => {
           {
             text: "OK",
             variant: "outline-dark",
-            func: () => setError(null)
-          }
+            func: () => setError(null),
+          },
         ]}
       >
         <h4>{error}</h4>

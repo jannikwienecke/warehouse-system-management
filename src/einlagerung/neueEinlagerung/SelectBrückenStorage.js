@@ -4,40 +4,34 @@ import FormCard from "../../components/form/FormCard";
 import ModularForm from "../../components/form/ModularForm";
 import FormBridge from "./FormBridge";
 import { sum, mockAPI } from "../../functions/utils";
-
-const testBridges = [
-  { value: "1", label: "Brücke Nr. 1" },
-  { value: "2", label: "Brücke Nr. 138" },
-  { value: "3", label: "Brücke Nr. 231" }
-];
+import { fetchStorageBridges } from "../../baseComponents/store/actions";
+import { useSelector, useDispatch } from "react-redux";
+import { selectBridge } from "../store";
 
 export const SelectBrückenStorage = ({ values, completeData }) => {
   const [show, setShow] = useState(false);
   const [bridges, setBridges] = useState([]);
   const [bridge, setBridge] = useState(null);
-  const [openBridges, setOpenBridges] = useState(null);
+
+  const storageBridges = useSelector((state) => state.base.storageBridges);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    setTimeout(() => setShow(true), 1000);
-    mockAPI(testBridges).then(res => setOpenBridges(res.data));
+    setTimeout(() => setShow(true), 500);
+    dispatch(fetchStorageBridges());
   }, []);
 
   useEffect(() => {
     if (bridge) {
-      console.log("br === ", bridge);
-
-      setOpenBridges(
-        openBridges.filter(
-          bridge_ => bridge_.value !== bridge.bridgeNumber.value
-        )
-      );
       validateQuantityBridge();
+      dispatch(selectBridge(storageBridges, bridge, values));
     }
   }, [bridge]);
 
   const getMissingQuantity = () => {
     if (bridges.length > 0) {
-      const prevQuantities = bridges.map(bridge => bridge.quantity);
+      const prevQuantities = bridges.map((bridge) => bridge.quantity);
       const sumQuantity = sum(prevQuantities);
       return parseInt(values.quantity) - sumQuantity;
     } else {
@@ -58,8 +52,6 @@ export const SelectBrückenStorage = ({ values, completeData }) => {
     }
   };
 
-  console.log("open br == ", openBridges);
-
   if (!show) return <></>;
   return (
     <div>
@@ -67,7 +59,7 @@ export const SelectBrückenStorage = ({ values, completeData }) => {
         max={getMissingQuantity()}
         bridgeCounter={bridges.length + 1}
         setBridge={setBridge}
-        openBridges={openBridges}
+        openBridges={storageBridges}
       />
     </div>
   );

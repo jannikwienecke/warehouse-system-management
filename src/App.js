@@ -26,11 +26,18 @@ import {
   fetchProducts,
   fetchStorage,
   fetchEmployees,
+  fetchStorageBridges,
 } from "./baseComponents/store/actions";
 
 const initializeData = () => {
   // const dispatch = useDispatch();
-  const funcArr = [fetchCustomer, fetchProducts, fetchStorage, fetchEmployees];
+  const funcArr = [
+    fetchCustomer,
+    fetchProducts,
+    fetchStorage,
+    fetchStorageBridges,
+    fetchEmployees,
+  ];
   funcArr.forEach((func) => {
     store.dispatch(func());
   });

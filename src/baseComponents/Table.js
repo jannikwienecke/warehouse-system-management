@@ -15,24 +15,62 @@ const baseComponents = {
   Empty: Empty,
 };
 
-export const Table = ({ tableData, columnsArr, middleware, clickRow }) => {
+export const Table = ({
+  tableData,
+  columnsArr,
+  middleware,
+  clickRow,
+  filterFuncStack,
+  parseFuncStack,
+}) => {
   const [columns, setColumns] = useState(null);
   const [ClickRowComponent, setClickRowComponent] = useState(null);
   const [rowData, setRowData] = useState(null);
+  const [preparedData, setPrepareData] = useState(null);
 
   useEffect(() => {
     _parseColumns();
   }, [columnsArr]);
 
+  useEffect(() => {
+    if (tableData) {
+      var data = parse(filter(tableData));
+      setPrepareData(data);
+    }
+  }, [tableData]);
+
   const _parseColumns = () => {
-    const columns_ = [];
-    columnsArr.forEach((column) => {
-      columns_.push({
-        Header: column[0],
-        accessor: column[1],
+    if (columnsArr[0].accessor) {
+      var columns_ = columnsArr;
+    } else {
+      var columns_ = [];
+      columnsArr.forEach((column) => {
+        columns_.push({
+          Header: column[0],
+          accessor: column[1],
+        });
       });
-    });
+    }
+
     setColumns(columns_);
+  };
+
+  const parse = (data) => {
+    if (parseFuncStack) {
+      parseFuncStack.forEach((parse_) => {
+        data = parse_(data);
+      });
+    }
+    return data;
+  };
+
+  const filter = (data) => {
+    if (filterFuncStack) {
+      filterFuncStack.forEach((filter_) => {
+        data = filter_(data);
+      });
+    }
+    return data;
   };
 
   const runClickRowMiddleware = (middlewareStack, data) => {
@@ -53,7 +91,7 @@ export const Table = ({ tableData, columnsArr, middleware, clickRow }) => {
     }
   };
 
-  if (!tableData || !columns) {
+  if (!preparedData || !columns) {
     return <Loader marginTop="5rem" time={1000} />;
   }
 
@@ -68,7 +106,7 @@ export const Table = ({ tableData, columnsArr, middleware, clickRow }) => {
       <Wrapper>
         {tableData && tableData.length == 0 && <h1>Keine Daten vorhanden</h1>}
         <ModularTable
-          data={tableData}
+          data={preparedData}
           columns={columns}
           pagination={true}
           handleClick={handleClick}

@@ -1,25 +1,25 @@
 import React, { useState, useEffect } from "react";
 import { ButtonSelection } from "../../components/button/ButtonSelection";
-import ModularTable from "../../components/table/ModularTable";
 import styled from "styled-components";
-import { sum } from "../../functions/utils";
+import { sum, copy } from "../../functions/utils";
 import { SuccessScreen } from "../../common/SuccessScreen";
+import { Parent } from "../../baseComponents/Parent";
+import { COLUMNS } from "../../baseComponents/base";
+import { useDispatch, useSelector } from "react-redux";
+import { selectRow } from "../store";
+
 export const SelectStorageRow = ({
   goBack,
   values,
   completeData,
   selectedStorage,
-  filteredRows,
   selectedRows,
   setSelelectedRows,
 }) => {
   const [successScreen, showSuccessScreen] = useState(null);
+  const storage = useSelector((state) => state.base.storage);
 
-  const handleAllSelected = (row, openQuantity) => {
-    row.quantity = openQuantity;
-    values["rows"] = selectedRows ? [...selectedRows, row] : [row];
-    completeData(values);
-  };
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (successScreen) {
@@ -29,12 +29,20 @@ export const SelectStorageRow = ({
     }
   }, [successScreen]);
 
+  const handleAllSelected = (row, openQuantity) => {
+    row.quantity = openQuantity;
+    values["rows"] = selectedRows ? [...selectedRows, row] : [row];
+    completeData(values);
+  };
+
   const handleNotAllSelected = (row) => {
     row.quantity = row.open;
 
     if (selectedRows) {
       setSelelectedRows([...selectedRows, row]);
     } else {
+      console.log("set selected rows", copy(row));
+
       setSelelectedRows([row]);
     }
 
@@ -45,11 +53,12 @@ export const SelectStorageRow = ({
     row = row.original;
     const openQuantity = getOpenQuantity();
 
-    if (row.open > openQuantity) {
+    if (row.open >= openQuantity) {
       handleAllSelected(row, openQuantity);
     } else {
       handleNotAllSelected(row);
     }
+    dispatch(selectRow(storage, row, values));
   };
 
   const getOpenQuantity = () => {
@@ -66,6 +75,30 @@ export const SelectStorageRow = ({
     const text = `Offene Anzahl ${getOpenQuantity()}`;
     return <SuccessScreen text={text} />;
   }
+
+  const filterStorage = (data) => {
+    return data.filter((row) => row.storage === selectedStorage);
+  };
+
+  const filterFullRows = (data) => {
+    return data.filter((row) => !row.isFull);
+  };
+
+  const parseBoolean = (data) => {
+    return data.map((row) => {
+      row.isEmpty = row.isEmpty ? "Ja" : "Nein";
+      return row;
+    });
+  };
+
+  const sortRows = (rows) => {
+    return rows.sort((a, b) => {
+      if (a.isEmpty) return -1;
+      if (a.open <= b.open) return 1;
+      else return -1;
+    });
+  };
+
   return (
     <>
       <Wrapper>
@@ -75,52 +108,33 @@ export const SelectStorageRow = ({
           Anderes Lager auswählen
         </ButtonSelection>
 
-        <TableOpenRows
-          filteredRows={filteredRows}
-          handleRowClick={handleRowClick}
-          selectedStorage={selectedStorage}
+        <Parent
+          table={{
+            columnsArr: columns,
+            dataName: "storage",
+            filterFuncStack: [filterStorage, filterFullRows],
+            parseFuncStack: [parseBoolean, sortRows],
+            middleware: [(data) => console.log("DATA VALIDATION")],
+            clickRow: {
+              func: handleRowClick,
+              baseComponent: {
+                type: "Empty",
+                headline: "",
+                settings: {},
+              },
+            },
+          }}
         />
       </Wrapper>
     </>
   );
 };
 
-const TableOpenRows = ({ filteredRows, handleRowClick, selectedStorage }) => {
-  if (!filteredRows) return <></>;
-
-  return (
-    <>
-      <ModularTable
-        data={filteredRows}
-        columns={columns}
-        pagination={true}
-        handleClick={(rowData) => handleRowClick(rowData)}
-      />
-    </>
-  );
-};
-
-export const columns = [
-  {
-    Header: "ID",
-    accessor: "value", // accessor is the "key" in the data
-  },
-  {
-    Header: "Reihe",
-    accessor: "label",
-  },
-  {
-    Header: "Lager",
-    accessor: "storage",
-  },
-  {
-    Header: "Verfügbar",
-    accessor: "open",
-  },
-  {
-    Header: "Leer?",
-    accessor: "isEmpty",
-  },
+const columns = [
+  COLUMNS.row,
+  COLUMNS.storage,
+  COLUMNS.open,
+  COLUMNS.isEmptyRow,
 ];
 
 const Wrapper = styled.div`

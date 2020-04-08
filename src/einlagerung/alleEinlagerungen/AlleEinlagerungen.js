@@ -2,8 +2,6 @@ import React, { useState, useEffect } from "react";
 
 import { SUB_PAGES } from "../data";
 import { mockAPI, setArrInputSize } from "../../functions/utils";
-import { dataRequest } from "./data";
-
 import { INPUT, COLUMNS } from "../../baseComponents/base";
 import { endGreaterStart, extractIdentifier } from "../../functions/middleware";
 import { Parent } from "../../baseComponents/Parent";
@@ -32,6 +30,8 @@ const arrInput = [
 setArrInputSize(arrInput, 6);
 
 export const AlleEinlagerungen = ({ setType, type }) => {
+  console.log("RUN----------------------------------");
+
   return (
     <>
       <Parent
@@ -71,14 +71,12 @@ export const AlleEinlagerungen = ({ setType, type }) => {
           requiredArguments: [INPUT.customers.name],
           cardWrapper: true,
           apiFunc: (dispatch, parameter) => {
-            return mockAPI(dataRequest, parameter, 1000).then((res) =>
+            return mockAPI({}, parameter, 1000).then((res) =>
               dispatch(fetchEinlagerungen)
             );
           },
         }}
-      >
-        {/* <Test /> */}
-      </Parent>
+      ></Parent>
     </>
   );
 };

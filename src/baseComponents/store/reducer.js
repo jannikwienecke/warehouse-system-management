@@ -2,11 +2,13 @@ import {
   SET_CUSTOMER,
   SET_PRODUCTS,
   SET_STORAGE,
+  SET_STORAGE_BRIDGES,
   SET_EMPLOYEES,
 } from "./types";
 
 const initialState = {
   storage: null,
+  storageBridges: null,
   customers: null,
   products: null,
   employees: null,
@@ -30,6 +32,11 @@ export default function (state = initialState, action) {
       return {
         ...state,
         storage: action.payload,
+      };
+    case SET_STORAGE_BRIDGES:
+      return {
+        ...state,
+        storageBridges: action.payload,
       };
 
     case SET_EMPLOYEES:

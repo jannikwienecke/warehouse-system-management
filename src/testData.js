@@ -69,6 +69,19 @@ export const einlagerungen = [
   },
 ];
 
+export const storageBridges = [
+  { bridge_id: "01", bridge_number: "Brücke Nr. 1", isEmpty: true },
+  { bridge_id: "122", bridge_number: "Brücke Nr.122", isEmpty: true },
+  {
+    bridge_id: "222",
+    bridge_number: "Brücke Nr.222",
+    isEmpty: false,
+    prduct_id: 2790000,
+    datetime: "2020-01-01 12:00:00",
+    type_id: 1,
+  },
+];
+
 export const storage = [
   {
     row_id: 1,

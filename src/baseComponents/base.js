@@ -18,6 +18,20 @@ export const INPUT = {
       };
     },
   },
+  storageBridges: {
+    type: "input",
+    name: "storageBridges",
+    identifier: "bridge_id",
+    labelName: "bridge_number",
+    placeholder: "Brücke",
+    setOptions: (options) => options[INPUT.storageBridges.name],
+    func: (state) => {
+      return {
+        name: INPUT.storageBridges.name,
+        data: state.base[INPUT.storageBridges.name],
+      };
+    },
+  },
   customers: {
     type: "input",
     name: "customers",
@@ -63,7 +77,7 @@ export const INPUT = {
     // },
 
     func: (name) =>
-      mockAPI(products, 500).then((res) => {
+      mockAPI(products, 5).then((res) => {
         return {
           data: res.data,
           name: INPUT.products.name,
@@ -95,6 +109,18 @@ export const INPUT = {
     type: "text",
     size: 6,
   },
+  datetime: {
+    name: "datetime",
+    placeholder: "Datum",
+    type: "date",
+    size: 6,
+  },
+  text: {
+    name: "text",
+    placeholder: "Text",
+    type: "text",
+    size: 6,
+  },
 };
 
 var ValidationException = {};
@@ -114,4 +140,7 @@ export const COLUMNS = {
   einlagerer: ["Mitarbeiter", "employee_name"],
   storage: ["Lager", "storage"],
   row: ["Lagerplatz", "row_name"],
+  open: ["Verfügbar", "open"],
+  isEmptyRow: ["Leer?", "isEmpty"],
+  isFullRow: ["Voll?", "isFull"],
 };

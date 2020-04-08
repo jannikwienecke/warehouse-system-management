@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import { HeaderElement } from "../common/HeaderElement";
 import { Form } from "../baseComponents/Form";
@@ -44,10 +44,10 @@ export const Parent = (props) => {
   }, [apiRequest]);
 
   useEffect(() => {
-    if (tableData) {
+    if (tableData || (props.table && props.table.data)) {
       setLoading(false);
     }
-  }, tableData);
+  }, [tableData, props.table]);
 
   const runInitFunctions = () => {
     Object.keys(props).forEach((componentName) => {
@@ -61,7 +61,6 @@ export const Parent = (props) => {
 
   const makeApiRequest = () => {
     console.log(`${props.name}: MOCK API REQUEST - ${apiRequest}`);
-
     setLoading(true);
     props.formApiRequest(apiRequest);
   };
@@ -86,7 +85,10 @@ export const Parent = (props) => {
       )}
 
       {!formLoading && props.table && (
-        <Table {...props.table} tableData={tableData} />
+        <Table
+          {...props.table}
+          tableData={props.table.data ? props.table.data : tableData}
+        />
       )}
 
       {formLoading && <Loader marginTop="5rem" />}
@@ -99,16 +101,16 @@ export const Parent = (props) => {
 Parent.propTypes = {
   name: PropTypes.string,
   type: PropTypes.string,
-  setType: PropTypes.func.isRequired,
+  setType: PropTypes.func,
   sub_pages: PropTypes.arrayOf(PropTypes.string),
   table: PropTypes.shape({
-    columnArr: PropTypes.array.isRequired,
+    columnArr: PropTypes.array,
     dataName: PropTypes.string.isRequired,
     initFunc: PropTypes.func.isRequired,
   }),
 
   form: PropTypes.shape({
-    title: PropTypes.string.isRequired,
+    title: PropTypes.string,
     arrInput: PropTypes.array.isRequired,
     middlewareValidation: PropTypes.arrayOf(PropTypes.func),
     middlewareParse: PropTypes.arrayOf(PropTypes.func),

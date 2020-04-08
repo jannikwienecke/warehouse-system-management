@@ -5,6 +5,7 @@ import { Button } from "react-bootstrap";
 import { Redirect } from "react-router";
 import styled from "styled-components";
 import { translate } from "../../functions/utils";
+import { INPUT } from "../../baseComponents/base";
 
 const SummaryPopup = ({ summary, cancel, approve, approveAndPrint }) => {
   const [visible, setVisible] = useState(false);
@@ -66,25 +67,26 @@ const Summary = ({ summary }) => {
   return (
     <ListWrapper>
       {Object.keys(summary).map((key) => {
+        if (key.includes("_id")) return <></>;
         const val = summary[key];
 
         if (key === "bridges") {
           var Items = val.map((bridge, index) => (
             <Item key={index}>
-              {index + 1} - {bridge.bridgeNumber.label}: Anzahl:{" "}
+              {index + 1}) {bridge[INPUT.storageBridges.name].label}: Anzahl:{" "}
               {bridge.quantity}
             </Item>
           ));
         } else if (key === "rows") {
           var Items = val.map((row, index) => (
             <Item key={index}>
-              {index + 1} - Reihe: {row.label} - Halle: {row.storage} - Anzahl:{" "}
-              {row.quantity}
+              {index + 1} - Reihe: {row[INPUT.storage.labelName]} - Halle:{" "}
+              {row.storage} - Anzahl: {row.quantity}
             </Item>
           ));
         } else {
           if (val && typeof val == "object" && "value" in val) {
-            var text = `${val.value} - ${val.label}`;
+            var text = `${val.label}`;
           } else if (val) {
             var text = val;
           } else {

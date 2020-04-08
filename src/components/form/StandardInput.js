@@ -8,9 +8,8 @@ const StandardInput = ({ input, values, formFunc, scheme, errors }) => {
       return true;
     }
 
-    // debugger;
     const hasFormValidationErr = input.error;
-    if (hasFormValidationErr) {
+    if (hasFormValidationErr && input.error.nameList) {
       const nameInErrorList = input.error.nameList.includes(name);
       if (nameInErrorList) {
         return true;

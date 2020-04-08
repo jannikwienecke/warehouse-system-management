@@ -127,8 +127,6 @@ const ModalUpdate = ({
   };
 
   const setDefaults = (arrInput_, obj) => {
-    console.log("arrINPUT", arrInput_);
-
     arrInput_.forEach((input) => {
       const { identifier, labelName } = input;
       if (identifier) {
@@ -141,9 +139,6 @@ const ModalUpdate = ({
       }
     });
   };
-
-  console.log("--------------------------------------------");
-  console.log("--------------------------------------------");
 
   if (!arrInput) return <></>;
   return (

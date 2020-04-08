@@ -18,9 +18,13 @@ export const NeueEinlagerung = ({ setType, type }) => {
 
   useEffect(() => {
     if (cancelOrder) setType(null);
+    console.log("CANCEL ORDER - CALL API HERE", completedData);
+    // NEED TO RELOAD STORAGE BRIDGES FROM DB COS REDUX STATE WAS UPDATED ALREADY
   }, [cancelOrder]);
 
   useEffect(() => {
+    console.log("APPROVE....");
+
     if (isApproved) saveOrder();
   }, [isApproved]);
 

@@ -37,7 +37,7 @@ const SelectInput = ({ input, values, formFunc, errors }) => {
     }
 
     const hasFormValidationErr = input.error;
-    if (hasFormValidationErr) {
+    if (hasFormValidationErr && input.error.nameList) {
       const nameInErrorList = input.error.nameList.includes(name);
       if (nameInErrorList) {
         return true;

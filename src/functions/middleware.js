@@ -1,4 +1,4 @@
-import { EXCEPTIONS, IDENTIFIER } from "../baseComponents/base";
+import { EXCEPTIONS, IDENTIFIER, INPUT } from "../baseComponents/base";
 
 export const endGreaterStart = (data) => {
   if (!"dateStart" in data || !"dateEnd" in data) return;
@@ -16,11 +16,8 @@ export const extractIdentifier = (data) => {
   Object.keys(data).forEach((key) => {
     var val = data[key];
     if (typeof val === "object") {
-      IDENTIFIER.forEach((id_) => {
-        if (val[id_]) {
-          data[key] = val[id_];
-        }
-      });
+      var id = INPUT[key].identifier;
+      data[id] = val.value;
     }
   });
 };

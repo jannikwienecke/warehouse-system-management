@@ -104,6 +104,7 @@ export const Form = (props) => {
 
     try {
       middleware(data);
+      formValidation(data);
     } catch (e) {
       if (e !== ValidationException && e !== ParseException) {
         console.log("run Middleware Error Form.js", e);
@@ -112,7 +113,6 @@ export const Form = (props) => {
         setError(e);
       }
     }
-    formValidation(data);
   };
 
   const formValidation = (data) => {
@@ -197,6 +197,7 @@ const FormElement = (props) => {
   arrInput.forEach((input) => {
     input.error = error;
   });
+
   return (
     <>
       {error && <AlertBanner err={error.msg} />}

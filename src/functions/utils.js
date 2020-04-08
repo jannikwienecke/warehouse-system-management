@@ -1,4 +1,5 @@
-import { EXCEPTIONS } from "../baseComponents/base";
+import { EXCEPTIONS, INPUT } from "../baseComponents/base";
+import { useRef, useEffect } from "react";
 
 export const getDateString = (date) => {
   var month = date.getMonth();
@@ -31,11 +32,17 @@ export const copy = (obj) => {
   return JSON.parse(JSON.stringify(obj));
 };
 
-const dictonary = {
-  quantity: "Anzahl",
-};
-
 export const translate = (text) => {
+  const dictonary = {
+    quantity: "Anzahl",
+    products: "Produkt",
+    employees: "Mitarbeiter",
+    customers: "Kunde",
+    chargennummer: "Chargennummer",
+    datetime: "Datum",
+    notes: "Notizen",
+  };
+
   if (text in dictonary) {
     return dictonary[text];
   }
@@ -111,3 +118,26 @@ export const runMiddleware = (
   }
   recursiveFunc(data);
 };
+
+export const get_input = (type, name, placeholder) => {
+  var input = copy(INPUT[type]);
+  input["name"] = name;
+  input["placeholder"] = placeholder;
+  return input;
+};
+
+function useTraceUpdate(props) {
+  const prev = useRef(props);
+  useEffect(() => {
+    const changedProps = Object.entries(props).reduce((ps, [k, v]) => {
+      if (prev.current[k] !== v) {
+        ps[k] = [prev.current[k], v];
+      }
+      return ps;
+    }, {});
+    if (Object.keys(changedProps).length > 0) {
+      console.log("Changed props:", changedProps);
+    }
+    prev.current = props;
+  });
+}
