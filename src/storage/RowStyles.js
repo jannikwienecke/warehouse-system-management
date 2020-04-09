@@ -13,16 +13,16 @@ export const RowPopup = styled.div`
   border: 0.5px solid darkgray;
   box-shadow: 1px 5px 4px rgba(0, 0, 0, 0.5);
 
-  ${({ stock, positionCompartment, directionCompartment }) =>
+  ${({ stock, positionCompartment, direction }) =>
     positionCompartment === "top" &&
-    directionCompartment === "column" &&
+    direction === "column" &&
     `
       top : 100%;
       left: -3rem;
     `}
-  ${({ stock, positionCompartment, directionCompartment }) =>
+  ${({ stock, positionCompartment, direction }) =>
     positionCompartment === "bottom" &&
-    directionCompartment === "column" &&
+    direction === "column" &&
     `
   top : 50%;
 `}
@@ -44,9 +44,9 @@ ${({ width }) =>
     width : ${width}%;
   `}
 
-${({ directionCompartment, width }) =>
+${({ direction, width }) =>
   width &&
-  directionCompartment === "row" &&
+  direction === "row" &&
   `
       height : ${width}%;
       width : 100%;
@@ -73,32 +73,32 @@ left: 5%;
 font-size: 2vh;
 color: #eee;
 
-${({ stock, positionCompartment, directionCompartment }) =>
+${({ stock, positionCompartment, direction }) =>
   positionCompartment === "bottom" &&
-  directionCompartment === "column" &&
+  direction === "column" &&
   `
     top : -${stock - 10}%;
   `}
 
-${({ stock, positionCompartment, directionCompartment }) =>
+${({ stock, positionCompartment, direction }) =>
   positionCompartment === "top" &&
-  directionCompartment === "column" &&
+  direction === "column" &&
   `
       top : +${100 - stock - 10}%;
     `}
 
-${({ positionCompartment, directionCompartment }) =>
+${({ positionCompartment, direction }) =>
   positionCompartment === "bottom" &&
-  directionCompartment === "row" &&
+  direction === "row" &&
   `
         top : -60%;
         left: 35%;
 
       `}
 
-${({ positionCompartment, directionCompartment }) =>
+${({ positionCompartment, direction }) =>
   positionCompartment === "top" &&
-  directionCompartment === "row" &&
+  direction === "row" &&
   `
         top : -60%;
         left: -35%;
@@ -115,27 +115,27 @@ height: 0%;
 position: relative;
 
 
-${({ stock, positionCompartment, directionCompartment }) =>
+${({ stock, positionCompartment, direction }) =>
   stock &&
   positionCompartment === "bottom" &&
-  directionCompartment === "column" &&
+  direction === "column" &&
   `
     height : ${stock}%;
     top: ${100 - stock}%;
   `}
 
-${({ stock, positionCompartment, directionCompartment }) =>
+${({ stock, positionCompartment, direction }) =>
   stock &&
   positionCompartment === "top" &&
-  directionCompartment === "column" &&
+  direction === "column" &&
   `
       height : ${stock}%;
     `}
 
-${({ stock, positionCompartment, directionCompartment }) =>
+${({ stock, positionCompartment, direction }) =>
   stock &&
   positionCompartment === "bottom" &&
-  directionCompartment === "row" &&
+  direction === "row" &&
   `
         width : ${stock}%;
         height: 100%;
@@ -143,9 +143,9 @@ ${({ stock, positionCompartment, directionCompartment }) =>
 
       `}
 
-${({ stock, positionCompartment, directionCompartment }) =>
+${({ stock, positionCompartment, direction }) =>
   positionCompartment === "top" &&
-  directionCompartment === "row" &&
+  direction === "row" &&
   `
         width : ${stock}%;
         height: 100%;

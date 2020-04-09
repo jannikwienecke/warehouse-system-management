@@ -16,9 +16,9 @@ const Compartment = (props) => {
           <Row
             key={index}
             data={val}
-            widthCompartment={width}
+            width={width}
             positionCompartment={realPosition}
-            directionCompartment={direction}
+            direction={direction}
             showPopup={showPopup}
             setShowPopup={setShowPopup}
             clickRow={clickRow}

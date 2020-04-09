@@ -16,9 +16,9 @@ const useStyles = makeStyles((theme) => ({
 const Row = (props) => {
   const {
     data,
-    widthCompartment,
+    width,
     positionCompartment,
-    directionCompartment,
+    direction,
     clickRow,
     showPopup,
     setShowPopup,
@@ -46,20 +46,20 @@ const Row = (props) => {
   return (
     <RowWrapper
       onClick={() => handleClick("row")}
-      width={(data["width"] / widthCompartment) * 100}
+      width={(data["width"] / width) * 100}
       hasStock={stock > 0}
-      directionCompartment={directionCompartment}
+      direction={direction}
     >
       <RowStock
         stock={stockLevel(data)}
         positionCompartment={positionCompartment}
-        directionCompartment={directionCompartment}
+        direction={direction}
       />
 
       <RowNumber
         stock={stockLevel(data)}
         positionCompartment={positionCompartment}
-        directionCompartment={directionCompartment}
+        direction={direction}
       >
         {data["id"]}
 
