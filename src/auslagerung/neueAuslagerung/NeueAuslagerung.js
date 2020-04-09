@@ -14,19 +14,6 @@ export const NeueAuslagerung = ({ setType, type }) => {
           type: type,
           sub_pages: SUB_PAGES,
         }}
-        // form={{
-        //   formTitle: "Einlagerungen Suchen",
-        //   arrInput: arrInput,
-        //   middlewareValidation: [endGreaterStart],
-        //   middlewareParse: [extractIdentifier],
-        //   requiredArguments: [INPUT.customers.name],
-        //   cardWrapper: true,
-        //   apiFunc: (dispatch, parameter) => {
-        //     return mockAPI({}, parameter, 1000).then((res) =>
-        //       dispatch(fetchEinlagerungen)
-        //     );
-        //   },
-        // }}
       />
 
       <CreateTour />

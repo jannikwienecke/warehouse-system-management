@@ -20,6 +20,7 @@ import { PageRouter } from "./PageRouter";
 import { DashboardEinlagerung } from "./einlagerung/Dashboard";
 import { DashboardAuslagerung } from "./auslagerung/DashboardAuslagerung";
 import CreateTour from "./auslagerung/createTour/CreateTour";
+import { Storage } from "./storage/Storage";
 import store from "./store";
 import {
   fetchCustomer,
@@ -60,7 +61,7 @@ export default function App() {
       <MyForm />
       <MyTable /> */}
           <Switch>
-            <PageRouter exact path="/" component={DashboardAuslagerung} />
+            <PageRouter exact path="/" component={Storage} />
 
             <PageRouter
               exact
