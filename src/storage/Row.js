@@ -1,40 +1,31 @@
 import React, { useState, useEffect } from "react";
-import Button from "@material-ui/core/Button";
-import { makeStyles } from "@material-ui/core/styles";
 import { RowWrapper, RowNumber, RowStock } from "./RowStyles";
 import { SmallPopupRow } from "./SmallPopupRow";
-
-const useStyles = makeStyles((theme) => ({
-  margin: {
-    margin: theme.spacing(1),
-  },
-  small: {
-    fontSize: "10px;",
-  },
-}));
 
 const Row = (props) => {
   const {
     data,
     width,
-    positionCompartment,
+    realPosition,
     direction,
     clickRow,
     showPopup,
     setShowPopup,
     showDetails,
+    filter,
   } = props;
 
-  const [stock, setStock] = useState(data["stock"]);
-  const classes = useStyles();
+  // console.log("filter", filter);
+  // console.log("data = ", data);
+  // console.log("--------------");
+
+  const stock = data["stock"];
 
   const stockLevel = (rowData) => {
     return (stock / rowData["maxStock"]) * 100;
   };
 
   const handleClick = (target) => {
-    console.log("click == ", data);
-
     if (target === "row") {
       clickRow(data);
     }
@@ -43,32 +34,47 @@ const Row = (props) => {
     }
   };
 
+  const isFiltered = () => {
+    if (!filter) return null;
+    return data.product_name.toLowerCase().includes(filter);
+  };
+
+  console.log("data", data);
+  console.log("filter", filter);
+
+  console.log(
+    "data.product_name.includes(filter)",
+    data.product_name.includes(filter)
+  );
+
   return (
     <RowWrapper
       onClick={() => handleClick("row")}
       width={(data["width"] / width) * 100}
       hasStock={stock > 0}
       direction={direction}
+      isFiltered={isFiltered()}
     >
       <RowStock
         stock={stockLevel(data)}
-        positionCompartment={positionCompartment}
+        realPosition={realPosition}
         direction={direction}
+        isFiltered={isFiltered()}
       />
 
       <RowNumber
         stock={stockLevel(data)}
-        positionCompartment={positionCompartment}
+        realPosition={realPosition}
         direction={direction}
       >
-        {data["id"]}
+        {data["row_id"]}
 
         <SmallPopupRow
           {...props}
           handleClick={handleClick}
           stockLevel={stockLevel}
           stock={stock}
-          showPopup={showPopup === data["id"]}
+          showPopup={showPopup === data["row_id"]}
         />
       </RowNumber>
     </RowWrapper>

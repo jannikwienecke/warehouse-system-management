@@ -30,6 +30,7 @@ import {
   fetchStorageBridges,
   fetchSymBuildings,
 } from "./baseComponents/store/actions";
+import { MyStorage } from "./templates/MyStorage";
 
 const initializeData = () => {
   // const dispatch = useDispatch();
@@ -61,7 +62,7 @@ export default function App() {
       <MyForm />
       <MyTable /> */}
           <Switch>
-            <PageRouter exact path="/" component={Storage} />
+            <PageRouter exact path="/" component={MyStorage} />
 
             <PageRouter
               exact

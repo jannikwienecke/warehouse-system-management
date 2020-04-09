@@ -11,7 +11,7 @@ export const SmallPopupRow = (props) => {
     setShowPopup,
     handleClick,
     stockLevel,
-    stock,
+    parentFunc,
   } = props;
 
   if (!showPopup) return null;
@@ -25,16 +25,31 @@ export const SmallPopupRow = (props) => {
       direction={direction}
     >
       <div>
-        Lager 1 - Lagerplatz 4 Material: 227454 <br /> Anzahl : {stock}
+        Lager {data.warehouse_id} Lagerplatz {data.row_id}
+        <br />
+        {data.stock > 0 ? (
+          <>
+            Material: {data.product_id} <br />
+            Anzahl : {data.stock} Paletten
+          </>
+        ) : (
+          <>--Leer--</>
+        )}
       </div>
 
       <MyButton size="small" onClick={() => setShowPopup(null)}>
         Close
       </MyButton>
 
-      <MyButton size="small" onClick={() => handleClick("btn")}>
-        Details
-      </MyButton>
+      {!parentFunc ? (
+        <MyButton size="small" onClick={() => handleClick("btn")}>
+          Details
+        </MyButton>
+      ) : (
+        <MyButton size="small" onClick={(data) => parentFunc.func(data)}>
+          {parentFunc.text}
+        </MyButton>
+      )}
     </RowPopup>
   );
 };

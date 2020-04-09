@@ -1,30 +1,31 @@
 import React, { useState, useEffect } from "react";
-
 import { test_storage } from "./data";
 import Row from "./Row";
 import { CompartmentWrapper } from "./CompartmentWrapper";
 
 const Compartment = (props) => {
-  const { compartment, setShowPopup, showPopup, clickRow, showDetails } = props;
-  const { name, width, direction, realPosition } = compartment;
+  const filterByZoom = (test_storage) => {
+    if (!props.compartmentZoom) return test_storage;
+    return Object.entries(test_storage)
+      .filter(([index, val]) => {
+        return val["compartment"] === props.compartmentZoom;
+      })
+      .map(([index, val]) => {
+        return val;
+      });
+  };
 
   const getStorageList = () => {
-    return Object.entries(test_storage)
-      .filter(([index, val]) => val["compartment"] === name)
+    const filteredStorage = filterByZoom(test_storage);
+
+    return Object.entries(filteredStorage)
+      .filter(([index, val]) => val["compartment"] === props.compartment.name)
+
       .map(([index, val]) => {
-        return (
-          <Row
-            key={index}
-            data={val}
-            width={width}
-            positionCompartment={realPosition}
-            direction={direction}
-            showPopup={showPopup}
-            setShowPopup={setShowPopup}
-            clickRow={clickRow}
-            showDetails={showDetails}
-          />
-        );
+        // console.log("filter", props.filter);
+        // console.log("val", val);
+
+        return <Row {...props} {...props.compartment} key={index} data={val} />;
       });
   };
 

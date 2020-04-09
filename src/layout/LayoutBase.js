@@ -85,10 +85,16 @@ const OpenSidebarBtn = styled.div`
 const Layout = styled.div`
   display: flex;
   flex-direction: row;
+  position: relative;
+  height: 100vh;
+  width: 90vw;
 `;
 const ContentWrapper = styled.div`
   width: 75%;
   transition: 1000ms;
+  position: relative;
+  height: 100vh;
+  width: 75vw;
 
   ${({ width }) =>
     width &&
@@ -99,7 +105,7 @@ const ContentWrapper = styled.div`
   ${({ isVisible }) =>
     !isVisible &&
     `
-    width: 100%;
+    width: 100vw;
   `}
 `;
 const SidebarWrapper = styled.div`
