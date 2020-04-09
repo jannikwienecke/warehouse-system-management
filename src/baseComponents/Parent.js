@@ -105,8 +105,9 @@ Parent.propTypes = {
   sub_pages: PropTypes.arrayOf(PropTypes.string),
   table: PropTypes.shape({
     columnArr: PropTypes.array,
-    dataName: PropTypes.string.isRequired,
+    dataName: PropTypes.string,
     initFunc: PropTypes.func.isRequired,
+    data: PropTypes.array,
   }),
 
   form: PropTypes.shape({

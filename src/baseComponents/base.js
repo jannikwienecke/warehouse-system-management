@@ -61,10 +61,25 @@ export const INPUT = {
     },
   },
 
+  symBuildings: {
+    type: "input",
+    name: "symBuildings",
+    identifier: "symBuilding_id",
+    labelName: "symBuilding_name",
+    placeholder: "SYM Gebäude",
+    setOptions: (options) => options[INPUT.symBuildings.name],
+    func: (state) => {
+      return {
+        name: INPUT.symBuildings.name,
+        data: state.base[INPUT.symBuildings.name],
+      };
+    },
+  },
+
   products: {
     type: "input",
     name: "products",
-    identifier: "id",
+    identifier: "product_id",
     labelName: "name",
     placeholder: "Produkt",
     setOptions: (options, name) => options[name],
@@ -133,6 +148,7 @@ export const EXCEPTIONS = {
 };
 
 export const COLUMNS = {
+  id: ["Nr.", "id"],
   datetime: ["Datum", "datetime"],
   customer: ["Kunden ID", "customer_id"],
   product: ["Produkt ID", "product_id"],
@@ -145,4 +161,7 @@ export const COLUMNS = {
   isFullRow: ["Voll?", "isFull"],
   tour: ["Tour Nr.", "tour_id"],
   driver: ["Fahrer", "employee_id"],
+  type: ["Type", "type"],
+  building: ["Gebäude", "building"],
+  factory: ["Werk", "factory"],
 };

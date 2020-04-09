@@ -28,7 +28,7 @@ export const getIndexOfType = (palletArr, type) => {
   return indexOfType;
 };
 
-export const getSortedListBy = typeToFind => {
+export const getSortedListBy = (typeToFind) => {
   const allTypes = Object.keys(DIMENSIONS);
   allTypes.sort((a, b) => {
     if (a === typeToFind) {
@@ -40,10 +40,11 @@ export const getSortedListBy = typeToFind => {
   return allTypes;
 };
 
-export const unpackPalletGroups = pallets => {
+export const unpackPalletGroups = (pallets) => {
   var pallets_ = [];
+  // debugger;
   pallets.forEach((pallet, index) => {
-    return [...Array(pallet.quantity).keys()].forEach(i => {
+    return [...Array(pallet.quantity).keys()].forEach((i) => {
       pallet.id = `${index}_${i}`;
 
       pallets_.push(JSON.parse(JSON.stringify(pallet)));
@@ -57,7 +58,7 @@ export const unpackPalletGroups = pallets => {
   return JSON.parse(JSON.stringify(pallets_));
 };
 
-export const copy = el => {
+export const copy = (el) => {
   return JSON.parse(JSON.stringify(el));
 };
 
@@ -73,7 +74,7 @@ export const isMinSpace = (width, height) => {
 };
 
 export const findIndexPalletInArr = (truck, id) => {
-  console.log("TO FIND", truck, id);
+  // console.log("TO FIND", truck, id);
 
   var index_column = null;
   var index_row = null;
@@ -83,7 +84,7 @@ export const findIndexPalletInArr = (truck, id) => {
         index_column = index_column_;
         index_row = index_row_;
       }
-    })
+    }),
   ]);
 
   return [index_column, index_row];

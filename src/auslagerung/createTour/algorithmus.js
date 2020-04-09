@@ -4,7 +4,7 @@ import {
   DIMENSIONS,
   MAX_HEIGHT,
   LKW_12,
-  LKW_7
+  LKW_7,
 } from "./constants";
 import {
   removeValidatedPallets,
@@ -12,12 +12,12 @@ import {
   getSortedListBy,
   unpackPalletGroups,
   copy,
-  isMinSpace
+  isMinSpace,
 } from "./helper";
 
 var BreakException = {};
-export const validate = pallets => {
-  const fitsHeight = pallet => {
+export const validate = (pallets) => {
+  const fitsHeight = (pallet) => {
     const { height } = DIMENSIONS[pallet.type];
     if (height_counter + height < MAX_HEIGHT) {
       return true;
@@ -26,7 +26,7 @@ export const validate = pallets => {
     }
   };
 
-  const fitsAny = height => {
+  const fitsAny = (height) => {
     const heightLeft = MAX_HEIGHT - height_counter;
 
     if (height) {
@@ -44,11 +44,11 @@ export const validate = pallets => {
     }
   };
 
-  const nextLkw = pallet => {
+  const nextLkw = (pallet) => {
     LKW.push(currentRow);
     trucks.push({
       lkw: currentLKW,
-      arr: LKW
+      arr: LKW,
     });
     LKW = [];
     currentRow = [];
@@ -85,7 +85,7 @@ export const validate = pallets => {
   };
 
   const addToDelivery = (pallet, index) => {
-    console.log(`---Add To Delivery Index ${pallet.id}--- `);
+    // console.log(`---Add To Delivery Index ${pallet.id}--- `);
 
     const { height, width } = DIMENSIONS[pallet.type];
 
@@ -114,7 +114,7 @@ export const validate = pallets => {
   };
 
   const getPalletsOfType = (type, availablePallets) => {
-    return availablePallets.filter(pallet => pallet.type === type);
+    return availablePallets.filter((pallet) => pallet.type === type);
   };
 
   const isOddQuantityOfType = (type, availablePallets) => {
@@ -134,7 +134,7 @@ export const validate = pallets => {
     const allTypes = getSortedListBy(typeToFind);
     var indexOfType = null;
 
-    allTypes.forEach(type => {
+    allTypes.forEach((type) => {
       if (!indexOfType) {
         var isOdd = isOddQuantityOfType(type, availablePallets);
         if (isOdd) {
@@ -175,7 +175,7 @@ export const validate = pallets => {
       addToDelivery(pallets[currentIndex], currentIndex);
     }
 
-    indexList.forEach(index_ => {
+    indexList.forEach((index_) => {
       const indexAdd = index + index_ + 1;
       const palletToAdd = pallets[indexAdd];
       addToDelivery(palletToAdd, indexAdd);
@@ -237,7 +237,7 @@ export const validate = pallets => {
     }
   };
 
-  const sort_ = pallets_ => {
+  const sort_ = (pallets_) => {
     pallets_.forEach((pallet, index) => {
       //   console.log(`------------${pallet.id}----------`);
 
@@ -280,7 +280,7 @@ export const validate = pallets => {
     LKW.push(currentRow);
     trucks.push({
       lkw: currentLKW,
-      arr: LKW
+      arr: LKW,
     });
   };
 
@@ -307,31 +307,31 @@ export const validate = pallets => {
   return trucks;
 };
 
-const reorderLoadings_ = trucks => {
+const reorderLoadings_ = (trucks) => {
   validateTrucks(trucks);
   createLoading(trucks);
   findFreeSpaces(trucks);
   insertFreeSpacesInto(trucks);
 };
 
-const insertFreeSpacesInto = trucks => {
-  console.log("insertFreeSpacesInto", trucks);
+const insertFreeSpacesInto = (trucks) => {
+  // console.log("insertFreeSpacesInto", trucks);
 
-  const loopLoadings = trucks => {
-    const insertSpace = space => {
+  const loopLoadings = (trucks) => {
+    const insertSpace = (space) => {
       console.log("insert space..", space);
 
       currentLoading.pallets.splice(space.palletIndex, 0, space);
     };
 
-    const loopSpaces = freeSpaces => {
-      freeSpaces.forEach(space => {
+    const loopSpaces = (freeSpaces) => {
+      freeSpaces.forEach((space) => {
         insertSpace(space);
       });
     };
 
     var currentLoading = null;
-    trucks.forEach(loading => {
+    trucks.forEach((loading) => {
       currentLoading = loading;
       loopSpaces(loading.freeSpaces);
     });
@@ -340,7 +340,7 @@ const insertFreeSpacesInto = trucks => {
   loopLoadings(trucks);
 };
 
-const findFreeSpaces = trucks => {
+const findFreeSpaces = (trucks) => {
   const addToFreeSpaces = (width, height, type) => {
     freeSpaces.push({
       freeSpaceType: type,
@@ -348,14 +348,14 @@ const findFreeSpaces = trucks => {
       width,
       position: {
         row: rowCounter,
-        column: columnCounter
+        column: columnCounter,
       },
-      palletIndex: palletIndexCounter
+      palletIndex: palletIndexCounter,
     });
     palletIndexCounter++;
   };
 
-  const validateTotalWidth = loading => {
+  const validateTotalWidth = (loading) => {
     const freeTotalWidth = currentLKW.maxLoading - totalWidth;
 
     rowCounter = 0;
@@ -376,7 +376,7 @@ const findFreeSpaces = trucks => {
     palletIndexCounter = 0;
   };
 
-  const validateColumn = column => {
+  const validateColumn = (column) => {
     const validateColumnValues = () => {
       const freeHeight = currentLKW.maxHeight - currentHeight;
       const freeWidth = currentMaxWidth;
@@ -399,7 +399,7 @@ const findFreeSpaces = trucks => {
     };
 
     const loopColumn = () => {
-      column.forEach(pallet => {
+      column.forEach((pallet) => {
         const { width, height } = DIMENSIONS[pallet.type];
         updateColumnValues(width, height);
       });
@@ -411,15 +411,15 @@ const findFreeSpaces = trucks => {
     validateColumnValues(currentMaxWidth, currentHeight);
   };
 
-  const loopLoadingArr = arr => {
-    arr.forEach(column => {
+  const loopLoadingArr = (arr) => {
+    arr.forEach((column) => {
       validateColumn(column);
       columnCounter++;
     });
   };
 
-  const loopLoadings = trucks => {
-    trucks.forEach(loading => {
+  const loopLoadings = (trucks) => {
+    trucks.forEach((loading) => {
       var { lkw, arr } = loading;
       currentLKW = lkw;
 
@@ -438,10 +438,10 @@ const findFreeSpaces = trucks => {
   loopLoadings(trucks);
 };
 
-const validateTrucks = trucks => {
+const validateTrucks = (trucks) => {
   var currentLKW = null;
   var totalWidth = 0;
-  const validateColumn = column => {
+  const validateColumn = (column) => {
     const updateColumnValues = (pallet, height, width) => {
       currentHeight += height;
 
@@ -456,7 +456,7 @@ const validateTrucks = trucks => {
     };
 
     const loopColumn = () => {
-      column.forEach(pallet => {
+      column.forEach((pallet) => {
         const { height, width } = DIMENSIONS[pallet.type];
         if (palletsToMoveNextRow.length > 0) {
           palletsToMoveNextRow.push(copy(pallet));
@@ -466,7 +466,7 @@ const validateTrucks = trucks => {
       });
     };
 
-    const removeFromColumn = pallet => {
+    const removeFromColumn = (pallet) => {
       //   const indexRemove = findIndexPalletInArr(copy(currentLKW), pallet.id);
       alert("NEEDS TO BE IMPLEMENTTED 'removeFromColumn'");
     };
@@ -474,12 +474,12 @@ const validateTrucks = trucks => {
     const finishColumn = () => {
       totalWidth += currentMaxWidth;
       if (removeLastPallet) {
-        palletsToMoveNextRow.forEach(pallet_ => {
+        palletsToMoveNextRow.forEach((pallet_) => {
           column.pop();
         });
       }
       if (palletsMoveLKW.length > 0) {
-        palletsMoveLKW.forEach(palletToMove => {
+        palletsMoveLKW.forEach((palletToMove) => {
           removeFromColumn(palletToMove);
         });
       }
@@ -494,10 +494,10 @@ const validateTrucks = trucks => {
     finishColumn();
   };
 
-  const validateTruck = truck => {
-    truck.arr.forEach(column => {
+  const validateTruck = (truck) => {
+    truck.arr.forEach((column) => {
       if (palletsToMoveNextRow) {
-        palletsToMoveNextRow.forEach(palletInsert => {
+        palletsToMoveNextRow.forEach((palletInsert) => {
           column.splice(0, 0, palletInsert);
         });
 
@@ -509,7 +509,7 @@ const validateTrucks = trucks => {
   };
 
   const _validate = () => {
-    trucks.forEach(truck => {
+    trucks.forEach((truck) => {
       currentLKW = truck;
 
       validateTruck(truck);
@@ -529,12 +529,12 @@ const validateTrucks = trucks => {
   _validate();
 };
 
-const createLoading = trucks => {
-  trucks = trucks.map(truck => {
+const createLoading = (trucks) => {
+  trucks = trucks.map((truck) => {
     var palletsTruck = [];
 
-    truck.arr.forEach(column => {
-      column.forEach(pallet => {
+    truck.arr.forEach((column) => {
+      column.forEach((pallet) => {
         palletsTruck.push(pallet);
       });
     });

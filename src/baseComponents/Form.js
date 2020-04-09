@@ -166,6 +166,7 @@ const FormElement = (props) => {
     formWidth,
     formTopMargin,
     formColor,
+    classOverride,
   } = props;
 
   const [optionsReady, setOptionsReady] = useState(false);
@@ -182,6 +183,7 @@ const FormElement = (props) => {
         input.options = input.setOptions(optionsObj, input.name);
       }
       input.error = error;
+      input.class = classOverride;
     });
 
     setOptionsReady(true);

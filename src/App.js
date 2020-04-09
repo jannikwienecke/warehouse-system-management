@@ -27,6 +27,7 @@ import {
   fetchStorage,
   fetchEmployees,
   fetchStorageBridges,
+  fetchSymBuildings,
 } from "./baseComponents/store/actions";
 
 const initializeData = () => {
@@ -37,6 +38,7 @@ const initializeData = () => {
     fetchStorage,
     fetchStorageBridges,
     fetchEmployees,
+    fetchSymBuildings,
   ];
   funcArr.forEach((func) => {
     store.dispatch(func());
@@ -58,7 +60,7 @@ export default function App() {
       <MyForm />
       <MyTable /> */}
           <Switch>
-            <PageRouter exact path="/" component={DashboardEinlagerung} />
+            <PageRouter exact path="/" component={DashboardAuslagerung} />
 
             <PageRouter
               exact

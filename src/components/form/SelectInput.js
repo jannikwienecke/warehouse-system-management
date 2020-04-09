@@ -49,7 +49,7 @@ const SelectInput = ({ input, values, formFunc, errors }) => {
     <>
       <Select
         components={makeAnimated()}
-        className="formInput"
+        className={input.class ? input.class : "formInput"}
         name={input.name}
         options={input.options}
         value={values.name}

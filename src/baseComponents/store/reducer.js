@@ -5,6 +5,7 @@ import {
   SET_STORAGE_BRIDGES,
   SET_EMPLOYEES,
   SET_ERROR,
+  SET_SYM_BUILDINGS,
 } from "./types";
 
 const initialState = {
@@ -13,6 +14,7 @@ const initialState = {
   customers: null,
   products: null,
   employees: null,
+  symBuildings: null,
 };
 
 export default function (state = initialState, action) {
@@ -44,6 +46,12 @@ export default function (state = initialState, action) {
       return {
         ...state,
         employees: action.payload,
+      };
+
+    case SET_SYM_BUILDINGS:
+      return {
+        ...state,
+        symBuildings: action.payload,
       };
 
     case SET_ERROR:

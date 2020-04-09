@@ -6,6 +6,7 @@ import {
   SET_STORAGE,
   SET_EMPLOYEES,
   SET_STORAGE_BRIDGES,
+  SET_SYM_BUILDINGS,
 } from "./types";
 import {
   customers,
@@ -13,6 +14,7 @@ import {
   storage,
   employees,
   storageBridges,
+  symBuildings,
 } from "../../testData";
 
 // const apiCall = (obj) => setTimeout(() => obj, 200);
@@ -44,5 +46,11 @@ export const fetchStorageBridges = () => (dispatch, getState) => {
 export const fetchEmployees = () => (dispatch, getState) => {
   setTimeout(() => {
     dispatch({ type: SET_EMPLOYEES, payload: employees });
+  }, 50);
+};
+
+export const fetchSymBuildings = () => (dispatch, getState) => {
+  setTimeout(() => {
+    dispatch({ type: SET_SYM_BUILDINGS, payload: symBuildings });
   }, 50);
 };

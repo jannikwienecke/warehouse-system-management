@@ -1,13 +1,23 @@
+import { EURO, INDUSTRY } from "./auslagerung/createTour/constants";
+
 export const products = [
   {
     id: 1,
     product_id: "227445",
     name: "Flachkannen 30l",
+    type: EURO,
   },
   {
     id: 2,
     product_id: "223657",
     name: "Polykanister SK",
+    type: EURO,
+  },
+  {
+    id: 3,
+    product_id: "2297500",
+    name: "CP3 Paletten",
+    type: INDUSTRY,
   },
 ];
 
@@ -180,4 +190,10 @@ export const employees = [
   { employee_id: "1", employee_name: "Fricke, Torben" },
   { employee_id: "2", employee_name: "Jagata, Maurice" },
   { employe__id: "3", employee_name: "Sylla, Ibrahima" },
+];
+
+export const symBuildings = [
+  { symBuilding_id: "1", symBuilding_name: "X442", symFactory_id: 1 },
+  { symBuilding_id: "2", symBuilding_name: "C50", symFactory_id: 2 },
+  { symBuilding_id: "3", symBuilding_name: "Y500", symFactory_id: 1 },
 ];

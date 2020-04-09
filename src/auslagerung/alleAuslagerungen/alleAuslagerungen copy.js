@@ -6,7 +6,6 @@ import { endGreaterStart, extractIdentifier } from "../../functions/middleware";
 import { Parent } from "../../baseComponents/Parent";
 import { fetchAuslagerungen } from "../store";
 import { useDispatch } from "react-redux";
-import styled from "styled-components";
 
 const columns = [
   COLUMNS.tour,
@@ -37,20 +36,6 @@ export const AlleAuslagerungen = ({ setType, type }) => {
           type: type,
           sub_pages: SUB_PAGES,
         }}
-      />
-
-      <Test>
-        <SelectWrapper>
-          <SelectType type="text" placeholder="Statistik wählen" />
-        </SelectWrapper>
-        <Options>
-          <Option>Test 1</Option>
-          <Option>Test 1</Option>
-          <Option>Test 1</Option>
-        </Options>
-      </Test>
-
-      <Parent
         table={{
           columnsArr: columns,
           dataName: "auslagerungen",
@@ -98,42 +83,3 @@ const DetailView = ({ name, rowData, isSubmitted }) => {
     </>
   );
 };
-
-const Test = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-`;
-const SelectWrapper = styled.div`
-  // text-align: right;
-  display: flex;
-  flex-direction: column;
-  width: 30%;
-`;
-const SelectType = styled.input`
-  border: 0.5px solid #ddd;
-  padding: 1rem;
-  border-radius: 1rem;
-  // width: 30%;
-  text-align: center;
-  font-size: 1.4rem;
-  letter-spacing: 1.1px;
-  text-transform: uppercase;
-  font-weight: 700;
-  // margin-right: 5rem;
-  :focus {
-    outline: none;
-  }
-`;
-
-const Options = styled.span`
-  display: flex;
-  flex-direction: column;
-  width: 28%;
-  background: #eee;
-  margin-top: 0.2rem;
-`;
-
-const Option = styled.span`
-  // width: 30%;
-`;

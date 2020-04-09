@@ -1,4 +1,7 @@
 import { EURO, INDUSTRY } from "./constants";
+
+export const TABLE_VIEW = "table_view";
+export const ANMITION_VIEW = "animation_view";
 export const DELIVERY = [
   [
     { id: 1, type: EURO, product: "x", quantity: 12, factory: 1 },
@@ -10,7 +13,7 @@ export const DELIVERY = [
     { id: 7, type: EURO, product: "x", quantity: 1, factory: 2 },
     { id: 8, type: EURO, product: "x", quantity: 1, factory: 2 },
     { id: 9, type: EURO, product: "x", quantity: 5, factory: 2 },
-    { id: 1, type: INDUSTRY, product: "x", quantity: 1, factory: 2 }
+    { id: 1, type: INDUSTRY, product: "x", quantity: 1, factory: 2 },
   ],
   [
     ({ id: 1, type: EURO, product: "x", quantity: 1, factory: 1 },
@@ -22,7 +25,7 @@ export const DELIVERY = [
     { id: 1, type: EURO, product: "x", quantity: 1, factory: 2 },
     { id: 1, type: EURO, product: "x", quantity: 1, factory: 2 },
     { id: 1, type: EURO, product: "x", quantity: 1, factory: 2 },
-    { id: 1, type: INDUSTRY, product: "x", quantity: 1, factory: 2 })
+    { id: 1, type: INDUSTRY, product: "x", quantity: 1, factory: 2 }),
   ],
 
   [
@@ -35,7 +38,7 @@ export const DELIVERY = [
     { id: 1, type: EURO, product: "x", quantity: 1, factory: 2 },
     { id: 1, type: EURO, product: "x", quantity: 1, factory: 2 },
     { id: 1, type: EURO, product: "x", quantity: 1, factory: 2 },
-    { id: 1, type: INDUSTRY, product: "x", quantity: 1, factory: 2 }
+    { id: 1, type: INDUSTRY, product: "x", quantity: 1, factory: 2 },
   ],
   [
     ({ id: 1, type: EURO, product: "x", quantity: 3, factory: 1 },
@@ -46,7 +49,7 @@ export const DELIVERY = [
     { id: 6, type: INDUSTRY, product: "x", quantity: 1, factory: 2 },
     { id: 7, type: EURO, product: "x", quantity: 1, factory: 2 },
     { id: 8, type: EURO, product: "x", quantity: 1, factory: 2 },
-    { id: 9, type: EURO, product: "x", quantity: 5, factory: 2 })
+    { id: 9, type: EURO, product: "x", quantity: 5, factory: 2 }),
     // { id: 1, type: INDUSTRY, : "x", quantity: 1, factory: 2 }
-  ]
+  ],
 ];

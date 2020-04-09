@@ -23,3 +23,25 @@ h1 {
   position: relative;
   /* left: 15px !important; */
 }
+
+.formInputSingle > div:first-child {
+  /* border: 0.04rem solid #cecece !important; */
+  transition: 0.5s !important;
+  border-radius: 0.4rem !important;
+  width: 60% !important;
+  text-align: center !important;
+  letter-spacing: 0.1rem !important;
+  font-weight: bold !important;
+  background-color: transparent !important;
+  /* margin-right: 1rem !important; */
+  font-size: 1rem !important;
+  position: relative;
+  padding: 1rem;
+  margin: 0 auto;
+
+  /* left: 15px !important; */
+}
+
+.formInputSingle > div:first-child:focus {
+  background-color: red !important;
+}

@@ -4,3 +4,4 @@ export const SET_STORAGE = "SET_STORAGE";
 export const SET_STORAGE_BRIDGES = "SET_STORAGE_BRIDGES";
 export const SET_EMPLOYEES = "SET_EMPLOYEES";
 export const SET_ERROR = "SET_ERROR";
+export const SET_SYM_BUILDINGS = "SET_SYM_BUILDINGS";

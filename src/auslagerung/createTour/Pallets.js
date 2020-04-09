@@ -6,14 +6,16 @@ import { compare, findIndexPalletInArr } from "./helper";
 import { validate, reorderLoadings } from "./algorithmus";
 import { Box } from "@material-ui/core";
 import styled from "styled-components";
+import { PalletsTableView } from "./PalletsTableView";
+import { ANMITION_VIEW, TABLE_VIEW } from "./data";
 
-const Pallets = ({ delivery }) => {
+const Pallets = ({ delivery, view }) => {
   const [trucks, setTrucks] = useState(null);
   const [_, setRerender] = useState(null);
   const [palletFocus, setPalletFocus] = useState(null);
 
   useEffect(() => {
-    getTrucks();
+    if (delivery) getTrucks();
   }, [delivery]);
 
   const render_ = () => {
@@ -97,7 +99,7 @@ const Pallets = ({ delivery }) => {
     setPalletFocus({
       pallet: JSON.parse(JSON.stringify(trucks[indexLkw].pallets[index])),
       index,
-      indexLkw
+      indexLkw,
     });
   };
 
@@ -109,21 +111,6 @@ const Pallets = ({ delivery }) => {
     } else {
       switchSpaces(index, indexLkw, pallet);
     }
-  };
-
-  const renderList = () => {
-    if (!trucks) return <h1>Loading..</h1>;
-
-    return trucks.map((loading, indexLkw) => {
-      const { pallets, lkw } = loading;
-      return pallets.map((pallete, index) => {
-        return (
-          <p>
-            {pallete.id} {pallete.product} {pallete.building}
-          </p>
-        );
-      });
-    });
   };
 
   const renderTrucks = () => {
@@ -192,12 +179,11 @@ const Pallets = ({ delivery }) => {
     setTrucks(loadings);
   };
 
-  console.log("STATUS TRUCKS : ", trucks);
-
   return (
     <>
-      {renderTrucks()}
-      {renderList()}
+      {view === ANMITION_VIEW && renderTrucks()}
+
+      {view === TABLE_VIEW && <PalletsTableView trucks={trucks} />}
     </>
   );
 };
