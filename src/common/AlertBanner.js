@@ -33,13 +33,15 @@ AlertBanner.propTypes = {
 const AlertWrapper = styled.div`
 position: relative;
 background: red;
-width: 100%;
+// width: 100%;
+width: 100vw;
 top: 0;
 left: 0;
 text-align: left;
 padding: 0.8rem 0.1rem 0.8rem 0.6rem ;
 padding-left: 8rem;
 background: #ef5350;
+z-index: 10;
 
 color: #fff;
 font-size: 1.05rem;
