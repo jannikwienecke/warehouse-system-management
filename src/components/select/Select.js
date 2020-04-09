@@ -71,25 +71,23 @@ export const Select = ({
   });
 
   return (
-    <div className="App">
-      <Wrapper>
-        <SelectWrapper>
-          <SearchSymbol>
-            <FaSearch />
-          </SearchSymbol>
-          <SelectType
-            onClick={() => setShowOptions(true)}
-            type="text"
-            placeholder={placeholder}
-            onChange={(e) => setFilter(e.target.value.toLowerCase())}
-            value={filter}
-          />
-          <Options showOptions={showOptions && filteredOptions.length > 0}>
-            {optionslist}
-          </Options>
-        </SelectWrapper>
-      </Wrapper>
-    </div>
+    <Wrapper>
+      <SelectWrapper>
+        <SearchSymbol>
+          <FaSearch />
+        </SearchSymbol>
+        <SelectType
+          onClick={() => setShowOptions(true)}
+          type="text"
+          placeholder={placeholder}
+          onChange={(e) => setFilter(e.target.value.toLowerCase())}
+          value={filter}
+        />
+        <Options showOptions={showOptions && filteredOptions.length > 0}>
+          {optionslist}
+        </Options>
+      </SelectWrapper>
+    </Wrapper>
   );
 };
 

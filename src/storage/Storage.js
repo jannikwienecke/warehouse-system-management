@@ -74,8 +74,6 @@ export const Storage = () => {
     { value: 2766358, label: "Flachkannen" },
   ];
 
-  console.log("filter = ", filter);
-
   return (
     <>
       {/* <Control /> */}
@@ -101,9 +99,8 @@ export const Storage = () => {
 const Wrapper = styled.div`
   position: absolute;
   top: -60px;
-  right: 15%;
+  right: 0px;
   z-index: 3;
-  width: 20%;
   text-align: right;
 `;
 

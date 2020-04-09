@@ -6,10 +6,11 @@ export const Wrapper = styled.div`
   justify-content: center;
   align-items: center;
   width: 30%;
-  margin-left: 1rem;
+  // margin-left: 1rem;
 `;
 export const SelectWrapper = styled.div`
   display: flex;
+  display: relative;
   flex-direction: column;
   width: 100%;
 `;
