@@ -72,9 +72,14 @@ const OpenSidebarBtn = styled.div`
   position: fixed;
   top: 1rem;
   right: 1rem;
-
+  z-index: 1;
   transition: 1000ms;
   opacity: 1;
+
+  :hover {
+    transform: scale(1.1);
+    cursor: pointer;
+  }
 
   ${({ isVisible }) =>
     isVisible &&

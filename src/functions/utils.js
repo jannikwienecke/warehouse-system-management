@@ -126,7 +126,7 @@ export const get_input = (type, name, placeholder) => {
   return input;
 };
 
-function useTraceUpdate(props) {
+export const useTraceUpdate = (props) => {
   const prev = useRef(props);
   useEffect(() => {
     const changedProps = Object.entries(props).reduce((ps, [k, v]) => {
@@ -140,4 +140,4 @@ function useTraceUpdate(props) {
     }
     prev.current = props;
   });
-}
+};

@@ -35,7 +35,7 @@ margin: 0.5%;
 background: #ccc;
 border: .5px solid #ababab;
 background : #aaa;
-transition: 1s background;
+transition: 2s background;
 
 
 
@@ -66,7 +66,7 @@ ${({ hasStock, isFiltered }) =>
   !hasStock &&
   isFiltered &&
   `
-      background : #00838f;
+      background : #7f0000;
     `};
   
 
@@ -99,11 +99,30 @@ ${({ stock, realPosition, direction }) =>
     top : -${stock - 10}%;
   `}
 
+
+
+  ${({ stock, realPosition, direction }) =>
+    realPosition === "top" &&
+    direction === "column" &&
+    `
+      top : +${100 - stock - 10}%;
+    `}
+
 ${({ stock, realPosition, direction }) =>
   realPosition === "top" &&
   direction === "column" &&
+  stock === 100 &&
   `
-      top : +${100 - stock - 10}%;
+      top : -${100 - stock + 10}%;
+    `}
+
+
+${({ stock, realPosition, direction }) =>
+  realPosition === "top" &&
+  direction === "column" &&
+  stock === 0 &&
+  `
+      top : +${90}%;
     `}
 
 ${({ realPosition, direction }) =>
@@ -132,7 +151,7 @@ background: #7f0000;
 width: 100%;
 height: 0%;
 position: relative;
-
+transition: 2s;
 
 
 
@@ -178,7 +197,8 @@ ${({ stock, realPosition, direction }) =>
       ${({ isFiltered }) =>
         isFiltered &&
         `
-    background : #00838f;
+    // background : #00838f;
+    background: #7f0000;
   `}
 
 ${({ isFiltered }) =>

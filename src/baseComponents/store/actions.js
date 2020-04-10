@@ -7,6 +7,8 @@ import {
   SET_EMPLOYEES,
   SET_STORAGE_BRIDGES,
   SET_SYM_BUILDINGS,
+  SET_WAREHOUSE,
+  SET_COMPARTMENTS,
 } from "./types";
 import {
   customers,
@@ -15,6 +17,7 @@ import {
   employees,
   storageBridges,
   symBuildings,
+  compartments,
 } from "../../testData";
 
 // const apiCall = (obj) => setTimeout(() => obj, 200);
@@ -52,5 +55,11 @@ export const fetchEmployees = () => (dispatch, getState) => {
 export const fetchSymBuildings = () => (dispatch, getState) => {
   setTimeout(() => {
     dispatch({ type: SET_SYM_BUILDINGS, payload: symBuildings });
+  }, 50);
+};
+
+export const fetchCompartments = () => (dispatch, getState) => {
+  setTimeout(() => {
+    dispatch({ type: SET_COMPARTMENTS, payload: compartments });
   }, 50);
 };

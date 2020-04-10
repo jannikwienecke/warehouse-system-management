@@ -46,8 +46,14 @@ export const SmallPopupRow = (props) => {
           Details
         </MyButton>
       ) : (
-        <MyButton size="small" onClick={() => clickRowFunc.func(data)}>
-          {clickRowFunc.text}
+        <MyButton
+          size="small"
+          onClick={() => {
+            setShowPopup(false);
+            clickRowFunc.func(data);
+          }}
+        >
+          {clickRowFunc.text}}
         </MyButton>
       )}
     </RowPopup>

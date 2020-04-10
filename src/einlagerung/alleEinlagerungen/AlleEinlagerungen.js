@@ -16,7 +16,7 @@ const columns = [
   COLUMNS.product,
   COLUMNS.quantity,
   COLUMNS.einlagerer,
-  COLUMNS.storage,
+  COLUMNS.warehouse,
   COLUMNS.row,
 ];
 

@@ -61,16 +61,16 @@ export default function (state = initialState, action) {
 const APPENDIX = "einlagerung";
 
 export const fetchEinlagerungen = () => (dispatch, getState) => {
-  const url = "https://dog.ceo/api/breeds/image/randomm";
+  // const url = "https://dog.ceo/api/breeds/image/randomm";
 
-  console.log("fetch einlagerungen....");
+  // console.log("fetch einlagerungen....");
 
-  const res = dispatch({
-    type: IS_DOG,
-    payload: axios.get(url),
-    dataName: "message",
-    APPENDIX,
-  });
+  // const res = dispatch({
+  //   type: IS_DOG,
+  //   payload: axios.get(url),
+  //   dataName: "message",
+  //   APPENDIX,
+  // });
 
   dispatch({
     type: SET_EINLAGERUNGEN,
@@ -115,27 +115,25 @@ export const selectRow = (storage, selectedRow, values) => (
   dispatch,
   getState
 ) => {
-  const quantityLeft = selectedRow.open - parseInt(values.quantity);
-  selectedRow.open = quantityLeft > 0 ? quantityLeft : 0;
+  // const quantityLeft = selectedRow.open - selectedQuantity;
+  // selectedRow.open = quantityLeft > 0 ? quantityLeft : 0;
+
+  const selectedQuantity = parseInt(values.quantity);
+  const freeSpace = selectedRow.maxStock - selectedRow.stock;
+
+  const quantityToStore =
+    selectedQuantity > freeSpace ? freeSpace : selectedQuantity;
+
+  selectedRow.stock += quantityToStore;
   selectedRow.isEmpty = false;
-  selectedRow.isFull = selectedRow.open === 0 ? true : false;
+  selectedRow.isFull =
+    selectedRow.stock === selectedRow.maxStock ? true : false;
 
   storage.forEach((row) => {
     if (row.row_id !== selectedRow.row_id) {
       row = selectedRow;
     }
   });
-
-  //   customers: {id: 1, customer_id: "37HOSTIE", customer_name: "Stitebel Eltron", value: "37HOSTIE", label: "Stitebel Eltron"}
-  // employees: {employee_id: "1", employee_name: "Fricke, Torben", value: "1", label: "Fricke, Torben"}
-  // products: undefined
-  // chargennummer: undefined
-  // quantity: "12"
-  // datetime: undefined
-  // notes: undefined
-  // customer_id: "37HOSTIE"
-  // employee_id: "1"
-  // }
 
   dispatch({ type: SET_STORAGE, payload: storage });
 };

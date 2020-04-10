@@ -34,10 +34,15 @@ export const Table = ({
 
   useEffect(() => {
     if (tableData) {
+      console.log("TABLE DATA ===", tableData);
+
       var data = parse(filter(tableData));
+
       setPrepareData(data);
     }
   }, [tableData]);
+
+  console.log("PREPARED DATA", preparedData);
 
   const _parseColumns = () => {
     if (columnsArr[0].accessor) {

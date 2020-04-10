@@ -15,10 +15,6 @@ const Row = (props) => {
     filter,
   } = props;
 
-  // console.log("filter", filter);
-  // console.log("data = ", data);
-  // console.log("--------------");
-
   const stock = data["stock"];
 
   const stockLevel = (rowData) => {
@@ -39,13 +35,7 @@ const Row = (props) => {
     return data.product_name.toLowerCase().includes(filter);
   };
 
-  console.log("data", data);
-  console.log("filter", filter);
-
-  console.log(
-    "data.product_name.includes(filter)",
-    data.product_name.includes(filter)
-  );
+  console.log("stockLevel(data)", stockLevel(data));
 
   return (
     <RowWrapper

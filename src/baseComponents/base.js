@@ -154,7 +154,7 @@ export const COLUMNS = {
   product: ["Produkt ID", "product_id"],
   quantity: ["Stück", "quantity"],
   einlagerer: ["Mitarbeiter", "employee_name"],
-  storage: ["Lager", "storage"],
+  warehouse: ["Lager", "warehouse_name"],
   row: ["Lagerplatz", "row_name"],
   open: ["Verfügbar", "open"],
   isEmptyRow: ["Leer?", "isEmpty"],

@@ -65,6 +65,11 @@ export const Parent = (props) => {
     props.formApiRequest(apiRequest);
   };
 
+  console.log("PROPS ", props);
+  console.log("tableDa", tableData);
+
+  console.log("--------------");
+
   return (
     <>
       {props.header && (

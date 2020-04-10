@@ -29,6 +29,7 @@ import {
   fetchEmployees,
   fetchStorageBridges,
   fetchSymBuildings,
+  fetchCompartments,
 } from "./baseComponents/store/actions";
 import { MyStorage } from "./templates/MyStorage";
 
@@ -41,6 +42,7 @@ const initializeData = () => {
     fetchStorageBridges,
     fetchEmployees,
     fetchSymBuildings,
+    fetchCompartments,
   ];
   funcArr.forEach((func) => {
     store.dispatch(func());

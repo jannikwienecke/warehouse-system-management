@@ -1,29 +1,23 @@
 import React, { useState, useEffect } from "react";
-import { test_storage } from "./data";
+import { warehouse } from "./data";
 import Row from "./Row";
 import { CompartmentWrapper } from "./CompartmentWrapper";
 
 const Compartment = (props) => {
-  const filterByZoom = (test_storage) => {
-    if (!props.compartmentZoom) return test_storage;
-    return Object.entries(test_storage)
-      .filter(([index, val]) => {
-        return val["compartment"] === props.compartmentZoom;
-      })
-      .map(([index, val]) => {
-        return val;
-      });
+  const isFiltered = (row) => {
+    return row.compartment === props.compartmentZoom || !props.compartmentZoom;
+  };
+
+  const isCompartment = (row) => {
+    return row.compartment === props.compartment.name;
   };
 
   const getStorageList = () => {
-    const filteredStorage = filterByZoom(test_storage);
-
-    return Object.entries(filteredStorage)
-      .filter(([index, val]) => val["compartment"] === props.compartment.name)
-
-      .map(([index, val]) => {
-        return <Row {...props} {...props.compartment} key={index} data={val} />;
-      });
+    return props.storage
+      .filter((row) => isCompartment(row) && isFiltered(row))
+      .map((row, index) => (
+        <Row {...props} {...props.compartment} key={index} data={row} />
+      ));
   };
 
   return <CompartmentWrapper {...props}>{getStorageList()}</CompartmentWrapper>;

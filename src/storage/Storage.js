@@ -1,17 +1,26 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Compartment from "./Compartment";
-import { compartments } from "./data";
 import Popup from "../components/popup/Popup";
 import { PopupRowView } from "./PopupRowView";
 import { MySelect } from "../components/select/MySelect";
+import { useSelector } from "react-redux";
+import { useTraceUpdate } from "../functions/utils";
 
-export const Storage = ({ defaultFilter, clickRowFunc }) => {
+export const Storage = ({ defaultFilter, clickRowFunc, warehouse_id }) => {
   const [filter, setFilter] = useState(null);
   const [showPopup, setShowPopups] = useState(null);
   const [showDetailPopup, setShowDetailPopup] = useState(null);
   const [compartmentZoom, setCompartmentZoom] = useState(null);
   const [hide, setHide] = useState(null);
+  const [warehouseID, setWarehouseID] = useState(2);
+  const compartments = useSelector((state) => state.base.compartments);
+  const storage = useSelector((state) => state.base.storage);
+
+  useEffect(() => {
+    if (warehouse_id) setWarehouseID(warehouse_id);
+  }, [warehouse_id]);
+
   useEffect(() => {
     if (!compartmentZoom) {
       setTimeout(() => {
@@ -43,16 +52,19 @@ export const Storage = ({ defaultFilter, clickRowFunc }) => {
     setShowPopups(rowData["row_id"]);
   };
 
+  const filterWarehouse = (compartment) => {
+    return compartment.warehouse_id === warehouseID;
+  };
+
+  const filterZoom = (compartment) => {
+    return compartment.name === compartmentZoom || !compartmentZoom;
+  };
+
   const getCompartmentList = () => {
-    return Object.entries(compartments)
-      .filter(([index, compartment]) => {
-        if (compartmentZoom) {
-          return compartmentZoom === index;
-        } else {
-          return index;
-        }
-      })
-      .map(([index, compartment]) => {
+    console.log("gtet.......");
+    return compartments
+      .filter((cp) => filterZoom(cp) && filterWarehouse(cp))
+      .map((compartment) => {
         return (
           <Compartment
             compartment={compartment}
@@ -64,6 +76,7 @@ export const Storage = ({ defaultFilter, clickRowFunc }) => {
             compartmentZoom={compartmentZoom}
             filter={filter}
             clickRowFunc={clickRowFunc}
+            storage={storage}
           />
         );
       });
@@ -74,6 +87,8 @@ export const Storage = ({ defaultFilter, clickRowFunc }) => {
     { value: 2744558, label: "CP3 Paletten" },
     { value: 2766358, label: "Flachkannen" },
   ];
+
+  if (!compartments || !storage || !warehouseID) return null;
 
   return (
     <>

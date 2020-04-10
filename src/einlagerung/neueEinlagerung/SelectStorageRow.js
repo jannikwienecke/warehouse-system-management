@@ -49,15 +49,15 @@ export const SelectStorageRow = ({
       setSelelectedRows([row]);
     }
 
-    showSuccessScreen(true);
+    // showSuccessScreen(true);
   };
 
   const handleClickRowStorage = (row) => {
-    row.quantity = row.maxStock - row.stock;
+    row.open = row.maxStock - row.stock;
+    handleRowClick(row);
   };
 
   const handleRowClick = (row) => {
-    row = row.original;
     const openQuantity = getOpenQuantity();
 
     if (row.open >= openQuantity) {
@@ -84,7 +84,7 @@ export const SelectStorageRow = ({
   }
 
   const filterStorage = (data) => {
-    return data.filter((row) => row.storage === selectedStorage);
+    return data.filter((row) => row.warehouse_id === selectedStorage);
   };
 
   const filterFullRows = (data) => {
@@ -130,7 +130,7 @@ export const SelectStorageRow = ({
               parseFuncStack: [parseBoolean, sortRows],
               middleware: [(data) => console.log("DATA VALIDATION")],
               clickRow: {
-                func: handleRowClick,
+                func: (row) => handleRowClick(row.original),
                 baseComponent: {
                   type: "Empty",
                   headline: "",
@@ -146,7 +146,7 @@ export const SelectStorageRow = ({
                 defaultFilter={values.products.product_name}
                 clickRowFunc={{
                   text: "Auswählen",
-                  func: (data) => console.log("SELECT...", data),
+                  func: handleClickRowStorage,
                 }}
               />
             </StorageWrapper>
@@ -166,7 +166,7 @@ const StorageWrapper = styled.div`
 
 const columns = [
   COLUMNS.row,
-  COLUMNS.storage,
+  COLUMNS.warehouse,
   COLUMNS.open,
   COLUMNS.isEmptyRow,
 ];

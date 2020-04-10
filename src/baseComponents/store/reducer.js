@@ -6,6 +6,8 @@ import {
   SET_EMPLOYEES,
   SET_ERROR,
   SET_SYM_BUILDINGS,
+  SET_WAREHOUSE,
+  SET_COMPARTMENTS,
 } from "./types";
 
 const initialState = {
@@ -15,6 +17,7 @@ const initialState = {
   products: null,
   employees: null,
   symBuildings: null,
+  compartments: null,
 };
 
 export default function (state = initialState, action) {
@@ -52,6 +55,12 @@ export default function (state = initialState, action) {
       return {
         ...state,
         symBuildings: action.payload,
+      };
+
+    case SET_COMPARTMENTS:
+      return {
+        ...state,
+        compartments: action.payload,
       };
 
     case SET_ERROR:
