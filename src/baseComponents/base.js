@@ -80,7 +80,7 @@ export const INPUT = {
     type: "input",
     name: "products",
     identifier: "product_id",
-    labelName: "name",
+    labelName: "product_name",
     placeholder: "Produkt",
     setOptions: (options, name) => options[name],
     //   func: (state) => {

@@ -87,7 +87,8 @@ const Layout = styled.div`
   flex-direction: row;
   position: relative;
   height: 100vh;
-  width: 90vw;
+  width: 100vw;
+  margin: 0 auto;
 `;
 const ContentWrapper = styled.div`
   width: 75%;

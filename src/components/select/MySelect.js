@@ -22,4 +22,7 @@ MySelect.propTypes = {
       label: PropTypes.string,
     })
   ),
+  defaultFilter: PropTypes.string,
+  setValue: PropTypes.func,
+  placeholder: PropTypes.string,
 };

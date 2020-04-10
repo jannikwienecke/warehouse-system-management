@@ -7,6 +7,7 @@ import { Parent } from "../../baseComponents/Parent";
 import { COLUMNS } from "../../baseComponents/base";
 import { useDispatch, useSelector } from "react-redux";
 import { selectRow } from "../store";
+import { Storage } from "../../storage/Storage";
 
 export const SelectStorageRow = ({
   goBack,
@@ -17,6 +18,8 @@ export const SelectStorageRow = ({
   setSelelectedRows,
 }) => {
   const [successScreen, showSuccessScreen] = useState(null);
+  const [storageScreen, showStorageScreen] = useState(false);
+
   const storage = useSelector((state) => state.base.storage);
 
   const dispatch = useDispatch();
@@ -47,6 +50,10 @@ export const SelectStorageRow = ({
     }
 
     showSuccessScreen(true);
+  };
+
+  const handleClickRowStorage = (row) => {
+    row.quantity = row.maxStock - row.stock;
   };
 
   const handleRowClick = (row) => {
@@ -99,6 +106,8 @@ export const SelectStorageRow = ({
     });
   };
 
+  console.log("VALUES == ", values);
+
   return (
     <>
       <Wrapper>
@@ -108,27 +117,52 @@ export const SelectStorageRow = ({
           Anderes Lager auswählen
         </ButtonSelection>
 
-        <Parent
-          table={{
-            columnsArr: columns,
-            dataName: "storage",
-            filterFuncStack: [filterStorage, filterFullRows],
-            parseFuncStack: [parseBoolean, sortRows],
-            middleware: [(data) => console.log("DATA VALIDATION")],
-            clickRow: {
-              func: handleRowClick,
-              baseComponent: {
-                type: "Empty",
-                headline: "",
-                settings: {},
+        <ButtonSelection onClick={() => showStorageScreen(!storageScreen)}>
+          Anischt Wechseln
+        </ButtonSelection>
+
+        {!storageScreen ? (
+          <Parent
+            table={{
+              columnsArr: columns,
+              dataName: "storage",
+              filterFuncStack: [filterStorage, filterFullRows],
+              parseFuncStack: [parseBoolean, sortRows],
+              middleware: [(data) => console.log("DATA VALIDATION")],
+              clickRow: {
+                func: handleRowClick,
+                baseComponent: {
+                  type: "Empty",
+                  headline: "",
+                  settings: {},
+                },
               },
-            },
-          }}
-        />
+            }}
+          />
+        ) : (
+          <>
+            <StorageWrapper>
+              <Storage
+                defaultFilter={values.products.product_name}
+                clickRowFunc={{
+                  text: "Auswählen",
+                  func: (data) => console.log("SELECT...", data),
+                }}
+              />
+            </StorageWrapper>
+          </>
+        )}
       </Wrapper>
     </>
   );
 };
+
+const StorageWrapper = styled.div`
+  display: relative;
+  height: 100vh;
+  width: 100%;
+  margin-top: 5rem;
+`;
 
 const columns = [
   COLUMNS.row,

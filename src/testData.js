@@ -4,19 +4,19 @@ export const products = [
   {
     id: 1,
     product_id: "227445",
-    name: "Flachkannen 30l",
+    product_name: "Flachkannen",
     type: EURO,
   },
   {
     id: 2,
     product_id: "223657",
-    name: "Polykanister SK",
+    product_name: "Polykanister",
     type: EURO,
   },
   {
     id: 3,
     product_id: "2297500",
-    name: "CP3 Paletten",
+    product_name: "CP3 Paletten",
     type: INDUSTRY,
   },
 ];

@@ -6,7 +6,7 @@ import Popup from "../components/popup/Popup";
 import { PopupRowView } from "./PopupRowView";
 import { MySelect } from "../components/select/MySelect";
 
-export const Storage = () => {
+export const Storage = ({ defaultFilter, clickRowFunc }) => {
   const [filter, setFilter] = useState(null);
   const [showPopup, setShowPopups] = useState(null);
   const [showDetailPopup, setShowDetailPopup] = useState(null);
@@ -63,6 +63,7 @@ export const Storage = () => {
             zoom={zoom}
             compartmentZoom={compartmentZoom}
             filter={filter}
+            clickRowFunc={clickRowFunc}
           />
         );
       });
@@ -87,6 +88,7 @@ export const Storage = () => {
               placeholder={"Material Suchen"}
               setValue={(filter_) => setFilter(filter_.toLowerCase())}
               optionData={options_}
+              defaultFilter={defaultFilter}
             />
           </Wrapper>
           {getCompartmentList()}

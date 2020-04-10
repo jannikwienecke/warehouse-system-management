@@ -38,7 +38,7 @@ const Form = (props) => {
           arrInput: arrInput,
           middlewareValidation: [],
           middlewareParse: [extractIdentifier],
-          requiredArguments: [INPUT.customers.name],
+          requiredArguments: [],
           cardWrapper: true,
           apiFunc: (dispatch, parameter) => props.setValues(parameter),
         }}

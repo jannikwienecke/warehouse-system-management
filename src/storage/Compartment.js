@@ -22,9 +22,6 @@ const Compartment = (props) => {
       .filter(([index, val]) => val["compartment"] === props.compartment.name)
 
       .map(([index, val]) => {
-        // console.log("filter", props.filter);
-        // console.log("val", val);
-
         return <Row {...props} {...props.compartment} key={index} data={val} />;
       });
   };

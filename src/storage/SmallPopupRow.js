@@ -11,12 +11,12 @@ export const SmallPopupRow = (props) => {
     setShowPopup,
     handleClick,
     stockLevel,
-    parentFunc,
+    clickRowFunc,
   } = props;
 
   if (!showPopup) return null;
 
-  console.log("DATA ROW = ", data);
+  console.log("clickRowFunc", clickRowFunc);
 
   return (
     <RowPopup
@@ -41,13 +41,13 @@ export const SmallPopupRow = (props) => {
         Close
       </MyButton>
 
-      {!parentFunc ? (
+      {!clickRowFunc ? (
         <MyButton size="small" onClick={() => handleClick("btn")}>
           Details
         </MyButton>
       ) : (
-        <MyButton size="small" onClick={(data) => parentFunc.func(data)}>
-          {parentFunc.text}
+        <MyButton size="small" onClick={() => clickRowFunc.func(data)}>
+          {clickRowFunc.text}
         </MyButton>
       )}
     </RowPopup>

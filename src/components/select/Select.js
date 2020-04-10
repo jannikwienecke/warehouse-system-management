@@ -41,10 +41,15 @@ export const Select = ({
   optionData,
   setValue,
   placeholder,
+  defaultFilter,
 }) => {
   const [showOptions, setShowOptions] = useState(false);
   const { setFilter, filteredOptions, filter } = useFilter(optionData);
   const { active, setActive } = useOptionActive(filteredOptions);
+
+  useEffect(() => {
+    if (defaultFilter) setFilter(defaultFilter);
+  }, [defaultFilter]);
 
   useEffect(() => {
     if (outside) {
