@@ -1,6 +1,7 @@
 // import axios from "axios";
 
 import {
+  SET_INIT,
   SET_CUSTOMER,
   SET_PRODUCTS,
   SET_STORAGE,
@@ -9,6 +10,7 @@ import {
   SET_SYM_BUILDINGS,
   SET_WAREHOUSE,
   SET_COMPARTMENTS,
+  SET_ERROR,
 } from "./types";
 import {
   customers,
@@ -21,6 +23,10 @@ import {
 } from "../../testData";
 
 // const apiCall = (obj) => setTimeout(() => obj, 200);
+
+export const setInitData = (initData) => (dispatch, getState) => {
+  dispatch({ type: SET_INIT, payload: initData });
+};
 
 export const fetchCustomer = () => (dispatch, getState) => {
   setTimeout(() => {
@@ -62,4 +68,14 @@ export const fetchCompartments = () => (dispatch, getState) => {
   setTimeout(() => {
     dispatch({ type: SET_COMPARTMENTS, payload: compartments });
   }, 50);
+};
+
+export const showAlert = (msg, code) => (dispatch, getState) => {
+  dispatch({
+    type: SET_ERROR,
+    payload: {
+      code: code ? code : "USER_ERROR",
+      message: msg,
+    },
+  });
 };

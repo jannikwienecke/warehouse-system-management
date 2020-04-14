@@ -7,8 +7,11 @@ import { Parent } from "../../baseComponents/Parent";
 import { fetchAuslagerungen } from "../store";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
+import { withApollo } from "react-apollo";
+import { FEED_QUERY } from "../../layout/LayoutBase";
 
 const columns = [
+  ["url", "url"],
   COLUMNS.tour,
   COLUMNS.datetime,
   COLUMNS.customer,
@@ -23,11 +26,31 @@ const arrInput = [
   INPUT.products,
   INPUT.dateStart,
   INPUT.dateEnd,
+  INPUT.text,
 ];
+
+INPUT.text.type = "text";
+INPUT.text.placeholder = "url";
+INPUT.text.name = "search";
 
 setArrInputSize(arrInput, 6);
 
-export const AlleAuslagerungen = ({ setType, type }) => {
+const AlleAuslagerungen = ({ setType, type, client }) => {
+  const [tableData, setTableData] = useState([]);
+  useEffect(() => {
+    getTableData();
+  }, []);
+  const getTableData = async (parameter) => {
+    // console.log("PARAMETER = =", parameter);
+    const result = await client.query({
+      query: FEED_QUERY,
+      variables: { ...parameter },
+    });
+
+    console.log("log", result);
+    setTableData(result.data.links);
+  };
+
   return (
     <>
       <Parent
@@ -39,21 +62,11 @@ export const AlleAuslagerungen = ({ setType, type }) => {
         }}
       />
 
-      <Test>
-        <SelectWrapper>
-          <SelectType type="text" placeholder="Statistik wählen" />
-        </SelectWrapper>
-        <Options>
-          <Option>Test 1</Option>
-          <Option>Test 1</Option>
-          <Option>Test 1</Option>
-        </Options>
-      </Test>
-
       <Parent
         table={{
           columnsArr: columns,
           dataName: "auslagerungen",
+          data: tableData,
           initFunc: (dispatch) => dispatch(fetchAuslagerungen()),
           middleware: [(data) => console.log("DATA VALIDATION")],
 
@@ -75,16 +88,14 @@ export const AlleAuslagerungen = ({ setType, type }) => {
           middlewareParse: [extractIdentifier],
           requiredArguments: [INPUT.customers.name],
           cardWrapper: true,
-          apiFunc: (dispatch, parameter) => {
-            return mockAPI({}, parameter, 1000).then((res) =>
-              dispatch(fetchAuslagerungen)
-            );
-          },
+          apiFunc: (dispatch, parameter) => getTableData(parameter),
         }}
       ></Parent>
     </>
   );
 };
+
+export default withApollo(AlleAuslagerungen);
 
 const DetailView = ({ name, rowData, isSubmitted }) => {
   useEffect(() => {
@@ -98,42 +109,3 @@ const DetailView = ({ name, rowData, isSubmitted }) => {
     </>
   );
 };
-
-const Test = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-`;
-const SelectWrapper = styled.div`
-  // text-align: right;
-  display: flex;
-  flex-direction: column;
-  width: 30%;
-`;
-const SelectType = styled.input`
-  border: 0.5px solid #ddd;
-  padding: 1rem;
-  border-radius: 1rem;
-  // width: 30%;
-  text-align: center;
-  font-size: 1.4rem;
-  letter-spacing: 1.1px;
-  text-transform: uppercase;
-  font-weight: 700;
-  // margin-right: 5rem;
-  :focus {
-    outline: none;
-  }
-`;
-
-const Options = styled.span`
-  display: flex;
-  flex-direction: column;
-  width: 28%;
-  background: #eee;
-  margin-top: 0.2rem;
-`;
-
-const Option = styled.span`
-  // width: 30%;
-`;

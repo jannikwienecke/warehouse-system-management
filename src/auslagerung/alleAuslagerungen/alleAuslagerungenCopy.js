@@ -6,8 +6,10 @@ import { endGreaterStart, extractIdentifier } from "../../functions/middleware";
 import { Parent } from "../../baseComponents/Parent";
 import { fetchAuslagerungen } from "../store";
 import { useDispatch } from "react-redux";
+import styled from "styled-components";
 
 const columns = [
+  ["URL", "url"],
   COLUMNS.tour,
   COLUMNS.datetime,
   COLUMNS.customer,
@@ -36,6 +38,9 @@ export const AlleAuslagerungen = ({ setType, type }) => {
           type: type,
           sub_pages: SUB_PAGES,
         }}
+      />
+
+      <Parent
         table={{
           columnsArr: columns,
           dataName: "auslagerungen",

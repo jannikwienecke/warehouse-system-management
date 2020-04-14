@@ -34,15 +34,11 @@ export const Table = ({
 
   useEffect(() => {
     if (tableData) {
-      console.log("TABLE DATA ===", tableData);
-
       var data = parse(filter(tableData));
 
       setPrepareData(data);
     }
   }, [tableData]);
-
-  console.log("PREPARED DATA", preparedData);
 
   const _parseColumns = () => {
     if (columnsArr[0].accessor) {
@@ -137,4 +133,5 @@ export const Table = ({
 
 const Wrapper = styled.div`
   margin-top: 3rem;
+  min-height: 75vh;
 `;

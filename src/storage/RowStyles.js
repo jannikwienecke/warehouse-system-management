@@ -66,7 +66,7 @@ ${({ hasStock, isFiltered }) =>
   !hasStock &&
   isFiltered &&
   `
-      background : #7f0000;
+      background : #66bb6a;
     `};
   
 

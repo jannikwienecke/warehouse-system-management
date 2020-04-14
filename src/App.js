@@ -1,26 +1,10 @@
 import React, { useEffect } from "react";
-import ReactDOM from "react-dom";
-import {
-  HashRouter as Router,
-  Route,
-  Switch,
-  Redirect,
-} from "react-router-dom";
-import { Provider, connect, useDispatch } from "react-redux";
-
+import { HashRouter as Router, Switch } from "react-router-dom";
+import { Provider } from "react-redux";
 import "./styles.css";
-import MyForm from "./templates/MyForm";
-import MyTable from "./templates/MyTable";
-import styled from "styled-components";
-import { Button } from "react-bootstrap";
-import MyPopup from "./templates/MyPopup";
-import MyModal from "./templates/MyModal";
-import { MyLayout } from "./MyLayout";
 import { PageRouter } from "./PageRouter";
 import { DashboardEinlagerung } from "./einlagerung/Dashboard";
 import { DashboardAuslagerung } from "./auslagerung/DashboardAuslagerung";
-import CreateTour from "./auslagerung/createTour/CreateTour";
-import { Storage } from "./storage/Storage";
 import store from "./store";
 import {
   fetchCustomer,
@@ -30,11 +14,13 @@ import {
   fetchStorageBridges,
   fetchSymBuildings,
   fetchCompartments,
+  setInitData,
+  showAlert,
 } from "./baseComponents/store/actions";
 import { MyStorage } from "./templates/MyStorage";
 
-const initializeData = () => {
-  // const dispatch = useDispatch();
+const initializeData = (data) => {
+  store.dispatch(setInitData(data));
   const funcArr = [
     fetchCustomer,
     fetchProducts,
@@ -49,20 +35,42 @@ const initializeData = () => {
   });
 };
 
-export default function App() {
+const setError = (error) => {
+  const errorKeys = ["graphQLErrors", "networkError"];
+  errorKeys.forEach((key) => {
+    try {
+      if (key === "graphQLErrors") {
+        var errorList = error[key];
+      } else {
+        var errorList = error[key].result.errors;
+      }
+    } catch (e) {
+      if (!(e instanceof TypeError)) {
+        throw e;
+      }
+      return [];
+    }
+
+    return errorList.forEach((err) => {
+      var msg = `${err.message} - Position ${JSON.stringify(err.locations)}`;
+      store.dispatch(showAlert(msg));
+    });
+  });
+};
+
+export default function App({ data, error, loading }) {
   useEffect(() => {
-    console.log("PROGRAMM STARTS...");
-    initializeData();
-  }, []);
+    if (data) {
+      initializeData(data);
+    } else if (error) {
+      setError(error);
+    }
+  }, [data, error, loading]);
 
   return (
     <Provider store={store}>
       <Router>
         <div className="App">
-          {/* <MyPopup />
-      <MyModal />
-      <MyForm />
-      <MyTable /> */}
           <Switch>
             <PageRouter exact path="/" component={MyStorage} />
 
@@ -76,18 +84,10 @@ export default function App() {
               path="/einlagerung"
               component={DashboardEinlagerung}
             />
-
-            <PageRouter exact path="/table" component={MyTable} />
           </Switch>
-          {/* <MyLayout /> */}
         </div>
       </Router>
+      >
     </Provider>
   );
 }
-
-const Table = styled.table`
-  border-radius: 1000px;
-  border: 10px solid gainsboro;
-  border-collapse: collapse;
-`;

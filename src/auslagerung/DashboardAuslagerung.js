@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { NeueAuslagerung } from "./neueAuslagerung/NeueAuslagerung";
-import { AlleAuslagerungen } from "./alleAuslagerungen/alleAuslagerungen";
+import AlleAuslagerungen from "./alleAuslagerungen/alleAuslagerungen";
 import Dashboard from "../baseComponents/Dashboard";
 
 import {

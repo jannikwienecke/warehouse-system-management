@@ -1,4 +1,5 @@
 import {
+  SET_INIT,
   SET_CUSTOMER,
   SET_PRODUCTS,
   SET_STORAGE,
@@ -22,6 +23,11 @@ const initialState = {
 
 export default function (state = initialState, action) {
   switch (action.type) {
+    case SET_INIT:
+      console.log("SET INIT", action);
+
+      return action.payload;
+
     case SET_CUSTOMER:
       return {
         ...state,

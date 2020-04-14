@@ -61,7 +61,6 @@ export const Storage = ({ defaultFilter, clickRowFunc, warehouse_id }) => {
   };
 
   const getCompartmentList = () => {
-    console.log("gtet.......");
     return compartments
       .filter((cp) => filterZoom(cp) && filterWarehouse(cp))
       .map((compartment) => {
@@ -88,12 +87,10 @@ export const Storage = ({ defaultFilter, clickRowFunc, warehouse_id }) => {
     { value: 2766358, label: "Flachkannen" },
   ];
 
-  if (!compartments || !storage || !warehouseID) return null;
+  if (!compartments || !storage) return null;
 
   return (
     <>
-      {/* <Control /> */}
-
       <PopupRowView visible={showDetailPopup} setVisible={setShowDetailPopup} />
 
       {!hide && (
@@ -135,8 +132,6 @@ const StorageHall = styled.div`
   justify-content: space-between;
   align-content: flex-start;
   border: 2px solid;
-  // left: 55%;
-  // margin-left: -47.5%;
   margin: 0 auto;
   margin-bottom: 10%;
 `;

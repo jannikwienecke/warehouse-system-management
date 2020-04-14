@@ -132,7 +132,7 @@ export const INPUT = {
   },
   text: {
     name: "text",
-    placeholder: "Text",
+    placeholder: "text",
     type: "text",
     size: 6,
   },

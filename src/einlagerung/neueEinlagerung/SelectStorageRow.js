@@ -8,6 +8,7 @@ import { COLUMNS } from "../../baseComponents/base";
 import { useDispatch, useSelector } from "react-redux";
 import { selectRow } from "../store";
 import { Storage } from "../../storage/Storage";
+import { showAlert } from "../../baseComponents/store/actions";
 
 export const SelectStorageRow = ({
   goBack,
@@ -44,17 +45,24 @@ export const SelectStorageRow = ({
     if (selectedRows) {
       setSelelectedRows([...selectedRows, row]);
     } else {
-      console.log("set selected rows", copy(row));
-
       setSelelectedRows([row]);
     }
 
-    // showSuccessScreen(true);
+    showSuccessScreen(true);
   };
 
   const handleClickRowStorage = (row) => {
-    row.open = row.maxStock - row.stock;
-    handleRowClick(row);
+    const { product_id, product_name } = values.products;
+    if (row.product_id !== product_id) {
+      dispatch(
+        showAlert(
+          `Bitte Gültiges Produkt auswählen: ${product_name} (${product_id})`
+        )
+      );
+    } else {
+      row.open = row.maxStock - row.stock;
+      handleRowClick(row);
+    }
   };
 
   const handleRowClick = (row) => {
@@ -78,10 +86,10 @@ export const SelectStorageRow = ({
     }
   };
 
-  if (successScreen) {
-    const text = `Offene Anzahl ${getOpenQuantity()}`;
-    return <SuccessScreen text={text} />;
-  }
+  // if (successScreen) {
+  //   const text = `Offene Anzahl ${getOpenQuantity()}`;
+  //   return <SuccessScreen text={text} />;
+  // }
 
   const filterStorage = (data) => {
     return data.filter((row) => row.warehouse_id === selectedStorage);
@@ -106,7 +114,7 @@ export const SelectStorageRow = ({
     });
   };
 
-  console.log("VALUES == ", values);
+  console.log("VALUES = ", values);
 
   return (
     <>
@@ -121,6 +129,7 @@ export const SelectStorageRow = ({
           Anischt Wechseln
         </ButtonSelection>
 
+        {!storageScreen && successScreen && <SuccessScreen />}
         {!storageScreen ? (
           <Parent
             table={{
@@ -143,6 +152,7 @@ export const SelectStorageRow = ({
           <>
             <StorageWrapper>
               <Storage
+                warehouse_id={selectedStorage}
                 defaultFilter={values.products.product_name}
                 clickRowFunc={{
                   text: "Auswählen",

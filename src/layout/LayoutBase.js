@@ -8,6 +8,19 @@ import { useSelector } from "react-redux";
 import { AlertBanner } from "../common/AlertBanner";
 import { copy } from "../functions/utils";
 
+import { Query } from "react-apollo";
+import gql from "graphql-tag";
+
+export const FEED_QUERY = gql`
+  query FeedQuery($first: Int, $skip: Int, $search: String) {
+    links(search: $search, first: $first, skip: $skip) {
+      url
+      description
+      # votes{}
+    }
+  }
+`;
+
 const useErrors = () => {
   const [errorQueue, setErrorQueue] = useState([]);
   const error = useSelector((state) => state.base.error);
@@ -36,6 +49,29 @@ export const LayoutBase = ({ width, children }) => {
     <>
       {errorBanners.length > 0 && <ErrorWrapper>{errorBanners}</ErrorWrapper>}
 
+      {/* <Query query={FEED_QUERY}>
+        {({ loading, error, data, subscribeToMore }) => {
+          if (loading) return <div>Fetching</div>;
+          if (error) {
+            return (
+              <div>Error: {error.graphQLErrors.map((err) => err.message)}</div>
+            );
+          }
+
+          console.log("link==", data);
+
+          return (
+            <>
+              {data.links.map((link, index) => (
+                <p key={link.id} link={link} index={index}>
+                  {link.url}
+                </p>
+              ))}
+            </>
+          );
+        }}
+      </Query> */}
+
       <Layout>
         <OpenSidebarBtn
           isVisible={isVisible}
@@ -56,7 +92,8 @@ export const LayoutBase = ({ width, children }) => {
 };
 
 const ErrorWrapper = styled.div`
-  position: absolute;
+  position: fixed;
+  z-index: 100;
 `;
 
 const OpenSidebarBtn = styled.div`
@@ -96,11 +133,11 @@ const Layout = styled.div`
   margin: 0 auto;
 `;
 const ContentWrapper = styled.div`
-  width: 75%;
+  // width: 75%;
   transition: 1000ms;
   position: relative;
   height: 100vh;
-  width: 75vw;
+  width: 74vw;
 
   ${({ width }) =>
     width &&

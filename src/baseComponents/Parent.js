@@ -65,11 +65,6 @@ export const Parent = (props) => {
     props.formApiRequest(apiRequest);
   };
 
-  console.log("PROPS ", props);
-  console.log("tableDa", tableData);
-
-  console.log("--------------");
-
   return (
     <>
       {props.header && (
@@ -123,3 +118,37 @@ Parent.propTypes = {
     apiFunc: PropTypes.func.isRequired,
   }),
 };
+
+// {!formLoading && props.table && (
+//   <Query query={FEED_QUERY}>
+//     {({ loading, error, data, subscribeToMore }) => {
+//       if (loading) return <div>Fetching</div>;
+//       if (error) {
+//         return (
+//           <div>
+//             Error: {error.graphQLErrors.map((err) => err.message)}
+//           </div>
+//         );
+//       }
+//       console.log("links==", data);
+
+//       return (
+//         <Table
+//           {...props.table}
+//           // tableData={props.table.data ? props.table.data : tableData}
+//           tableData={data.links}
+//         />
+//       );
+
+//       // return (
+//       //   <>
+//       //     {data.links.map((link, index) => (
+//       //       <p key={link.id} link={link} index={index}>
+//       //         {link.url}
+//       //       </p>
+//       //     ))}
+//       //   </>
+//       // );
+//     }}
+//   </Query>
+// )}

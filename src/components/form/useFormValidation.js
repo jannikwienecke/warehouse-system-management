@@ -24,20 +24,21 @@ function useFormValidation(
     }
   }, [errors]);
 
-  const handleChange = e => {
+  const handleChange = (e) => {
     setValues({
       ...values,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
+    handleSubmit();
   };
 
-  const removeValue = name => {
+  const removeValue = (name) => {
     var oldValues = values;
     delete oldValues[name];
     setValues(oldValues);
   };
 
-  const setMissingValues = element => {
+  const setMissingValues = (element) => {
     // console.log('ELEMENT = ', element);
     var newValues = values;
     newValues[element.name] = element.defaultValues;
@@ -48,8 +49,8 @@ function useFormValidation(
     var e = {
       target: {
         value: data,
-        name
-      }
+        name,
+      },
     };
 
     handleChange(e);
@@ -60,8 +61,8 @@ function useFormValidation(
     setErrors(validationErrors);
   };
 
-  const handleSubmit = e => {
-    e.preventDefault();
+  const handleSubmit = (e) => {
+    if (e) e.preventDefault();
     let validationErrors = validateAuth(values, requiredArguments, authFuncArr);
 
     setSubmitting(true);
@@ -72,7 +73,7 @@ function useFormValidation(
     handleBlur,
     handleChange,
     handleInputChange,
-    handleSubmit
+    handleSubmit,
   };
 
   return {
@@ -81,7 +82,7 @@ function useFormValidation(
     isSubmitting,
     setMissingValues,
     removeValue,
-    formFunc
+    formFunc,
   };
 }
 
