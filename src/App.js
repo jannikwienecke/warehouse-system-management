@@ -18,12 +18,13 @@ import {
   showAlert,
 } from "./baseComponents/store/actions";
 import { MyStorage } from "./templates/MyStorage";
+import GraphQl from "./templates/GraphQl";
 
 const initializeData = (data) => {
   store.dispatch(setInitData(data));
   const funcArr = [
     fetchCustomer,
-    fetchProducts,
+    // fetchProducts,
     fetchStorage,
     fetchStorageBridges,
     fetchEmployees,
@@ -72,7 +73,7 @@ export default function App({ data, error, loading }) {
       <Router>
         <div className="App">
           <Switch>
-            <PageRouter exact path="/" component={MyStorage} />
+            <PageRouter exact path="/" component={GraphQl} />
 
             <PageRouter
               exact

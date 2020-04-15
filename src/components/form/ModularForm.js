@@ -39,6 +39,8 @@ const ModularForm = (props) => {
     arrInput
   );
 
+  // console.log("VALUES = ", values);
+
   return (
     <Form>
       <Header>

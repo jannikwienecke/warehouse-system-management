@@ -29,7 +29,7 @@ export const Table = ({
   const [preparedData, setPrepareData] = useState(null);
 
   useEffect(() => {
-    _parseColumns();
+    if (columnsArr.length > 0) _parseColumns();
   }, [columnsArr]);
 
   useEffect(() => {
@@ -46,10 +46,12 @@ export const Table = ({
     } else {
       var columns_ = [];
       columnsArr.forEach((column) => {
-        columns_.push({
-          Header: column[0],
-          accessor: column[1],
-        });
+        if (column && column.length > 0 && column[0] !== "__typename") {
+          columns_.push({
+            Header: column[0],
+            accessor: column[1],
+          });
+        }
       });
     }
 

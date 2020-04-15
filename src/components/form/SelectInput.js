@@ -13,7 +13,7 @@ const errorStyles = {
 
 const SelectInput = ({ input, values, formFunc, errors }) => {
   const _parse = () => {
-    // console.log("input = ", input);
+    // console.log("values_____= ", values);
     // console.log("options= ", input.options);
 
     input.options.map((option) => {
@@ -52,7 +52,7 @@ const SelectInput = ({ input, values, formFunc, errors }) => {
         className={input.class ? input.class : "formInput"}
         name={input.name}
         options={input.options}
-        value={values.name}
+        // value={values.name}
         onBlur={formFunc.handleBlur}
         onChange={(data) => formFunc.handleInputChange(data, input.name)}
         isMulti={input.multiSelect}

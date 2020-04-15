@@ -19,15 +19,15 @@ export const Form = (props) => {
 
   useEffect(() => {
     setLoading(true);
-    runFetchDataFunctions();
-  }, []);
+    if (arrInput) runFetchDataFunctions();
+  }, [arrInput]);
 
   useEffect(() => {
     validateIfAllOptionsAreLoaded();
   }, [optionsObj]);
 
   const validateIfAllOptionsAreLoaded = () => {
-    if (!optionsObj) {
+    if (!optionsObj || !arrInput) {
       return;
     }
     var optionMissing = false;
@@ -75,11 +75,15 @@ export const Form = (props) => {
     return new Promise((resolve) => {
       var error = false;
       const promises = arrInput.map((input) => {
+        // console.log("INPUT +++ ", input);
+
         if (!input.func) return;
         if (input.name in optionsObj) return; //input was fetched already
 
         return new Promise((resolve) => {
           const response = input.func(state);
+          // console.log("RESPONSE = ", response);
+
           if (!response.then) {
             resolve(response);
           } else {
@@ -126,6 +130,7 @@ export const Form = (props) => {
   };
 
   const allOptionsAreSet = () => {
+    if (!arrInput) return false;
     if (!optionsObj) return false;
 
     var isValid = true;
@@ -189,10 +194,10 @@ const FormElement = (props) => {
     setOptionsReady(true);
   };
 
-  if (!optionsReady)
+  if (!optionsReady || arrInput.length == 0)
     return (
       <>
-        <Loader />
+        <Loader time={1} />
       </>
     );
 

@@ -11,17 +11,19 @@ import { AUTH_TOKEN } from "./constants";
 import App from "./App";
 import { setInitData } from "./baseComponents/store/actions";
 
-import gql from "graphql-tag";
 import { useDispatch } from "react-redux";
+import { INIT_QUERY } from "./queries/queries";
 
-export const FEED_QUERY = gql`
-  query FeedQuery($first: Int, $skip: Int) {
-    links(first: $first, skip: $skip) {
-      url
-      description
-    }
-  }
-`;
+// export const FEED_QUERY = gql`
+//   query FeedQuery {
+//     products {
+//       name
+//     }
+//     packagings {
+//       name
+//     }
+//   }
+// `;
 
 const httpLink = createHttpLink({
   uri: "http://localhost:8000/graphql/",
@@ -44,9 +46,8 @@ const client = new ApolloClient({
 
 ReactDOM.render(
   <ApolloProvider client={client}>
-    <Query query={FEED_QUERY}>
+    <Query query={INIT_QUERY}>
       {(props) => {
-        console.log("props", props);
         return <App {...props} />;
       }}
     </Query>

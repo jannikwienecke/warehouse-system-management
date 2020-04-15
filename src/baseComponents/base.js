@@ -79,25 +79,31 @@ export const INPUT = {
   products: {
     type: "input",
     name: "products",
-    identifier: "product_id",
-    labelName: "product_name",
+    identifier: "id",
+    labelName: "name",
     placeholder: "Produkt",
     setOptions: (options, name) => options[name],
-    //   func: (state) => {
-    //     return {
-    //       name: INPUT.products.name,
-    //       data: state.base[INPUT.products.name],
-    //     };
-    //   },
-    // },
+    func: (state) => {
+      return {
+        name: INPUT.products.name,
+        data: state.base[INPUT.products.name],
+      };
+    },
+  },
 
-    func: (name) =>
-      mockAPI(products, 5).then((res) => {
-        return {
-          data: res.data,
-          name: INPUT.products.name,
-        };
-      }),
+  packagings: {
+    type: "input",
+    name: "packagings",
+    identifier: "id",
+    labelName: "name",
+    placeholder: "Verpachung",
+    setOptions: (options, name) => options[name],
+    func: (state) => {
+      return {
+        name: INPUT.packagings.name,
+        data: state.base[INPUT.packagings.name],
+      };
+    },
   },
 
   dateStart: {
@@ -136,7 +142,39 @@ export const INPUT = {
     type: "text",
     size: 6,
   },
+  string: {
+    name: "text",
+    placeholder: "text",
+    type: "text",
+    size: 6,
+  },
+  number: {
+    name: "text",
+    placeholder: "text",
+    type: "number",
+    size: 6,
+  },
+  boolean: {
+    name: "boolean1",
+    placeholder: "text",
+    type: "input",
+    size: 6,
+    identifier: "value",
+    labelName: "label",
+    setOptions: (options) => options[INPUT.boolean.name],
+    func: (state) => {
+      return {
+        name: INPUT.boolean.name,
+        data: booleanValues,
+      };
+    },
+  },
 };
+
+const booleanValues = [
+  { label: "Auswählen", value: true },
+  { label: "Nicht Auswählen", value: false },
+];
 
 var ValidationException = {};
 var ParseException = {};
@@ -164,4 +202,10 @@ export const COLUMNS = {
   type: ["Type", "type"],
   building: ["Gebäude", "building"],
   factory: ["Werk", "factory"],
+};
+
+export const INPUT_TYPES = {
+  products: {
+    products: INPUT.products,
+  },
 };
