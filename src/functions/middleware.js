@@ -16,7 +16,11 @@ export const extractIdentifier = (data) => {
   Object.keys(data).forEach((key) => {
     var val = data[key];
     if (typeof val === "object") {
-      var id = INPUT[key].identifier;
+      if (INPUT[key]) {
+        var id = INPUT[key].name.slice(0, -1) + "Id";
+      } else {
+        var id = key;
+      }
       data[id] = val.value;
     }
   });

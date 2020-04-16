@@ -97,6 +97,7 @@ export const INPUT = {
     identifier: "id",
     labelName: "name",
     placeholder: "Verpachung",
+    size: 6,
     setOptions: (options, name) => options[name],
     func: (state) => {
       return {
@@ -172,8 +173,8 @@ export const INPUT = {
 };
 
 const booleanValues = [
-  { label: "Auswählen", value: true },
-  { label: "Nicht Auswählen", value: false },
+  { label: "Ja", value: true },
+  { label: "Nein", value: false },
 ];
 
 var ValidationException = {};
@@ -204,8 +205,8 @@ export const COLUMNS = {
   factory: ["Werk", "factory"],
 };
 
-export const INPUT_TYPES = {
-  products: {
-    products: INPUT.products,
-  },
-};
+// export const INPUT_TYPES = {
+//   products: {
+//     products: INPUT.products,
+//   },
+// };

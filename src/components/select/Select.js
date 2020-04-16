@@ -59,7 +59,11 @@ export const Select = ({
   }, [outside, setOutside]);
 
   useEffect(() => {
-    if (filter !== null) setValue(filter);
+    if (filter !== null) {
+      const option = optionData.find((option) => option.label === filter);
+
+      setValue({ filter, option });
+    }
   }, [filter]);
 
   const optionslist = filteredOptions.map((option, index) => {

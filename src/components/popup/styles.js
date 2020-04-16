@@ -11,7 +11,9 @@ Box_.Container = posed.div({
     opacity: 0,
   },
 });
-Box_.Style = {};
+Box_.Style = {
+  position: "relative",
+};
 export const Box = Box_;
 
 export const Layover = styled.div`
@@ -37,6 +39,9 @@ export const PopupCardWrapper = styled.div`
   transition: 1s;
   min-height: 400px;
   opacity: 0;
+  overflow: scroll;
+      overflow-y: auto;
+    overflow-x: hidden;
 
     ${({ visible }) =>
       visible &&

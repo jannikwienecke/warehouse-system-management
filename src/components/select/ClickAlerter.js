@@ -14,8 +14,12 @@ function useOutsideAlerter(ref, setOutside) {
   }, [ref, setOutside]);
 }
 
-export const OutsideAlerter = props => {
+export const OutsideAlerter = (props) => {
   const wrapperRef = useRef(null);
   useOutsideAlerter(wrapperRef, props.setOutside);
-  return <div ref={wrapperRef}>{props.children}</div>;
+  return (
+    <div style={{ position: "relative" }} ref={wrapperRef}>
+      {props.children}
+    </div>
+  );
 };

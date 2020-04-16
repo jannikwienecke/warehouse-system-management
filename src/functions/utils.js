@@ -41,6 +41,9 @@ export const translate = (text) => {
     chargennummer: "Chargennummer",
     datetime: "Datum",
     notes: "Notizen",
+    width: "Breite",
+    length: "Länge",
+    id: "ID",
   };
 
   if (text in dictonary) {

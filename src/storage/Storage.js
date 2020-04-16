@@ -98,7 +98,7 @@ export const Storage = ({ defaultFilter, clickRowFunc, warehouse_id }) => {
           <Wrapper>
             <MySelect
               placeholder={"Material Suchen"}
-              setValue={(filter_) => setFilter(filter_.toLowerCase())}
+              setValue={(filter_) => setFilter(filter_.filter.toLowerCase())}
               optionData={options_}
               defaultFilter={defaultFilter}
             />

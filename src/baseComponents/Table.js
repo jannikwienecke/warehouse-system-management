@@ -89,6 +89,7 @@ export const Table = ({
       runClickRowMiddleware(middleware, rowData);
     } else {
       const PopupChildren = clickRow.func(rowData, setRowData);
+
       setRowData(rowData);
       setClickRowComponent(PopupChildren);
     }
@@ -125,8 +126,10 @@ export const Table = ({
           settings={clickRow.baseComponent.settings}
           headline={clickRow.baseComponent.headline}
           btnList={clickRow.baseComponent.btnList}
+          header={ClickRowComponent.header}
+          btnList={ClickRowComponent.btnList}
         >
-          {ClickRowComponent}
+          {ClickRowComponent.children}
         </BaseComponent>
       )}
     </>

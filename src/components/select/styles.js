@@ -2,23 +2,26 @@ import styled from "styled-components";
 
 export const Wrapper = styled.div`
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 30%;
-  // margin-left: 1rem;
+  flex-direction: row;
+  justify-content: flex-end;
+  width: 100%;
+  margin: 0 auto;
 `;
 export const SelectWrapper = styled.div`
-  display: flex;
-  display: relative;
-  flex-direction: column;
-  width: 100%;
+  // display: flex;
+  // display: relative;
+  // flex-direction: column;
+  // width: 30%;
+  background: blue;
+  position: relative;
+  // text-align: right;
+  // position: relative;
 `;
 export const SelectType = styled.input`
   border: 0.5px solid #ddd;
   padding: 0.5rem;
   padding-left: 3.5rem;
-  width: 20rem;
+  // width: 20rem;
   text-align: left;
   font-size: 1.4rem;
   letter-spacing: 1.1px;
@@ -39,9 +42,11 @@ export const SelectType = styled.input`
 export const Options = styled.span`
   position: absolute;
   top: 3rem;
-  width: 20rem;
-  display: flex;
-  flex-direction: column;
+  left: 0rem;
+  width: 100%;
+  // width: 20rem;
+  // display: flex;
+  // flex-direction: column;
   text-align: left;
   background: #fff;
   margin-top: 1rem;
@@ -58,7 +63,8 @@ export const Options = styled.span`
     `}
 `;
 
-export const Option = styled.span`
+export const Option = styled.div`
+  position: relative;
   padding: 0.5rem;
   padding-left: 2rem;
   transition: 0.5s;

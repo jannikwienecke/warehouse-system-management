@@ -236,6 +236,7 @@ const FormRaw = ({
   btnPosition,
   formColor,
   optionsLoaded,
+  hideSubmitBtn,
 }) => {
   return (
     <ModularForm
@@ -244,20 +245,24 @@ const FormRaw = ({
       headline={formTitle}
       arrInput={arrInput}
       submitFunc={(data) => formValidation(data)}
-      arrBtns={{
-        btns: [
-          {
-            size: btnSize ? btnSize : "md",
-            variant: btnVariant ? btnVariant : "dark",
-            text: btnText ? btnText : "Suchen",
-            isSubmitFunc: true,
-            disabled: isLoading,
-          },
-        ],
+      arrBtns={
+        hideSubmitBtn
+          ? null
+          : {
+              btns: [
+                {
+                  size: btnSize ? btnSize : "md",
+                  variant: btnVariant ? btnVariant : "dark",
+                  text: btnText ? btnText : "Suchen",
+                  isSubmitFunc: true,
+                  disabled: isLoading,
+                },
+              ],
 
-        justifyContent: "flex-end",
-        position: btnPosition ? btnPosition : "top",
-      }}
+              justifyContent: "flex-end",
+              position: btnPosition ? btnPosition : "top",
+            }
+      }
     />
   );
 };

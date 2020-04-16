@@ -129,7 +129,7 @@ const Layout = styled.div`
   flex-direction: row;
   position: relative;
   height: 100vh;
-  width: 100vw;
+  width: 98vw;
   margin: 0 auto;
 `;
 const ContentWrapper = styled.div`
@@ -148,7 +148,7 @@ const ContentWrapper = styled.div`
   ${({ isVisible }) =>
     !isVisible &&
     `
-    width: 100vw;
+    width: 98vw;
   `}
 `;
 const SidebarWrapper = styled.div`
