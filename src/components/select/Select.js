@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { FaSearch } from "react-icons/fa";
 
 const useFilter = (optionData) => {
-  const [filter, setFilter] = useState(null);
+  const [filter, setFilter] = useState("");
   const [options, setOptions] = useState([]);
 
   useEffect(() => {
@@ -69,6 +69,7 @@ export const Select = ({
   const optionslist = filteredOptions.map((option, index) => {
     return (
       <Option
+        key={index}
         id={option.value}
         active={active}
         onMouseOver={() => setActive(option.value)}

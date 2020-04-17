@@ -24,10 +24,15 @@ function useFormValidation(
     }
   }, [errors]);
 
-  const handleChange = (e) => {
+  const handleChange = (e, type) => {
+    if (type && type === "number") {
+      var val = parseInt(e.target.value);
+    } else {
+      var val = e.target.value;
+    }
     setValues({
       ...values,
-      [e.target.name]: e.target.value,
+      [e.target.name]: val,
     });
     handleSubmit();
   };

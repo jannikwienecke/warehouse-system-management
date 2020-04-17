@@ -8,26 +8,18 @@ const DetailView = (props) => {
   const { rowData, isSubmitted, runFunc, trigger } = props;
   const [row, setRow] = useState(null);
 
-  console.log("ROW = ", row);
-
   useEffect(() => {
     if (rowData) {
       setRow(rowData.original);
     }
   }, [rowData]);
 
-  //   useEffect(() => {
-  //     if (isSubmitted) {
-  //       console.log("SUBMIT FUNC", rowData);
-  //     }
-  //   }, [isSubmitted, rowData]);
-
   const rowDataList = () => {
     const columns = Object.keys(row);
 
     return columns.map((column) => {
       let val = row[column];
-      if (typeof val === "object") {
+      if (val && typeof val === "object") {
         val = val[Object.keys(val)[0]];
       } else if (typeof val === "boolean") {
         val = val ? "Ja" : "Nein";

@@ -44,6 +44,12 @@ export const translate = (text) => {
     width: "Breite",
     length: "Länge",
     id: "ID",
+    packagings: "Verpackung",
+    name: "Name",
+    productNumber: "Produkt Nr.",
+    notesPicking: "Notiz Auslagerung",
+    notesPutaway: "Notiz Einlagerung",
+    threeInRow: "3 Pal. Möglich",
   };
 
   if (text in dictonary) {

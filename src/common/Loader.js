@@ -12,9 +12,13 @@ export const Loader = ({ time, marginTop, color }) => {
   time = time ? time : 500;
   const [spinner, showSpinner] = useState(null);
   useEffect(() => {
-    setTimeout(() => {
+    var timeout = setTimeout(() => {
       showSpinner(true);
     }, time);
+
+    return () => {
+      clearTimeout(timeout);
+    };
   }, []);
 
   if (spinner) {

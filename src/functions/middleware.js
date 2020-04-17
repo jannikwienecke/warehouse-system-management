@@ -21,7 +21,13 @@ export const extractIdentifier = (data) => {
       } else {
         var id = key;
       }
-      data[id] = val.value;
+      try {
+        // console.log("HHIER", val, id);
+
+        data[id] = parseInt(val.value);
+      } catch (e) {
+        data[id] = val.value;
+      }
     }
   });
 };

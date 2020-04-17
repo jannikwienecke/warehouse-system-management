@@ -58,6 +58,7 @@ export const Form = (props) => {
           if (!option || !option.data) {
             return;
           }
+
           const input = arrInput.find((input) => input.name === option.name);
           if (input.filter) {
             option.data = input.filter(option.data);
@@ -81,7 +82,7 @@ export const Form = (props) => {
         if (input.name in optionsObj) return; //input was fetched already
 
         return new Promise((resolve) => {
-          const response = input.func(state);
+          const response = input.func(state, input);
           // console.log("RESPONSE = ", response);
 
           if (!response.then) {

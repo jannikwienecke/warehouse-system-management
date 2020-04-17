@@ -22,7 +22,7 @@ const StandardInput = ({ input, values, formFunc, scheme, errors }) => {
       type={input.type}
       name={input.name}
       placeholder={input.placeholder ? input.placeholder : input.name}
-      onChange={formFunc.handleChange}
+      onChange={(e) => formFunc.handleChange(e, input.type)}
       onBlur={formFunc.handleBlur}
       defaultValue={input.default}
       disabled={input.disable && true}

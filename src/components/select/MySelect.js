@@ -18,7 +18,7 @@ export const MySelect = (props) => {
 MySelect.propTypes = {
   optionData: PropTypes.arrayOf(
     PropTypes.shape({
-      value: PropTypes.number,
+      value: PropTypes.string,
       label: PropTypes.string,
     })
   ),

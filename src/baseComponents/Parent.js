@@ -112,7 +112,7 @@ Parent.propTypes = {
 
   form: PropTypes.shape({
     title: PropTypes.string,
-    arrInput: PropTypes.array.isRequired,
+    arrInput: PropTypes.array,
     middlewareValidation: PropTypes.arrayOf(PropTypes.func),
     middlewareParse: PropTypes.arrayOf(PropTypes.func),
     apiFunc: PropTypes.func.isRequired,

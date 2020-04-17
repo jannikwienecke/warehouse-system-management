@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { ListWrapper, ButtonWrapper } from "./StylesDetailView";
 import { Parent } from "../baseComponents/Parent";
-import { QUERY_DICT } from "../queries/queries";
+import { queryBuilder } from "../queries/queryBuilder";
 import { extractIdentifier } from "../functions/middleware";
 import { MyButton } from "../components/button/MyButton";
 
@@ -24,10 +24,23 @@ export const UpdateForm = ({
   }, [mutationResult]);
 
   const runMutation = async () => {
-    const result = await client.mutate({
-      mutation: QUERY_DICT[dataType].update_,
-      variables: { id: values["id"], ...updateParameter },
-    });
+    console.log("IPDATE PARAMTER", updateParameter);
+
+    const mutation = queryBuilder(
+      [
+        {
+          modelName: dataType,
+          parameter: { id: parseInt(values["id"]), ...updateParameter },
+        },
+      ],
+      "mutation"
+    );
+    const result = await client.mutate({ mutation });
+
+    // const result = await client.mutate({
+    //   mutation: QUERY_DICT[dataType].update_,
+    //   variables: { id: values["id"], ...updateParameter },
+    // });
 
     // THE RELATED DATA IS ALWAYS IN THE FIRST KEY OF result.data
     const resultData = result.data[Object.keys(result.data)[0]];

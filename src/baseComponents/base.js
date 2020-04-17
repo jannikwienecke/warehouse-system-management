@@ -1,9 +1,46 @@
 import { customers, products } from "../testData";
-import { mockAPI } from "../functions/utils";
+import { mockAPI, translate } from "../functions/utils";
 export const IDENTIFIER = ["id", "value"];
 
-// const FIELDS
+const setInput = (name, identifier, labelName, funcReturnValue) => {
+  let input = Object.assign({}, INPUT.INPUT_BASE);
+  input.name = name;
+  input.identifier = identifier;
+  input.labelName = labelName;
+  input.placeholder = translate(name);
+
+  if (funcReturnValue) {
+    input.func = () => funcReturnValue;
+  }
+
+  return Object.assign({}, input);
+};
+
+export const getFormInput = (name, nameOverride) => {
+  let input = INPUT[name];
+  if (typeof input === "function") {
+    input = input(nameOverride);
+  }
+  if (!input) return null;
+  return Object.assign({}, input);
+};
+
 export const INPUT = {
+  INPUT_BASE: {
+    name: "",
+    placeholder: "",
+    type: "input",
+    identifier: "value",
+    labelName: "label",
+    size: 6,
+    setOptions: (options, name) => options[name],
+    func: (state, input) => {
+      return {
+        name: input.name,
+        data: state.base[input.name],
+      };
+    },
+  },
   storage: {
     type: "input",
     name: "storage",
@@ -76,36 +113,9 @@ export const INPUT = {
     },
   },
 
-  products: {
-    type: "input",
-    name: "products",
-    identifier: "id",
-    labelName: "name",
-    placeholder: "Produkt",
-    setOptions: (options, name) => options[name],
-    func: (state) => {
-      return {
-        name: INPUT.products.name,
-        data: state.base[INPUT.products.name],
-      };
-    },
-  },
+  products: () => setInput("products", "id", "name"),
 
-  packagings: {
-    type: "input",
-    name: "packagings",
-    identifier: "id",
-    labelName: "name",
-    placeholder: "Verpachung",
-    size: 6,
-    setOptions: (options, name) => options[name],
-    func: (state) => {
-      return {
-        name: INPUT.packagings.name,
-        data: state.base[INPUT.packagings.name],
-      };
-    },
-  },
+  packagings: () => setInput("packagings", "id", "name"),
 
   dateStart: {
     name: "dateStart",
@@ -155,21 +165,12 @@ export const INPUT = {
     type: "number",
     size: 6,
   },
-  boolean: {
-    name: "boolean1",
-    placeholder: "text",
-    type: "input",
-    size: 6,
-    identifier: "value",
-    labelName: "label",
-    setOptions: (options) => options[INPUT.boolean.name],
-    func: (state) => {
-      return {
-        name: INPUT.boolean.name,
-        data: booleanValues,
-      };
-    },
-  },
+
+  boolean: (name) =>
+    setInput(name, "value", "label", {
+      name: name,
+      data: booleanValues,
+    }),
 };
 
 const booleanValues = [
@@ -205,8 +206,7 @@ export const COLUMNS = {
   factory: ["Werk", "factory"],
 };
 
-// export const INPUT_TYPES = {
-//   products: {
-//     products: INPUT.products,
-//   },
-// };
+export const OPTIONS_BASE_DATA = [
+  { value: "products", label: "Produkte" },
+  { value: "packagings", label: "Verpackungen" },
+];
