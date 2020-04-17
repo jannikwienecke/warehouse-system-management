@@ -15,15 +15,13 @@ export const endGreaterStart = (data) => {
 export const extractIdentifier = (data) => {
   Object.keys(data).forEach((key) => {
     var val = data[key];
-    if (typeof val === "object") {
+    if (typeof val === "object" && val !== null) {
       if (INPUT[key]) {
         var id = INPUT[key].name.slice(0, -1) + "Id";
       } else {
         var id = key;
       }
       try {
-        // console.log("HHIER", val, id);
-
         data[id] = parseInt(val.value);
       } catch (e) {
         data[id] = val.value;

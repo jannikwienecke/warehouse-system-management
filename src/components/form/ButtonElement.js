@@ -5,18 +5,20 @@ import styled from "styled-components";
 const ButtonElement = ({ arrBtns, formFunc, scheme }) => {
   if (!arrBtns) return <></>;
 
-  const btns = arrBtns.btns.map((btn, index) => (
-    <Btn key={index}>
-      <Button
-        variant={btn.variant}
-        onClick={btn.isSubmitFunc ? formFunc.handleSubmit : btn.func}
-        size={btn.size}
-        disabled={btn.disabled}
-      >
-        {btn.text ? btn.text : "Bestätigen"}
-      </Button>
-    </Btn>
-  ));
+  const btns = arrBtns.btns.map((btn, index) => {
+    return (
+      <Btn key={index}>
+        <Button
+          variant={btn.variant}
+          onClick={btn.isSubmitFunc ? formFunc.handleSubmit : btn.func.func}
+          size={btn.size}
+          disabled={btn.disabled}
+        >
+          {btn.text ? btn.text : "Bestätigen"}
+        </Button>
+      </Btn>
+    );
+  });
 
   return (
     <BtnContainer justifyContent={arrBtns.justifyContent}>{btns}</BtnContainer>

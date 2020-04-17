@@ -14,17 +14,6 @@ import { setInitData } from "./baseComponents/store/actions";
 import { useDispatch } from "react-redux";
 import { INIT_QUERY } from "./queries/queries";
 
-// export const FEED_QUERY = gql`
-//   query FeedQuery {
-//     products {
-//       name
-//     }
-//     packagings {
-//       name
-//     }
-//   }
-// `;
-
 const httpLink = createHttpLink({
   uri: "http://localhost:8000/graphql/",
 });
@@ -46,7 +35,7 @@ const client = new ApolloClient({
 
 ReactDOM.render(
   <ApolloProvider client={client}>
-    <Query query={INIT_QUERY}>
+    <Query query={INIT_QUERY()}>
       {(props) => {
         return <App {...props} />;
       }}

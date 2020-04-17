@@ -238,6 +238,7 @@ const FormRaw = ({
   formColor,
   optionsLoaded,
   hideSubmitBtn,
+  replaceFuncSubmit,
 }) => {
   return (
     <ModularForm
@@ -255,8 +256,9 @@ const FormRaw = ({
                   size: btnSize ? btnSize : "md",
                   variant: btnVariant ? btnVariant : "dark",
                   text: btnText ? btnText : "Suchen",
-                  isSubmitFunc: true,
+                  isSubmitFunc: replaceFuncSubmit ? false : true,
                   disabled: isLoading,
+                  func: replaceFuncSubmit,
                 },
               ],
 

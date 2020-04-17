@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { INPUT, getFormInput } from "../baseComponents/base";
-import { translate } from "../functions/utils";
+import { translate, copy } from "../functions/utils";
 import { QUERY_DICT, queryBuilder } from "../queries/queryBuilder";
 
 export const useGraphqlApi = (dataType, client, sizeFields = 6) => {
@@ -35,13 +35,7 @@ export const useGraphqlApi = (dataType, client, sizeFields = 6) => {
 
     const result = await client.query({
       query: query,
-      //   variables: { ...parameter },
     });
-    // F;
-    // const result = await client.query({
-    //   query: QUERY_DICT[dataType].query_,
-    //   variables: { ...parameter },
-    // });
 
     setTableData(result.data[dataType]);
   };
@@ -93,7 +87,7 @@ export const useGraphqlApi = (dataType, client, sizeFields = 6) => {
 
         const typeColumn = typeof sampleData[key];
 
-        if (typeColumn === "object") {
+        if (typeColumn === "object" && sampleData[key] !== null) {
           key = key + "s";
 
           var input = getFormInput(key);
@@ -101,6 +95,9 @@ export const useGraphqlApi = (dataType, client, sizeFields = 6) => {
           if (!input) return;
         } else {
           var input = getFormInput(typeColumn, key);
+          if (!input) {
+            input = getFormInput("text", key);
+          }
         }
         addInputToArray(input, key);
       });
@@ -109,9 +106,6 @@ export const useGraphqlApi = (dataType, client, sizeFields = 6) => {
     const sampleData = tableData[0];
     const keysTable = Object.keys(sampleData);
     let arrInput_ = [getFormInput(dataType)];
-    // let arrInput_ = [INPUT[dataType]()];
-    console.log("ARR INPUT", arrInput_);
-    // arrInput_();
 
     loopKeysTable();
     addFuzzySearch(arrInput_);
@@ -119,11 +113,12 @@ export const useGraphqlApi = (dataType, client, sizeFields = 6) => {
   };
 
   const addFuzzySearch = (arrInput_) => {
-    const fuzzy_input = INPUT.text;
-    fuzzy_input.name = "search";
-    fuzzy_input.placeholder = "Alles Durchsuchen";
-    fuzzy_input.size = 12;
-    arrInput_.push(fuzzy_input);
+    // const fuzzy_input = Object.assign({}, INPUT.text);
+    // fuzzy_input.name = "search";
+    // fuzzy_input.placeholder = "Alles Durchsuchen";
+    // fuzzy_input.size = 12;
+    // arrInput_.push(fuzzy_input);
   };
+
   return { arrInput, tableColumns, tableData, fetchData };
 };

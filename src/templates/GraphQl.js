@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { withApollo } from "react-apollo";
 
 import { translate } from "../functions/utils";
 import { Parent } from "../baseComponents/Parent";
 import { INPUT, OPTIONS_BASE_DATA } from "../baseComponents/base";
-import { QUERY_DICT } from "../queries/queries";
 import DetailView from "./DetailView";
 import styled from "styled-components";
 import { MySelect } from "../components/select/MySelect";
@@ -14,7 +13,7 @@ import { useGraphqlApi } from "./useGraphqlApi";
 const UPDATE_BTN_TEXT = "Ändern";
 
 const GraphQl = (props) => {
-  const [dataType, setDataType] = useState("packagings");
+  const [dataType, setDataType] = useState("products");
   const [successScreen, showSuccessScreen] = useState(null);
 
   const { arrInput, tableData, tableColumns, fetchData } = useGraphqlApi(
@@ -80,6 +79,7 @@ const GraphQl = (props) => {
                         dataType={dataType}
                         client={props.client}
                         trigger={UPDATE_BTN_TEXT}
+                        fetchData={fetchData}
                       />
                     ),
                   };
@@ -97,6 +97,12 @@ const GraphQl = (props) => {
             form={{
               formTitle: translate(dataType),
               arrInput: arrInput,
+              btnText: "HIER WEITER MACHEN",
+              replaceFuncSubmit: {
+                func: () => console.log("HIER"),
+                text: "TEST",
+              },
+
               // middlewareValidation: [],
               // middlewareParse: [],
               // requiredArguments: [],

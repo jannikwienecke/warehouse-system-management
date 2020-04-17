@@ -22,13 +22,13 @@ const MyModal = () => {
           {
             text: "Cancel",
             variant: "outline-dark",
-            func: () => setVisible(false)
+            func: close,
           },
           {
             text: "OK",
             variant: "dark",
-            func: () => console.log("CLICK OK")
-          }
+            func: submit,
+          },
         ]}
       >
         <TestChildren />
@@ -45,7 +45,7 @@ const TestChildren = () => {
       <InputElement
         type="text"
         value="test"
-        onChange={e => console.log("onchange")}
+        onChange={(e) => console.log("onchange")}
       />
     </>
   );

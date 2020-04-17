@@ -1,8 +1,12 @@
 import gql from "graphql-tag";
 
-import { RETURN_VALUES, QUERY_DICT } from "./queries";
+import { RETURN_VALUES, QUERY_DICT, QUERY_TRANSLATE } from "./queries";
 
-export const queryBuilder = (queryList, queryType = "query") => {
+export const queryBuilder = (
+  queryList,
+  queryType = "get",
+  returnValues = null
+) => {
   const setQueryString = (parameter) => {
     let queryStr = "";
     if (!parameter) return queryStr;
@@ -25,9 +29,17 @@ export const queryBuilder = (queryList, queryType = "query") => {
   };
 
   const buildQuery = (queryName, queryStr, modelName) => {
+    const returnValues_ = returnValues
+      ? returnValues
+      : RETURN_VALUES[modelName];
+    // console.log("RETURN VALUES", returnValues);
+    // console.log("modelname", modelName);
+    // console.log("quername", queryName);
+    // console.log("-------------------------");
+
     return `
     ${queryName} ${queryStr}{
-      ${RETURN_VALUES[modelName]}
+      ${returnValues_}
     }
   `;
   };
@@ -39,7 +51,7 @@ export const queryBuilder = (queryList, queryType = "query") => {
     });
 
     return gql`
-      ${queryType} {
+      ${QUERY_TRANSLATE[queryType]} {
        ${str}
       }
     `;

@@ -30,9 +30,22 @@ ${({ size }) =>
   padding: 4px 10px;
 `}
 
+
+
 :hover{
   background: #c51162;
     color: #e8e8e8;
 }
+
+${({ color }) =>
+  color &&
+  `
+  background-color: ${color};
+
+  :hover{
+    background-color: #43a047;
+  }
+`}
+
 }
 `;

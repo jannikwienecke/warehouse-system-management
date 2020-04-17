@@ -4,6 +4,7 @@ import { Parent } from "../baseComponents/Parent";
 import { queryBuilder } from "../queries/queryBuilder";
 import { extractIdentifier } from "../functions/middleware";
 import { MyButton } from "../components/button/MyButton";
+import { ValidateDeleteModal } from "./ValidateDeleteModal";
 
 export const UpdateForm = ({
   setValues,
@@ -13,9 +14,11 @@ export const UpdateForm = ({
   values,
   client,
   setRunFunc,
+  fetchData,
 }) => {
   const [updateParameter, setUpdateParamter] = useState(null);
   const [mutationResult, setMutationResult] = useState(null);
+  const [validateDelete, setValidateDelete] = useState(null);
 
   useEffect(() => {
     if (mutationResult) {
@@ -23,9 +26,29 @@ export const UpdateForm = ({
     }
   }, [mutationResult]);
 
-  const runMutation = async () => {
-    console.log("IPDATE PARAMTER", updateParameter);
+  const runDelete = async () => {
+    console.log("DELTE ==", values);
+    const mutation = queryBuilder(
+      [
+        {
+          modelName: dataType,
+          parameter: { id: parseInt(values["id"]) },
+        },
+      ],
+      "delete",
+      "id"
+    );
+    const result = await client.mutate({ mutation });
+    console.log("resujlt", result);
 
+    setRow(null);
+    setValues(null);
+    client.cache.reset();
+
+    fetchData();
+  };
+
+  const runMutation = async () => {
     const mutation = queryBuilder(
       [
         {
@@ -33,14 +56,9 @@ export const UpdateForm = ({
           parameter: { id: parseInt(values["id"]), ...updateParameter },
         },
       ],
-      "mutation"
+      "put"
     );
     const result = await client.mutate({ mutation });
-
-    // const result = await client.mutate({
-    //   mutation: QUERY_DICT[dataType].update_,
-    //   variables: { id: values["id"], ...updateParameter },
-    // });
 
     // THE RELATED DATA IS ALWAYS IN THE FIRST KEY OF result.data
     const resultData = result.data[Object.keys(result.data)[0]];
@@ -58,6 +76,11 @@ export const UpdateForm = ({
 
   return (
     <>
+      <ValidateDeleteModal
+        show={validateDelete}
+        close={() => setValidateDelete(false)}
+        submit={runDelete}
+      />
       <ListWrapper>
         <Parent
           form={{
@@ -70,8 +93,12 @@ export const UpdateForm = ({
           }}
         />
       </ListWrapper>
+
       <ButtonWrapper>
-        <MyButton onClick={runMutation}>Speichern</MyButton>
+        <MyButton color="#4caf50" onClick={runMutation}>
+          Speichern
+        </MyButton>
+        <MyButton onClick={() => setValidateDelete(true)}>Löschen</MyButton>
       </ButtonWrapper>
     </>
   );
@@ -111,5 +138,6 @@ const parseArrInput = (arrInput, values, dataType) => {
   const ignoreInputList = ["search", "id", dataType];
   let arrInput_ = [];
   loopArr();
+
   return arrInput_;
 };

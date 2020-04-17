@@ -18,6 +18,7 @@ const setInput = (name, identifier, labelName, funcReturnValue) => {
 
 export const getFormInput = (name, nameOverride) => {
   let input = INPUT[name];
+
   if (typeof input === "function") {
     input = input(nameOverride);
   }
@@ -149,7 +150,7 @@ export const INPUT = {
   },
   text: {
     name: "text",
-    placeholder: "text",
+    placeholder: "TEST TEXT!!!!",
     type: "text",
     size: 6,
   },
