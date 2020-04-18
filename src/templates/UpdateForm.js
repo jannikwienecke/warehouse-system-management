@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { ListWrapper, ButtonWrapper } from "./StylesDetailView";
 import { Parent } from "../baseComponents/Parent";
-import { queryBuilder } from "../queries/queryBuilder";
+import { queryBuilder, updateStore } from "../queries/queryBuilder";
 import { extractIdentifier } from "../functions/middleware";
 import { MyButton } from "../components/button/MyButton";
 import { ValidateDeleteModal } from "./ValidateDeleteModal";
+import { useMutation } from "react-apollo";
+import { nullMutation } from "../queries/queries";
 
 export const UpdateForm = ({
   setValues,
@@ -20,6 +22,26 @@ export const UpdateForm = ({
   const [mutationResult, setMutationResult] = useState(null);
   const [validateDelete, setValidateDelete] = useState(null);
 
+  const [mutation, setMutation] = useState({ mutation: nullMutation });
+  const [updateElement, { data, error, loading }] = useMutation(
+    mutation.mutation,
+    mutation.options
+  );
+
+  useEffect(() => {
+    if (mutation && mutation.options) {
+      updateElement();
+    }
+  }, [mutation]);
+
+  useEffect(() => {
+    if (data) {
+      setRow(null);
+      setValues(null);
+      fetchData();
+    }
+  }, [data]);
+
   useEffect(() => {
     if (mutationResult) {
       updateValues();
@@ -27,42 +49,50 @@ export const UpdateForm = ({
   }, [mutationResult]);
 
   const runDelete = async () => {
-    console.log("DELTE ==", values);
-    const mutation = queryBuilder(
+    const id = parseInt(values["id"]);
+    const mutation_ = queryBuilder(
       [
         {
           modelName: dataType,
-          parameter: { id: parseInt(values["id"]) },
+          parameter: { id },
         },
       ],
       "delete",
       "id"
     );
-    const result = await client.mutate({ mutation });
-    console.log("resujlt", result);
-
-    setRow(null);
-    setValues(null);
-    client.cache.reset();
-
-    fetchData();
+    setMutation({
+      mutation: mutation_,
+      options: {
+        update: (cache, { data }) =>
+          updateStore(cache, data, dataType, { action: "delete", id }),
+      },
+    });
   };
 
   const runMutation = async () => {
-    const mutation = queryBuilder(
+    const id = parseInt(values["id"]);
+    const mutation_ = queryBuilder(
       [
         {
           modelName: dataType,
-          parameter: { id: parseInt(values["id"]), ...updateParameter },
+          parameter: { id, ...updateParameter },
         },
       ],
       "put"
     );
-    const result = await client.mutate({ mutation });
 
-    // THE RELATED DATA IS ALWAYS IN THE FIRST KEY OF result.data
-    const resultData = result.data[Object.keys(result.data)[0]];
-    setMutationResult(resultData);
+    setMutation({
+      mutation: mutation_,
+      options: {
+        update: (cache, { data }) =>
+          updateStore(cache, data, dataType, { action: "update", id }),
+      },
+    });
+
+    // const result = await client.mutate({ mutation });
+
+    // const resultData = result.data[Object.keys(result.data)[0]];
+    // setMutationResult(resultData);
   };
 
   const updateValues = () => {

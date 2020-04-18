@@ -188,7 +188,9 @@ const FormElement = (props) => {
       if (input.setOptions) {
         input.options = input.setOptions(optionsObj, input.name);
       }
-      input.error = error;
+      if (error) {
+        input.error = error;
+      }
       input.class = classOverride;
     });
 
@@ -203,7 +205,7 @@ const FormElement = (props) => {
     );
 
   arrInput.forEach((input) => {
-    input.error = error;
+    if (error) input.error = error;
   });
 
   return (

@@ -84,20 +84,20 @@ export const INPUT = {
       };
     },
   },
-  employees: {
-    type: "input",
-    name: "employees",
-    identifier: "employee_id",
-    labelName: "employee_name",
-    placeholder: "Mitarbeiter",
-    setOptions: (options) => options[INPUT.employees.name],
-    func: (state) => {
-      return {
-        name: INPUT.employees.name,
-        data: state.base[INPUT.employees.name],
-      };
-    },
-  },
+  // employees: {
+  //   type: "input",
+  //   name: "employees",
+  //   identifier: "employee_id",
+  //   labelName: "employee_name",
+  //   placeholder: "Mitarbeiter",
+  //   setOptions: (options) => options[INPUT.employees.name],
+  //   func: (state) => {
+  //     return {
+  //       name: INPUT.employees.name,
+  //       data: state.base[INPUT.employees.name],
+  //     };
+  //   },
+  // },
 
   symBuildings: {
     type: "input",
@@ -115,7 +115,7 @@ export const INPUT = {
   },
 
   products: () => setInput("products", "id", "name"),
-
+  employees: () => setInput("employees", "id", "name"),
   packagings: () => setInput("packagings", "id", "name"),
 
   dateStart: {
@@ -210,4 +210,5 @@ export const COLUMNS = {
 export const OPTIONS_BASE_DATA = [
   { value: "products", label: "Produkte" },
   { value: "packagings", label: "Verpackungen" },
+  { value: "employees", label: "Mitarbeiter" },
 ];

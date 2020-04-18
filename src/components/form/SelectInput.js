@@ -16,6 +16,8 @@ const SelectInput = ({ input, values, formFunc, errors }) => {
     // console.log("values_____= ", values);
     // console.log("options= ", input.options);
 
+    // console.log("input", input);
+
     input.options.map((option) => {
       option["value"] = option[input.identifier];
       option["label"] = option[input.labelName];

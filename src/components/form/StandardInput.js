@@ -2,6 +2,9 @@ import React from "react";
 import styled from "styled-components";
 
 const StandardInput = ({ input, values, formFunc, scheme, errors }) => {
+  // console.log("input error....", input);
+  // console.log("inpujt.errr", input.error);
+
   const hasError = () => {
     const name = input.name;
     if (errors[name]) {

@@ -23,6 +23,7 @@ const Popup = ({
   btnArr,
   visible,
   close,
+  marginTopHeader,
 }) => {
   const btnList = () => {
     return btnArr.map((btn, index) => (
@@ -47,7 +48,9 @@ const Popup = ({
           <PopupUpper color={color} height={heightHeader}>
             {close && <CloseBtn onClick={close}>CLOSE</CloseBtn>}
             <PopupUpperContent>
-              <PopupHeaderText>{headline}</PopupHeaderText>
+              <PopupHeaderText marginTopHeader={marginTopHeader}>
+                {headline}
+              </PopupHeaderText>
 
               {btnArr && btnList()}
             </PopupUpperContent>

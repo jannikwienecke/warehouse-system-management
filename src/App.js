@@ -19,6 +19,7 @@ import {
 } from "./baseComponents/store/actions";
 import { MyStorage } from "./templates/MyStorage";
 import GraphQl from "./templates/GraphQl";
+import { createErrListFromApiError } from "./functions/utils";
 
 const initializeData = (data) => {
   store.dispatch(setInitData(data));
@@ -27,7 +28,7 @@ const initializeData = (data) => {
     // fetchProducts,
     fetchStorage,
     fetchStorageBridges,
-    fetchEmployees,
+    // fetchEmployees,
     fetchSymBuildings,
     fetchCompartments,
   ];
@@ -37,26 +38,7 @@ const initializeData = (data) => {
 };
 
 const setError = (error) => {
-  const errorKeys = ["graphQLErrors", "networkError"];
-  errorKeys.forEach((key) => {
-    try {
-      if (key === "graphQLErrors") {
-        var errorList = error[key];
-      } else {
-        var errorList = error[key].result.errors;
-      }
-    } catch (e) {
-      if (!(e instanceof TypeError)) {
-        throw e;
-      }
-      return [];
-    }
-
-    return errorList.forEach((err) => {
-      var msg = `${err.message} - Position ${JSON.stringify(err.locations)}`;
-      store.dispatch(showAlert(msg));
-    });
-  });
+  createErrListFromApiError(error, store.dispatch);
 };
 
 export default function App({ data, error, loading }) {

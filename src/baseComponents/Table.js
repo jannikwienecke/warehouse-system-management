@@ -29,7 +29,7 @@ export const Table = ({
   const [preparedData, setPrepareData] = useState(null);
 
   useEffect(() => {
-    if (columnsArr.length > 0) _parseColumns();
+    if (columnsArr && columnsArr.length > 0) _parseColumns();
   }, [columnsArr]);
 
   useEffect(() => {
@@ -94,6 +94,10 @@ export const Table = ({
       setClickRowComponent(PopupChildren);
     }
   };
+
+  if (!columns) {
+    return <h1>Keine Daten vorhanden</h1>;
+  }
 
   if (!preparedData || !columns) {
     return <Loader marginTop="5rem" time={1000} />;

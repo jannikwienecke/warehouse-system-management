@@ -58,6 +58,11 @@ export const queryBuilder = (
   };
 
   const getQueryName = (modelName) => {
+    if (!QUERY_DICT[modelName] || !QUERY_DICT[modelName][queryType]) {
+      alert("NOT IMPLEMENTED");
+      return false;
+    }
+
     return QUERY_DICT[modelName][queryType];
   };
 
@@ -65,7 +70,9 @@ export const queryBuilder = (
     queryList.map((query) => {
       var { modelName, parameter } = query;
       const queryName = getQueryName(modelName, queryType);
+
       const queryStr = setQueryString(parameter);
+
       const builtQuery = buildQuery(queryName, queryStr, modelName);
 
       listBuiltQueries.push(builtQuery);
@@ -74,8 +81,43 @@ export const queryBuilder = (
     return completeQuery();
   };
 
-  console.log("queryList", queryList);
-
   let listBuiltQueries = [];
   return loopQueries();
+};
+
+export const updateStore = (cache, data, dataType, parameter) => {
+  const GET_ALL_ELEMENTS = queryBuilder([{ modelName: dataType }], "get");
+  const response = cache.readQuery({ query: GET_ALL_ELEMENTS });
+  const fetchElements = data[Object.keys(data)[0]];
+
+  const _add = () => {
+    return response[dataType].concat([fetchElements]);
+  };
+
+  const _update = () => {
+    return response[dataType].map((data) => {
+      if (parseInt(data.id) === parameter.id) {
+        return fetchElements;
+      } else {
+        return data;
+      }
+    });
+  };
+
+  const _delete = () => {
+    return response[dataType].filter(
+      (data) => parseInt(data.id) !== parameter.id
+    );
+  };
+
+  const dict_func = {
+    update: _update,
+    delete: _delete,
+    add: _add,
+  };
+
+  cache.writeQuery({
+    query: GET_ALL_ELEMENTS,
+    data: { [dataType]: dict_func[parameter.action]() },
+  });
 };

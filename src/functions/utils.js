@@ -1,5 +1,6 @@
 import { EXCEPTIONS, INPUT } from "../baseComponents/base";
 import { useRef, useEffect } from "react";
+import { showAlert } from "../baseComponents/store/actions";
 
 export const getDateString = (date) => {
   var month = date.getMonth();
@@ -148,5 +149,95 @@ export const useTraceUpdate = (props) => {
       console.log("Changed props:", changedProps);
     }
     prev.current = props;
+  });
+};
+
+// red positional arguments: 'name', 'product_number', 'three_in_row', and 'packaging_id'
+export const parsePyToJsNameConvention = (names) => {
+  return names.map((name) => {
+    if (!name.includes("_")) return name;
+    let renamed = "";
+
+    let isDivider = false;
+    Object.values(name).forEach((letter) => {
+      if (!isDivider && letter !== "_") {
+        renamed += letter;
+      } else if (!isDivider && letter === "_") {
+        isDivider = true;
+      } else {
+        renamed += letter.toUpperCase();
+        isDivider = false;
+      }
+    });
+
+    if (renamed.includes("Id")) {
+      renamed = renamed.replace("Id", "s");
+    }
+
+    return renamed;
+  });
+};
+
+export const _extractErrorParameter = (msg) => {
+  console.log(msg);
+
+  var words = [];
+  let currentWord = "";
+  if (msg.includes("missing") && msg.includes("positional")) {
+    let isWord = false;
+    Object.values(msg).forEach((letter) => {
+      if (!currentWord && letter === "'") {
+        isWord = true;
+      } else if (isWord && letter === "'") {
+        isWord = false;
+        words.push(currentWord);
+        currentWord = "";
+      } else if (isWord) {
+        currentWord += letter;
+      }
+    });
+  }
+  words = parsePyToJsNameConvention(words);
+  return words.length > 0 ? words : null;
+};
+
+export const createErrListFromApiError = (
+  apiError,
+  dispatch,
+  msgPrefix = ""
+) => {
+  var errorList;
+  const errorKeys = ["graphQLErrors", "networkError"];
+  errorKeys.forEach((key) => {
+    try {
+      if (key === "graphQLErrors") {
+        errorList = apiError[key];
+      } else {
+        errorList = apiError[key].result.errors;
+      }
+    } catch (e) {
+      if (!(e instanceof TypeError)) {
+        throw e;
+      }
+      return [];
+    }
+
+    errorList.forEach((err) => {
+      const errMsg = `${err.message} - Position ${JSON.stringify(
+        err.locations
+      )}`;
+      dispatch(showAlert(msgPrefix + errMsg));
+    });
+
+    // errorList.forEach((errMsg) => store.dispatch(showAlert(errMsg)));
+  });
+  const errorMsg = errorList[0].message;
+  const errorParameter = _extractErrorParameter(errorMsg);
+  return { errorMsg, errorParameter };
+};
+
+export const removeErrors = (arrInput) => {
+  arrInput.forEach((input) => {
+    delete input["error"];
   });
 };

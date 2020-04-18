@@ -9,16 +9,17 @@ import styled from "styled-components";
 import { MySelect } from "../components/select/MySelect";
 import { SuccessScreen } from "../common/SuccessScreen";
 import { useGraphqlApi } from "./useGraphqlApi";
+import { PopupNewElement } from "./PopupNewElement";
 
 const UPDATE_BTN_TEXT = "Ändern";
 
 const GraphQl = (props) => {
   const [dataType, setDataType] = useState("products");
   const [successScreen, showSuccessScreen] = useState(null);
+  const [newElementForm, showNewElementForm] = useState(null);
 
   const { arrInput, tableData, tableColumns, fetchData } = useGraphqlApi(
-    dataType,
-    props.client
+    dataType
   );
 
   const changeScreen = () => {
@@ -44,6 +45,18 @@ const GraphQl = (props) => {
           sub_pages: [],
         }}
       />
+
+      {newElementForm && (
+        <PopupNewElement
+          show={newElementForm}
+          close={() => showNewElementForm(false)}
+          arrInput={arrInput}
+          dataType={dataType}
+          client={props.client}
+          fetchData={fetchData}
+        />
+      )}
+
       {successScreen ? (
         <SuccessScreen text={`Stammdaten: ${translate(dataType)}`} />
       ) : (
@@ -97,10 +110,10 @@ const GraphQl = (props) => {
             form={{
               formTitle: translate(dataType),
               arrInput: arrInput,
-              btnText: "HIER WEITER MACHEN",
+              btnText: "Neu Anlegen",
               replaceFuncSubmit: {
-                func: () => console.log("HIER"),
-                text: "TEST",
+                func: () => showNewElementForm(true),
+                text: "Neu",
               },
 
               // middlewareValidation: [],

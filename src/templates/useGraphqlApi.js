@@ -1,20 +1,37 @@
 import React, { useState, useEffect } from "react";
 import { INPUT, getFormInput } from "../baseComponents/base";
-import { translate, copy } from "../functions/utils";
+import { translate, copy, createErrListFromApiError } from "../functions/utils";
 import { QUERY_DICT, queryBuilder } from "../queries/queryBuilder";
+import { useMutation, useQuery } from "react-apollo";
+import { nullQuery } from "../queries/queries";
+import { useDispatch } from "react-redux";
 
-export const useGraphqlApi = (dataType, client, sizeFields = 6) => {
+export const useGraphqlApi = (dataType, sizeFields = 6) => {
   const [tableData, setTableData] = useState([]);
   const [tableColumns, setTableColumns] = useState([]);
   const [arrInput, setArrInput] = useState(null);
+  const [query, setQuery] = useState({ query: nullQuery });
+
+  const { data, error, loading } = useQuery(query.query, {
+    ...query.options,
+    onError: (err) =>
+      createErrListFromApiError(error, dispatch, "useGraphqlApi Fetching"),
+  });
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    if (client && dataType) {
-      setTableData([]);
-      fetchData();
-      setTableColumns([]);
+    if (data) {
+      setTableData(data[dataType]);
     }
-  }, [client, dataType]);
+  }, [data]);
+
+  useEffect(() => {
+    if (dataType) {
+      setTableData([]);
+      setTableColumns([]);
+      fetchData();
+    }
+  }, [dataType]);
 
   useEffect(() => {
     if (tableData.length > 0 && tableColumns.length === 0) {
@@ -30,14 +47,8 @@ export const useGraphqlApi = (dataType, client, sizeFields = 6) => {
 
   const fetchData = async (parameter) => {
     _parseParameter(parameter);
-
-    const query = queryBuilder([{ modelName: dataType, parameter }]);
-
-    const result = await client.query({
-      query: query,
-    });
-
-    setTableData(result.data[dataType]);
+    const query_ = queryBuilder([{ modelName: dataType, parameter }]);
+    setQuery({ query: query_ });
   };
 
   const getTableColumns = () => {
@@ -113,11 +124,11 @@ export const useGraphqlApi = (dataType, client, sizeFields = 6) => {
   };
 
   const addFuzzySearch = (arrInput_) => {
-    // const fuzzy_input = Object.assign({}, INPUT.text);
-    // fuzzy_input.name = "search";
-    // fuzzy_input.placeholder = "Alles Durchsuchen";
-    // fuzzy_input.size = 12;
-    // arrInput_.push(fuzzy_input);
+    const fuzzy_input = Object.assign({}, INPUT.text);
+    fuzzy_input.name = "search";
+    fuzzy_input.placeholder = "Alles Durchsuchen";
+    fuzzy_input.size = 12;
+    arrInput_.push(fuzzy_input);
   };
 
   return { arrInput, tableColumns, tableData, fetchData };

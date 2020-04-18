@@ -15,6 +15,7 @@ export const endGreaterStart = (data) => {
 export const extractIdentifier = (data) => {
   Object.keys(data).forEach((key) => {
     var val = data[key];
+
     if (typeof val === "object" && val !== null) {
       if (INPUT[key]) {
         var id = INPUT[key].name.slice(0, -1) + "Id";
@@ -22,7 +23,11 @@ export const extractIdentifier = (data) => {
         var id = key;
       }
       try {
-        data[id] = parseInt(val.value);
+        if (typeof val.value === "boolean") {
+          data[id] = val.value;
+        } else {
+          data[id] = parseInt(val.value);
+        }
       } catch (e) {
         data[id] = val.value;
       }

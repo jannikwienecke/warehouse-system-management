@@ -31,11 +31,11 @@ const useErrors = () => {
     }
   }, [error]);
 
-  var errorBanners = errorQueue.map((err) => {
+  var errorBanners = errorQueue.map((err, index) => {
     if (!err) return <></>;
     const msg = `Status: ${err.code} - ${err.message}`;
 
-    return <AlertBanner err={msg} />;
+    return <AlertBanner key={index} err={msg} />;
   });
 
   return { errorBanners };

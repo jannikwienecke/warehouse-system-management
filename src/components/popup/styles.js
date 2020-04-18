@@ -23,7 +23,7 @@ export const Layover = styled.div`
   width: 100%;
   height: 110%;
   background: rgb(220, 220, 220, 0.5);
-  z-index: 1;
+  z-index: 2;
 `;
 
 export const PopupCardWrapper = styled.div`
@@ -94,6 +94,12 @@ export const PopupHeaderText = styled.div`
   line-height: 4rem;
   color: #fff;
   padding: 2rem 0.5rem 0.5rem 0.5rem;
+
+  ${({ marginTopHeader }) =>
+    marginTopHeader &&
+    `
+    margin-top: ${marginTopHeader}
+  `}
 `;
 
 export const PopupHeaderTextSmall = styled.div`
