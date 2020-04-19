@@ -16,7 +16,25 @@ const setInput = (name, identifier, labelName, funcReturnValue) => {
   return Object.assign({}, input);
 };
 
-export const getFormInput = (name, nameOverride) => {
+export const getInputField = (name, typeColumn) => {
+  const handleObjectType = () => {
+    input = getField(name);
+    if (!input) input = getField(name + "s", name + "s");
+  };
+  const handleNonObjectTypes = () => {
+    input = getField(typeColumn, name);
+  };
+
+  let input;
+  if (typeColumn === "object") {
+    handleObjectType();
+  } else {
+    handleNonObjectTypes();
+  }
+  return input;
+};
+
+export const getField = (name, nameOverride) => {
   let input = INPUT[name];
 
   if (typeof input === "function") {
@@ -84,20 +102,6 @@ export const INPUT = {
       };
     },
   },
-  // employees: {
-  //   type: "input",
-  //   name: "employees",
-  //   identifier: "employee_id",
-  //   labelName: "employee_name",
-  //   placeholder: "Mitarbeiter",
-  //   setOptions: (options) => options[INPUT.employees.name],
-  //   func: (state) => {
-  //     return {
-  //       name: INPUT.employees.name,
-  //       data: state.base[INPUT.employees.name],
-  //     };
-  //   },
-  // },
 
   symBuildings: {
     type: "input",
@@ -136,10 +140,10 @@ export const INPUT = {
     type: "number",
     size: 6,
   },
-  notes: {
-    name: "notes",
-    placeholder: "Anmerkungen",
-    type: "text",
+  id: {
+    name: "id",
+    placeholder: "ID",
+    type: "number",
     size: 6,
   },
   datetime: {
@@ -161,7 +165,7 @@ export const INPUT = {
     size: 6,
   },
   number: {
-    name: "text",
+    name: "number",
     placeholder: "text",
     type: "number",
     size: 6,

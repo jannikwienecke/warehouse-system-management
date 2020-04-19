@@ -296,3 +296,24 @@ export const findModelSchema = (dataType, __schema) => {
   modelType["parameter"] = schema.args;
   return modelType;
 };
+
+export const getTypeColumnBySchema = (columnName, schemaFields) => {
+  const schemaColumn = schemaFields.find(
+    (field) =>
+      field.name === columnName || field.name === columnName.slice(0, -1)
+  );
+
+  if (!schemaColumn) return;
+
+  let typeColumn = schemaColumn.type;
+  if (typeColumn.ofType) {
+    if (typeColumn.ofType.kind.toLowerCase() === "object") {
+      typeColumn = typeColumn.ofType.kind;
+    } else {
+      typeColumn = typeColumn.ofType.name;
+    }
+  } else {
+    typeColumn = typeColumn.name;
+  }
+  return typeColumn.toLowerCase();
+};
