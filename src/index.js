@@ -35,11 +35,8 @@ const client = new ApolloClient({
 
 ReactDOM.render(
   <ApolloProvider client={client}>
-    <Query query={INIT_QUERY()}>
-      {(props) => {
-        return <App {...props} />;
-      }}
-    </Query>
+    <App />
   </ApolloProvider>,
   document.getElementById("root")
 );
+// ReactDOM.render(<App />, document.getElementById("root"));

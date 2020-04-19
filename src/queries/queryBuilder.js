@@ -5,12 +5,17 @@ import { RETURN_VALUES, QUERY_DICT, QUERY_TRANSLATE } from "./queries";
 export const queryBuilder = (
   queryList,
   queryType = "get",
+  schema,
   returnValues = null
 ) => {
   const setQueryString = (parameter) => {
+    // console.log("---------------------", schema);
+
     let queryStr = "";
     if (!parameter) return queryStr;
     Object.keys(parameter).forEach((key) => {
+      // console.log("Parameter: ", parameter);
+
       const val = parameter[key];
       if ((!val || typeof val === "object") && val !== false) return;
 
@@ -28,18 +33,57 @@ export const queryBuilder = (
     }
   };
 
-  const buildQuery = (queryName, queryStr, modelName) => {
-    const returnValues_ = returnValues
-      ? returnValues
-      : RETURN_VALUES[modelName];
-    // console.log("RETURN VALUES", returnValues);
-    // console.log("modelname", modelName);
-    // console.log("quername", queryName);
-    // console.log("-------------------------");
+  const buildReturnQuery = (schema, modelName) => {
+    const _getSchema = () => {
+      if (modelName) {
+        return schema[modelName];
+      } else {
+        return schema;
+      }
+    };
 
+    const _loopFields = () => {
+      let schemaModel = _getSchema();
+
+      return schemaModel.fields.map((field) => {
+        if (!field.fields) {
+          return field.name;
+        }
+        const names = buildReturnQuery(field);
+        return { name: field.name, names };
+      });
+    };
+
+    return _loopFields();
+  };
+
+  const createReturnString = (returnValues) => {
+    let str = "";
+    returnValues.forEach((value) => {
+      if (typeof value === "string") {
+        str += value + " ";
+        return;
+      }
+
+      const _subString = createReturnString(value.names);
+
+      str += `${value.name} {
+        ${_subString}
+      }`;
+    });
+    return str;
+  };
+
+  const buildQuery = (queryName, queryStr, modelName) => {
+    if (schema === "__schema") {
+      var returnString = returnValues ? returnValues : RETURN_VALUES[modelName];
+    } else {
+      var returnValues_ = buildReturnQuery(schema, modelName);
+      var returnString = createReturnString(returnValues_);
+    }
     return `
     ${queryName} ${queryStr}{
-      ${returnValues_}
+      ${returnString}
     }
   `;
   };

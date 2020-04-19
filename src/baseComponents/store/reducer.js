@@ -9,6 +9,7 @@ import {
   SET_SYM_BUILDINGS,
   SET_WAREHOUSE,
   SET_COMPARTMENTS,
+  SET_SCHEMA,
 } from "./types";
 
 const initialState = {
@@ -19,12 +20,22 @@ const initialState = {
   employees: null,
   symBuildings: null,
   compartments: null,
+  __schema: null,
 };
 
 export default function (state = initialState, action) {
   switch (action.type) {
+    case SET_SCHEMA:
+      return {
+        ...state,
+        __schema: action.payload,
+      };
+
     case SET_INIT:
-      return action.payload;
+      return {
+        ...state,
+        ...action.payload,
+      };
 
     case SET_CUSTOMER:
       return {

@@ -11,6 +11,7 @@ import {
   SET_WAREHOUSE,
   SET_COMPARTMENTS,
   SET_ERROR,
+  SET_SCHEMA,
 } from "./types";
 import {
   customers,
@@ -23,6 +24,10 @@ import {
 } from "../../testData";
 
 // const apiCall = (obj) => setTimeout(() => obj, 200);
+
+export const setSchema = (schema) => (dispatch, getState) => {
+  dispatch({ type: SET_SCHEMA, payload: schema });
+};
 
 export const setInitData = (initData) => (dispatch, getState) => {
   dispatch({ type: SET_INIT, payload: initData });

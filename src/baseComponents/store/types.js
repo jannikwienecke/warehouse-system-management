@@ -1,3 +1,4 @@
+export const SET_SCHEMA = "SET_SCHEMA";
 export const SET_INIT = "SET_INIT";
 export const SET_CUSTOMER = "SET_CUSTOMER";
 export const SET_PRODUCTS = "SET_PRODUCTS";

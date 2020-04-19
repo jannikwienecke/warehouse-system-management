@@ -241,3 +241,58 @@ export const removeErrors = (arrInput) => {
     delete input["error"];
   });
 };
+
+export const findModelSchema = (dataType, __schema) => {
+  const _getSchema = () => {
+    let types = __schema.types.find((type) => type.name === "Query");
+    schema = types.fields.find((field) => field.name === dataType);
+
+    if (!schema) {
+      types = __schema.types.find((type) => type.name === "Mutation");
+      schema = types.fields.find((field) => field.name === dataType);
+    }
+  };
+
+  const _getModelType = (nameToFind) => {
+    return __schema.types.find((type) =>
+      type.name.toLowerCase().includes(nameToFind.toLowerCase().slice(0, -1))
+    );
+  };
+
+  const _updateSchema = (name, fields) => {
+    var modelToUpdate = modelType.fields.find((field) => {
+      const ofType = field.type.ofType;
+
+      return ofType && ofType.name === name;
+    });
+    modelToUpdate["fields"] = fields;
+  };
+
+  const _parse = () => {
+    modelType.fields.forEach((field) => {
+      const ofType = field.type.ofType;
+
+      if (ofType && ofType.kind === "OBJECT") {
+        const nameOfType = field.type.ofType.name;
+
+        const modelType = _getModelType(nameOfType);
+        // console.log("MODEL", modelType);
+        modelType.fields = modelType.fields.filter((field) => {
+          // console.log("FIELD = ", field);
+
+          if (!field.type.ofType) return true;
+          if (field.type.ofType.kind !== "OBJECT") return true;
+        });
+
+        _updateSchema(nameOfType, modelType.fields);
+      }
+    });
+  };
+
+  let schema;
+  _getSchema();
+  let modelType = _getModelType(dataType);
+  _parse();
+  modelType["parameter"] = schema.args;
+  return modelType;
+};

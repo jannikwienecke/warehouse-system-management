@@ -1,16 +1,25 @@
 import React, { useState, useEffect } from "react";
 import { INPUT, getFormInput } from "../baseComponents/base";
-import { translate, copy, createErrListFromApiError } from "../functions/utils";
+import {
+  translate,
+  copy,
+  createErrListFromApiError,
+  findModelSchema,
+} from "../functions/utils";
 import { QUERY_DICT, queryBuilder } from "../queries/queryBuilder";
 import { useMutation, useQuery } from "react-apollo";
 import { nullQuery } from "../queries/queries";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 export const useGraphqlApi = (dataType, sizeFields = 6) => {
   const [tableData, setTableData] = useState([]);
   const [tableColumns, setTableColumns] = useState([]);
   const [arrInput, setArrInput] = useState(null);
   const [query, setQuery] = useState({ query: nullQuery });
+  // const [currentSchema, setCurrentSchema] = useState(null);
+
+  const __schema = useSelector((state) => state.base.__schema);
+  const currentSchema = useSelector((state) => state.base.currentSchema);
 
   const { data, error, loading } = useQuery(query.query, {
     ...query.options,
@@ -25,13 +34,21 @@ export const useGraphqlApi = (dataType, sizeFields = 6) => {
     }
   }, [data]);
 
+  // useEffect(() => {
+  //   if (dataType && __schema) {
+  //     console.log("set...");
+
+  //     _setCurrentSchema();
+  //   }
+  // }, [dataType, __schema]);
+
   useEffect(() => {
-    if (dataType) {
+    if (dataType && currentSchema) {
       setTableData([]);
       setTableColumns([]);
       fetchData();
     }
-  }, [dataType]);
+  }, [dataType, currentSchema]);
 
   useEffect(() => {
     if (tableData.length > 0 && tableColumns.length === 0) {
@@ -45,9 +62,23 @@ export const useGraphqlApi = (dataType, sizeFields = 6) => {
     }
   }, [tableColumns]);
 
+  // const _setCurrentSchema = () => {
+  //   console.log("HIER....");
+
+  //   // const schema = findModelSchema(dataType, __schema);
+  //   console.log("SCHEMA ", schema);
+
+  //   setCurrentSchema(schema);
+  // };
+
   const fetchData = async (parameter) => {
     _parseParameter(parameter);
-    const query_ = queryBuilder([{ modelName: dataType, parameter }]);
+
+    const query_ = queryBuilder(
+      [{ modelName: dataType, parameter }],
+      "get",
+      currentSchema
+    );
     setQuery({ query: query_ });
   };
 
@@ -92,9 +123,17 @@ export const useGraphqlApi = (dataType, sizeFields = 6) => {
       arrInput_.push(Object.assign({}, input));
     };
 
+    const isSearchParameter = (key) => {
+      var isSearchParameter = currentSchema[dataType].parameter.find(
+        (para) => para.name === key
+      );
+      if (isSearchParameter) return true;
+    };
+
     const loopKeysTable = () => {
       keysTable.forEach((key) => {
         if (key.includes("__type")) return;
+        if (!isSearchParameter(key)) return;
 
         const typeColumn = typeof sampleData[key];
 

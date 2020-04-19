@@ -20,6 +20,7 @@ import {
 import { MyStorage } from "./templates/MyStorage";
 import GraphQl from "./templates/GraphQl";
 import { createErrListFromApiError } from "./functions/utils";
+import { useInitQuery } from "./queries/queries";
 
 const initializeData = (data) => {
   store.dispatch(setInitData(data));
@@ -41,15 +42,10 @@ const setError = (error) => {
   createErrListFromApiError(error, store.dispatch);
 };
 
-export default function App({ data, error, loading }) {
-  useEffect(() => {
-    if (data) {
-      initializeData(data);
-    } else if (error) {
-      setError(error);
-    }
-  }, [data, error, loading]);
+export default function App() {
+  const { loadingInitData } = useInitQuery(store);
 
+  if (loadingInitData) return <h1>LOADING...</h1>;
   return (
     <Provider store={store}>
       <Router>
