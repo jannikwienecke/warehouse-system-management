@@ -18,9 +18,10 @@ import {
   showAlert,
 } from "./baseComponents/store/actions";
 import { MyStorage } from "./templates/MyStorage";
-import GraphQl from "./templates/GraphQl";
+import GraphQl from "./wareBaseData/GraphQl";
 import { createErrListFromApiError } from "./functions/utils";
 import { useInitQuery } from "./queries/queries";
+import { ModularGraphQl } from "./templates/ModularGraphQl";
 
 const initializeData = (data) => {
   store.dispatch(setInitData(data));
@@ -51,7 +52,7 @@ export default function App() {
       <Router>
         <div className="App">
           <Switch>
-            <PageRouter exact path="/" component={GraphQl} />
+            <PageRouter exact path="/" component={ModularGraphQl} />
 
             <PageRouter
               exact

@@ -8,7 +8,7 @@ import DetailView from "./DetailView";
 import styled from "styled-components";
 import { MySelect } from "../components/select/MySelect";
 import { SuccessScreen } from "../common/SuccessScreen";
-import { useGraphqlApi } from "./useGraphqlApi";
+import { useGraphqlApi } from "../functions/hooks.js/useGraphqlApi";
 import { PopupNewElement } from "./PopupNewElement";
 
 const UPDATE_BTN_TEXT = "Ändern";

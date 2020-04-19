@@ -4,7 +4,8 @@ import React, { useEffect, useState } from "react";
 export const Popup_ = ({
   setValues,
   values,
-  settings,
+  height,
+  heightHeader,
   children,
   header,
   btnList,
@@ -18,8 +19,6 @@ export const Popup_ = ({
   }, [values]);
 
   const _validate = () => {
-    console.log("validate/...", values);
-
     setIsSubmitted(true);
     setTimeout(() => {
       setShowModal(false);
@@ -43,7 +42,7 @@ export const Popup_ = ({
 
   const wrapper = (func) => {
     const inner = () => {
-      setRunFunc(func.text);
+      setRunFunc(func.triggerName);
       func.func();
     };
     return {
@@ -74,8 +73,8 @@ export const Popup_ = ({
         visible={showModal}
         close={_cancel}
         marginTop="2rem"
-        height={settings.height ? settings.height : "800px"}
-        heightHeader={settings.heightHeader ? settings.heightHeader : "30%"}
+        height={height ? height : "800px"}
+        heightHeader={heightHeader ? heightHeader : "30%"}
         headline={header ? header : "Details"}
         btnArr={getBtns()}
       >

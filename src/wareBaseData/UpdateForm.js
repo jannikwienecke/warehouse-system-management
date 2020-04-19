@@ -15,7 +15,6 @@ export const UpdateForm = ({
   dataType,
   arrInput,
   values,
-  client,
   setRunFunc,
   fetchData,
 }) => {
@@ -31,7 +30,11 @@ export const UpdateForm = ({
   const currentSchema = useSelector((state) => state.base.currentSchema);
 
   useEffect(() => {
+    console.log("hier 1");
+
     if (mutation && mutation.options) {
+      console.log("hier 2");
+
       updateElement();
     }
   }, [mutation]);
@@ -89,6 +92,9 @@ export const UpdateForm = ({
       "put",
       currentSchema
     );
+
+    console.log("set mutation", updateParameter);
+    console.log(arrInput);
 
     setMutation({
       mutation: mutation_,
@@ -153,8 +159,13 @@ const parseArrInput = (arrInput, values, dataType) => {
       };
     } else {
       const valueName = name.slice(0, -1);
+      console.log("NAME = ", valueName);
+      console.log("identifier ", identifier);
+      console.log("val", values);
+      console.log("ID = ", id);
+
       input.default = {
-        [identifier]: values[valueName][id],
+        [identifier]: values[valueName]["id"],
         [labelName]: values[valueName][labelName],
       };
     }
@@ -162,6 +173,8 @@ const parseArrInput = (arrInput, values, dataType) => {
 
   const loopArr = () => {
     arrInput.forEach((input) => {
+      console.log("-----------", arrInput);
+
       if (ignoreInputList.includes(input.name)) {
         return null;
       } else if (input.type === "input") {

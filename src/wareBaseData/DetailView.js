@@ -5,7 +5,10 @@ import { translate } from "../functions/utils";
 import { UpdateForm } from "./UpdateForm";
 
 const DetailView = (props) => {
-  const { rowData, isSubmitted, runFunc, trigger } = props;
+  console.log(props);
+
+  const { rowData, isSubmitted, runFunc } = props;
+
   const [row, setRow] = useState(null);
 
   useEffect(() => {
@@ -35,7 +38,7 @@ const DetailView = (props) => {
   if (!row) return null;
   return (
     <>
-      {runFunc === trigger ? (
+      {runFunc === "update" ? (
         <UpdateForm values={row} setRow={setRow} {...props} />
       ) : (
         <ListWrapper numberItems={Object.keys(row).length}>

@@ -2,7 +2,7 @@ import gql from "graphql-tag";
 
 import { RETURN_VALUES, QUERY_DICT, QUERY_TRANSLATE } from "./queries";
 import { getTypeColumnBySchema } from "../functions/utils";
-import { getIdentifierField } from "../templates/helperUseGraphql";
+import { getIdentifierField } from "../wareBaseData/helperUseGraphql";
 
 const numberTypes = ["boolean", "number", "id", "int"];
 export const queryBuilder = (

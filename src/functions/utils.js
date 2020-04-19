@@ -33,28 +33,29 @@ export const copy = (obj) => {
   return JSON.parse(JSON.stringify(obj));
 };
 
-export const translate = (text) => {
-  const dictonary = {
-    quantity: "Anzahl",
-    products: "Produkt",
-    employees: "Mitarbeiter",
-    customers: "Kunde",
-    chargennummer: "Chargennummer",
-    datetime: "Datum",
-    notes: "Notizen",
-    width: "Breite",
-    length: "Länge",
-    id: "ID",
-    packagings: "Verpackung",
-    name: "Name",
-    productNumber: "Produkt Nr.",
-    notesPicking: "Notiz Auslagerung",
-    notesPutaway: "Notiz Einlagerung",
-    threeInRow: "3 Pal. Möglich",
-  };
+export const myDictonary = {
+  quantity: "Anzahl",
+  products: "Produkt",
+  employees: "Mitarbeiter",
+  customers: "Kunde",
+  chargennummer: "Chargennummer",
+  datetime: "Datum",
+  notes: "Notizen",
+  width: "Breite",
+  length: "Länge",
+  id: "ID",
+  packagings: "Verpackung",
+  name: "Name",
+  productNumber: "Produkt Nr.",
+  notesPicking: "Notiz Auslagerung",
+  notesPutaway: "Notiz Einlagerung",
+  threeInRow: "3 Pal. Möglich",
+};
 
-  if (text in dictonary) {
-    return dictonary[text];
+export const translate = (text, dictonary) => {
+  let dictonary_ = dictonary ? dictonary : myDictonary;
+  if (text in dictonary_) {
+    return dictonary_[text];
   }
 
   return text;
@@ -316,4 +317,23 @@ export const getTypeColumnBySchema = (columnName, schemaFields) => {
     typeColumn = typeColumn.name;
   }
   return typeColumn.toLowerCase();
+};
+
+export const _parseColumns = (columnsArr) => {
+  if (columnsArr[0].accessor) {
+    var columns = columnsArr;
+  } else {
+    var columns = [];
+    columnsArr.forEach((column) => {
+      if (column && column.length > 0 && column[0] !== "__typename") {
+        columns.push({
+          Header: column[0],
+          accessor: column[1],
+        });
+      }
+    });
+  }
+
+  return columns;
+  // setColumns(columns_);
 };

@@ -3,14 +3,20 @@ import {
   translate,
   createErrListFromApiError,
   getTypeColumnBySchema,
-} from "../functions/utils";
-import { queryBuilder } from "../queries/queryBuilder";
+  _parseColumns,
+} from "../utils";
+import { queryBuilder } from "../../queries/queryBuilder";
 import { useQuery } from "react-apollo";
-import { nullQuery } from "../queries/queries";
+import { nullQuery } from "../../queries/queries";
 import { useDispatch, useSelector } from "react-redux";
-import { getArrInput, _parseParameter } from "./helperUseGraphql";
+import {
+  getArrInput,
+  _parseParameter,
+} from "../../wareBaseData/helperUseGraphql";
 
-export const useGraphqlApi = (dataType, sizeFields = 6) => {
+const sizeFields = 6;
+
+export const useGraphqlApi = (dataType, options) => {
   const [tableData, setTableData] = useState([]);
   const [tableColumns, setTableColumns] = useState([]);
   const [arrInput, setArrInput] = useState(null);
@@ -64,12 +70,14 @@ export const useGraphqlApi = (dataType, sizeFields = 6) => {
 
   const getTableColumns = () => {
     let columnFields = currentSchema[dataType].fields;
-    return columnFields.map((column) => {
+    let columns = [];
+    columnFields.forEach((column) => {
       let type = getTypeColumnBySchema(column.name, columnFields);
       if (type === "object") return null;
 
-      return [translate(column.name), column.name];
+      columns.push([translate(column.name), column.name], options.parameter);
     });
+    return _parseColumns(columns);
   };
 
   return { arrInput, tableColumns, tableData, fetchData };
