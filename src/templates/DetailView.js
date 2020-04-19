@@ -17,7 +17,7 @@ const DetailView = (props) => {
   const rowDataList = () => {
     const columns = Object.keys(row);
 
-    return columns.map((column) => {
+    return columns.map((column, index) => {
       let val = row[column];
       if (val && typeof val === "object") {
         val = val[Object.keys(val)[0]];
@@ -25,7 +25,7 @@ const DetailView = (props) => {
         val = val ? "Ja" : "Nein";
       }
       return (
-        <ListItem numberItems={columns.length}>
+        <ListItem key={index} numberItems={columns.length}>
           {translate(column)}: <ValueText>{val}</ValueText>
         </ListItem>
       );

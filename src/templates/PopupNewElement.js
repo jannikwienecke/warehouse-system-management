@@ -10,7 +10,7 @@ import {
 } from "../functions/utils";
 import { queryBuilder, updateStore } from "../queries/queryBuilder";
 import { useMutation } from "@apollo/react-hooks";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { nullQuery, QUERY_DICT, nullMutation } from "../queries/queries";
 
 export const PopupNewElement = (props) => {
@@ -24,6 +24,8 @@ export const PopupNewElement = (props) => {
     mutation.mutation,
     mutation.options
   );
+
+  const currentSchema = useSelector((state) => state.base.currentSchema);
 
   useEffect(() => {
     if (error) {
@@ -52,14 +54,15 @@ export const PopupNewElement = (props) => {
           parameter: { ...values },
         },
       ],
-      "post"
+      "post",
+      currentSchema
     );
 
     setMutation({
       mutation: mutation_,
       options: {
         update: (cache, { data }) =>
-          updateStore(cache, data, dataType, { action: "add" }),
+          updateStore(cache, data, dataType, { action: "add", currentSchema }),
       },
     });
 

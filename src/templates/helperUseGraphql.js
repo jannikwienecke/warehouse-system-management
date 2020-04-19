@@ -34,6 +34,7 @@ export const getArrInput = (dataType, sizeFields, currentSchema) => {
       if (!isSearchParameter(key)) return;
 
       let typeColumn = getTypeColumnBySchema(column.name, schemaFields);
+
       let inputField = getInputField(column.name, typeColumn);
 
       if (!inputField) {

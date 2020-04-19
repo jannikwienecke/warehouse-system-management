@@ -14,7 +14,7 @@ import { PopupNewElement } from "./PopupNewElement";
 const UPDATE_BTN_TEXT = "Ändern";
 
 const GraphQl = (props) => {
-  const [dataType, setDataType] = useState("products");
+  const [dataType, setDataType] = useState("packagings");
   const [successScreen, showSuccessScreen] = useState(null);
   const [newElementForm, showNewElementForm] = useState(null);
 

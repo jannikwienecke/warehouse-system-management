@@ -164,7 +164,7 @@ export const INPUT = {
     type: "text",
     size: 6,
   },
-  number: {
+  int: {
     name: "number",
     placeholder: "text",
     type: "number",

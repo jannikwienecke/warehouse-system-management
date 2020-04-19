@@ -1,36 +1,55 @@
 import gql from "graphql-tag";
 
 import { RETURN_VALUES, QUERY_DICT, QUERY_TRANSLATE } from "./queries";
+import { getTypeColumnBySchema } from "../functions/utils";
+import { getIdentifierField } from "../templates/helperUseGraphql";
 
+const numberTypes = ["boolean", "number", "id", "int"];
 export const queryBuilder = (
   queryList,
   queryType = "get",
   schema,
   returnValues = null
 ) => {
-  const setQueryString = (parameter) => {
-    // console.log("---------------------", schema);
-
+  const setQueryString = (parameter, modelName) => {
     let queryStr = "";
     if (!parameter) return queryStr;
     Object.keys(parameter).forEach((key) => {
-      // console.log("Parameter: ", parameter);
-
       const val = parameter[key];
-      if ((!val || typeof val === "object") && val !== false) return;
 
-      if (typeof val === "number" || typeof val === "boolean") {
+      if (!val) return;
+
+      if (key === modelName && val) {
+        queryStr += `id: ${parseInt(val["id"])}`;
+        return;
+      }
+
+      let type = getTypeColumnBySchema(key, schema[modelName].fields);
+
+      if (type === "object") {
+        let identifierField = getIdentifierField(schema[key]);
+        if (identifierField) {
+          let name = identifierField.name;
+
+          queryStr += `${key.replace("s", "Id")} : ${val[name]} `;
+          return;
+        } else {
+          return;
+        }
+      }
+
+      if (!type) return;
+
+      if (numberTypes.includes(type)) {
         queryStr += `${key} : ${val} `;
       } else {
         queryStr += `${key} : "${val}" `;
       }
     });
 
-    if (queryStr) {
-      return `(${queryStr})`;
-    } else {
-      return "";
-    }
+    if (!queryStr) return queryStr;
+
+    return `(${queryStr})`;
   };
 
   const buildReturnQuery = (schema, modelName) => {
@@ -46,6 +65,9 @@ export const queryBuilder = (
       let schemaModel = _getSchema();
 
       return schemaModel.fields.map((field) => {
+        if (returnValues && !returnValues.includes(field.name)) {
+          return null;
+        }
         if (!field.fields) {
           return field.name;
         }
@@ -60,6 +82,7 @@ export const queryBuilder = (
   const createReturnString = (returnValues) => {
     let str = "";
     returnValues.forEach((value) => {
+      if (!value) return;
       if (typeof value === "string") {
         str += value + " ";
         return;
@@ -71,6 +94,7 @@ export const queryBuilder = (
         ${_subString}
       }`;
     });
+
     return str;
   };
 
@@ -115,7 +139,7 @@ export const queryBuilder = (
       var { modelName, parameter } = query;
       const queryName = getQueryName(modelName, queryType);
 
-      const queryStr = setQueryString(parameter);
+      const queryStr = setQueryString(parameter, modelName);
 
       const builtQuery = buildQuery(queryName, queryStr, modelName);
 
@@ -130,7 +154,11 @@ export const queryBuilder = (
 };
 
 export const updateStore = (cache, data, dataType, parameter) => {
-  const GET_ALL_ELEMENTS = queryBuilder([{ modelName: dataType }], "get");
+  const GET_ALL_ELEMENTS = queryBuilder(
+    [{ modelName: dataType }],
+    "get",
+    parameter.currentSchema
+  );
   const response = cache.readQuery({ query: GET_ALL_ELEMENTS });
   const fetchElements = data[Object.keys(data)[0]];
 

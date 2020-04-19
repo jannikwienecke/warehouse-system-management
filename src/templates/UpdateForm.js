@@ -7,6 +7,7 @@ import { MyButton } from "../components/button/MyButton";
 import { ValidateDeleteModal } from "./ValidateDeleteModal";
 import { useMutation } from "react-apollo";
 import { nullMutation } from "../queries/queries";
+import { useSelector } from "react-redux";
 
 export const UpdateForm = ({
   setValues,
@@ -21,12 +22,13 @@ export const UpdateForm = ({
   const [updateParameter, setUpdateParamter] = useState(null);
   const [mutationResult, setMutationResult] = useState(null);
   const [validateDelete, setValidateDelete] = useState(null);
-
   const [mutation, setMutation] = useState({ mutation: nullMutation });
   const [updateElement, { data, error, loading }] = useMutation(
     mutation.mutation,
     mutation.options
   );
+
+  const currentSchema = useSelector((state) => state.base.currentSchema);
 
   useEffect(() => {
     if (mutation && mutation.options) {
@@ -58,19 +60,25 @@ export const UpdateForm = ({
         },
       ],
       "delete",
-      "id"
+      currentSchema,
+      ["id"]
     );
     setMutation({
       mutation: mutation_,
       options: {
         update: (cache, { data }) =>
-          updateStore(cache, data, dataType, { action: "delete", id }),
+          updateStore(cache, data, dataType, {
+            action: "delete",
+            id,
+            currentSchema,
+          }),
       },
     });
   };
 
   const runMutation = async () => {
     const id = parseInt(values["id"]);
+    console.log("UPDATE PARAMETER", updateParameter);
     const mutation_ = queryBuilder(
       [
         {
@@ -78,21 +86,21 @@ export const UpdateForm = ({
           parameter: { id, ...updateParameter },
         },
       ],
-      "put"
+      "put",
+      currentSchema
     );
 
     setMutation({
       mutation: mutation_,
       options: {
         update: (cache, { data }) =>
-          updateStore(cache, data, dataType, { action: "update", id }),
+          updateStore(cache, data, dataType, {
+            action: "update",
+            id,
+            currentSchema,
+          }),
       },
     });
-
-    // const result = await client.mutate({ mutation });
-
-    // const resultData = result.data[Object.keys(result.data)[0]];
-    // setMutationResult(resultData);
   };
 
   const updateValues = () => {
