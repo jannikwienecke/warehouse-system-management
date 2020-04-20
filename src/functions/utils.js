@@ -299,6 +299,8 @@ export const findModelSchema = (dataType, __schema) => {
 };
 
 export const getTypeColumnBySchema = (columnName, schemaFields) => {
+  if (columnName === "search") return "string";
+
   const schemaColumn = schemaFields.find(
     (field) =>
       field.name === columnName || field.name === columnName.slice(0, -1)

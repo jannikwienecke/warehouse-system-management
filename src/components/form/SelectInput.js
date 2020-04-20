@@ -1,6 +1,7 @@
 import React from "react";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
+import { useSelector } from "react-redux";
 
 const errorStyles = {
   control: (provided, state) => {
@@ -11,12 +12,13 @@ const errorStyles = {
   },
 };
 
-const SelectInput = ({ input, values, formFunc, errors }) => {
+const SelectInput = (props) => {
+  const state = useSelector((state) => state);
+  const { input, values, formFunc, errors } = props;
   const _parse = () => {
-    // console.log("values_____= ", values);
-    // console.log("options= ", input.options);
-
-    // console.log("input", input);
+    if (input.setOptions) {
+      input["options"] = input.setOptions(state, input.name);
+    }
 
     input.options.map((option) => {
       option["value"] = option[input.identifier];
@@ -54,7 +56,6 @@ const SelectInput = ({ input, values, formFunc, errors }) => {
         className={input.class ? input.class : "formInput"}
         name={input.name}
         options={input.options}
-        // value={values.name}
         onBlur={formFunc.handleBlur}
         onChange={(data) => formFunc.handleInputChange(data, input.name)}
         isMulti={input.multiSelect}

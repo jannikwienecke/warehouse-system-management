@@ -22,6 +22,7 @@ import GraphQl from "./wareBaseData/GraphQl";
 import { createErrListFromApiError } from "./functions/utils";
 import { useInitQuery } from "./queries/queries";
 import { ModularGraphQl } from "./templates/ModularGraphQl";
+import { GraphQlForm } from "./templates/GraphQlForm";
 
 const initializeData = (data) => {
   store.dispatch(setInitData(data));
@@ -52,7 +53,7 @@ export default function App() {
       <Router>
         <div className="App">
           <Switch>
-            <PageRouter exact path="/" component={ModularGraphQl} />
+            <PageRouter exact path="/" component={GraphQl} />
 
             <PageRouter
               exact

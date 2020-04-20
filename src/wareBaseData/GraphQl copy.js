@@ -10,8 +10,7 @@ import { MySelect } from "../components/select/MySelect";
 import { SuccessScreen } from "../common/SuccessScreen";
 import { useGraphqlApi } from "../functions/hooks.js/useGraphqlApi";
 import { PopupNewElement } from "./PopupNewElement";
-import { GraphQlForm } from "./GraphQlForm";
-import { GraphqlTable } from "./GraphqlTable";
+
 const UPDATE_BTN_TEXT = "Ändern";
 
 const GraphQl = (props) => {
@@ -62,7 +61,7 @@ const GraphQl = (props) => {
         <SuccessScreen text={`Stammdaten: ${translate(dataType)}`} />
       ) : (
         <>
-          <div style={{ width: "90%", margin: "1rem auto" }}>
+          <div style={{ width: "90%", margin: "0 auto" }}>
             <MySelect
               placeholder={"Stammdaten"}
               setValue={validateSelection}
@@ -70,21 +69,7 @@ const GraphQl = (props) => {
             />
           </div>
 
-          <GraphQlForm
-            arrInput={arrInput}
-            fetchData={fetchData}
-            showNewElementForm={showNewElementForm}
-            dataType={dataType}
-          />
-          <GraphqlTable
-            tableColumns={tableColumns}
-            tableData={tableData}
-            arrInput={arrInput}
-            fetchData={fetchData}
-            dataType={dataType}
-          />
-
-          {/* <Parent
+          <Parent
             table={{
               columnsArr: tableColumns,
               data: tableData,
@@ -137,7 +122,7 @@ const GraphQl = (props) => {
               cardWrapper: true,
               apiFunc: (dispatch, parameter) => fetchData(parameter),
             }}
-          /> */}
+          />
         </>
       )}
     </>

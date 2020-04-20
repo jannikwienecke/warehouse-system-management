@@ -10,7 +10,8 @@ const setInput = (name, identifier, labelName, funcReturnValue) => {
   input.placeholder = translate(name);
 
   if (funcReturnValue) {
-    input.func = () => funcReturnValue;
+    input.setOptions = null;
+    input.options = funcReturnValue;
   }
 
   return Object.assign({}, input);
@@ -52,12 +53,8 @@ export const INPUT = {
     identifier: "value",
     labelName: "label",
     size: 6,
-    setOptions: (options, name) => options[name],
-    func: (state, input) => {
-      return {
-        name: input.name,
-        data: state.base[input.name],
-      };
+    setOptions: (state, name) => {
+      return state.base[name];
     },
   },
   storage: {
@@ -121,6 +118,7 @@ export const INPUT = {
   products: () => setInput("products", "id", "name"),
   employees: () => setInput("employees", "id", "name"),
   packagings: () => setInput("packagings", "id", "name"),
+  boolean: (name) => setInput(name, "value", "label", booleanValues),
 
   dateStart: {
     name: "dateStart",
@@ -170,12 +168,6 @@ export const INPUT = {
     type: "number",
     size: 6,
   },
-
-  boolean: (name) =>
-    setInput(name, "value", "label", {
-      name: name,
-      data: booleanValues,
-    }),
 };
 
 const booleanValues = [

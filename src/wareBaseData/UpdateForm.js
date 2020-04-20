@@ -8,6 +8,8 @@ import { ValidateDeleteModal } from "./ValidateDeleteModal";
 import { useMutation } from "react-apollo";
 import { nullMutation } from "../queries/queries";
 import { useSelector } from "react-redux";
+import { GraphQlForm } from "./GraphQlForm";
+import { UpdateFormElement } from "./UpdateFormElement";
 
 export const UpdateForm = ({
   setValues,
@@ -30,11 +32,7 @@ export const UpdateForm = ({
   const currentSchema = useSelector((state) => state.base.currentSchema);
 
   useEffect(() => {
-    console.log("hier 1");
-
     if (mutation && mutation.options) {
-      console.log("hier 2");
-
       updateElement();
     }
   }, [mutation]);
@@ -82,6 +80,9 @@ export const UpdateForm = ({
   const runMutation = async () => {
     const id = parseInt(values["id"]);
     console.log("UPDATE PARAMETER", updateParameter);
+    console.log("val", values);
+    console.log(dataType);
+
     const mutation_ = queryBuilder(
       [
         {
@@ -92,9 +93,6 @@ export const UpdateForm = ({
       "put",
       currentSchema
     );
-
-    console.log("set mutation", updateParameter);
-    console.log(arrInput);
 
     setMutation({
       mutation: mutation_,
@@ -126,15 +124,9 @@ export const UpdateForm = ({
         submit={runDelete}
       />
       <ListWrapper>
-        <Parent
-          form={{
-            arrInput: parseArrInput(arrInput, values, dataType),
-            middlewareParse: [extractIdentifier],
-            requiredArguments: [],
-            cardWrapper: false,
-            hideSubmitBtn: true,
-            apiFunc: (dispatch, parameter) => setUpdateParamter(parameter),
-          }}
+        <UpdateFormElement
+          arrInput={parseArrInput(arrInput, values, dataType)}
+          apiFunc={(parameter) => setUpdateParamter(parameter)}
         />
       </ListWrapper>
 
@@ -151,30 +143,30 @@ export const UpdateForm = ({
 const parseArrInput = (arrInput, values, dataType) => {
   const handleInputType = (input) => {
     const { name, identifier, labelName, id } = input;
+    const valueName = name.slice(0, -1);
+
+    let identifierVal;
+    let labelNameVal;
 
     if (typeof values[name] === "boolean") {
-      input.default = {
-        label: values[name] ? "Ja" : "Nein",
-        value: values[name],
-      };
-    } else {
-      const valueName = name.slice(0, -1);
-      console.log("NAME = ", valueName);
-      console.log("identifier ", identifier);
-      console.log("val", values);
-      console.log("ID = ", id);
-
-      input.default = {
-        [identifier]: values[valueName]["id"],
-        [labelName]: values[valueName][labelName],
-      };
+      identifierVal = values[name];
+      labelNameVal = identifierVal ? "Ja" : "Nein";
+    } else if (values[valueName]) {
+      identifierVal = values[valueName][identifier];
+      labelNameVal = values[valueName][labelName];
+      // } else {
+      //   identifierVal = values[identifier];
+      //   labelNameVal = values[labelName];
     }
+
+    input.default = {
+      [identifier]: identifierVal,
+      [labelName]: labelNameVal,
+    };
   };
 
   const loopArr = () => {
     arrInput.forEach((input) => {
-      console.log("-----------", arrInput);
-
       if (ignoreInputList.includes(input.name)) {
         return null;
       } else if (input.type === "input") {

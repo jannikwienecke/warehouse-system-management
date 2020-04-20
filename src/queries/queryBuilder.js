@@ -15,12 +15,12 @@ export const queryBuilder = (
     let queryStr = "";
     if (!parameter) return queryStr;
     Object.keys(parameter).forEach((key) => {
-      const val = parameter[key];
+      var val = parameter[key];
 
       if (!val) return;
 
       if (key === modelName && val) {
-        queryStr += `id: ${parseInt(val["id"])}`;
+        queryStr += `id: ${parseInt(val["id"])} `;
         return;
       }
 
@@ -39,6 +39,10 @@ export const queryBuilder = (
       }
 
       if (!type) return;
+
+      if (type === "boolean") {
+        val = val.value;
+      }
 
       if (numberTypes.includes(type)) {
         queryStr += `${key} : ${val} `;
@@ -105,6 +109,7 @@ export const queryBuilder = (
       var returnValues_ = buildReturnQuery(schema, modelName);
       var returnString = createReturnString(returnValues_);
     }
+
     return `
     ${queryName} ${queryStr}{
       ${returnString}
@@ -137,6 +142,7 @@ export const queryBuilder = (
   const loopQueries = () => {
     queryList.map((query) => {
       var { modelName, parameter } = query;
+
       const queryName = getQueryName(modelName, queryType);
 
       const queryStr = setQueryString(parameter, modelName);

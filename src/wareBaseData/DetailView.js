@@ -5,8 +5,6 @@ import { translate } from "../functions/utils";
 import { UpdateForm } from "./UpdateForm";
 
 const DetailView = (props) => {
-  console.log(props);
-
   const { rowData, isSubmitted, runFunc } = props;
 
   const [row, setRow] = useState(null);

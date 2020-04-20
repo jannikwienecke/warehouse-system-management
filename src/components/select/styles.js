@@ -40,6 +40,7 @@ export const SelectType = styled.input`
 `;
 
 export const Options = styled.span`
+  z-index: 1;
   position: absolute;
   top: 3rem;
   left: 0rem;

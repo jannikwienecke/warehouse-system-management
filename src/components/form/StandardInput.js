@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-const StandardInput = ({ input, values, formFunc, scheme, errors }) => {
+const StandardInput = ({ input, values, formFunc, colorScheme, errors }) => {
   // console.log("input error....", input);
   // console.log("inpujt.errr", input.error);
 
@@ -29,7 +29,7 @@ const StandardInput = ({ input, values, formFunc, scheme, errors }) => {
       onBlur={formFunc.handleBlur}
       defaultValue={input.default}
       disabled={input.disable && true}
-      scheme={scheme}
+      scheme={colorScheme}
       error={hasError()}
       max={input.max}
       style={input.style}

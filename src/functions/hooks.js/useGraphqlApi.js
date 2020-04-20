@@ -75,7 +75,7 @@ export const useGraphqlApi = (dataType, options) => {
       let type = getTypeColumnBySchema(column.name, columnFields);
       if (type === "object") return null;
 
-      columns.push([translate(column.name), column.name], options.parameter);
+      columns.push([translate(column.name), column.name]);
     });
     return _parseColumns(columns);
   };

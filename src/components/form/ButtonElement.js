@@ -10,7 +10,8 @@ const ButtonElement = ({ arrBtns, formFunc, scheme }) => {
       <Btn key={index}>
         <Button
           variant={btn.variant}
-          onClick={btn.isSubmitFunc ? formFunc.handleSubmit : btn.func.func}
+          // onClick={!btn.isSubmitFunc ? btn.func.func : formFunc.handleSubmit}
+          onClick={btn.isSubmitFunc ? formFunc.handleSubmit : btn.func}
           size={btn.size}
           disabled={btn.disabled}
         >

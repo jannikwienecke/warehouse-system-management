@@ -23,6 +23,7 @@ const ModularForm = (props) => {
 
   const setInitialState = () => {
     var state = {};
+    if (!arrInput) return state;
     arrInput.forEach((element, index) => {
       if (element.type === "button") return;
       state[element.name] = element.default;
@@ -39,8 +40,6 @@ const ModularForm = (props) => {
     arrInput
   );
 
-  // console.log("VALUES = ", values);
-
   return (
     <Form>
       <Header>
@@ -53,11 +52,10 @@ const ModularForm = (props) => {
       </Header>
 
       <FormElement
+        {...props}
         formFunc={formFunc}
-        arrInput={arrInput}
         errors={errors}
         values={values}
-        scheme={colorScheme}
       />
     </Form>
   );
