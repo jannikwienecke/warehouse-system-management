@@ -19,7 +19,7 @@ const FormElement = (props) => {
   if (!arrInput) return <></>;
 
   const formElements = arrInput.map((input, index) => {
-    if (!input.name || !input.type) {
+    if (!input || !input.name || !input.type) {
       console.log(ERROR_MISSING_DATA);
       throw new Error("ERROR - No Name or Type");
     }

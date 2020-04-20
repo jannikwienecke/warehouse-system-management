@@ -25,7 +25,13 @@ const ModularForm = (props) => {
     var state = {};
     if (!arrInput) return state;
     arrInput.forEach((element, index) => {
-      if (element.type === "button") return;
+      try {
+        if (element.type === "button") return;
+      } catch (err) {
+        console.log("Keine Base Daten gefunden für ", element);
+        return state;
+      }
+
       state[element.name] = element.default;
     });
     return state;

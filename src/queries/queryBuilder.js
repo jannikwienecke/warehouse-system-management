@@ -17,21 +17,24 @@ export const queryBuilder = (
     Object.keys(parameter).forEach((key) => {
       var val = parameter[key];
 
-      if (!val) return;
+      if (!val && val !== 0) return;
 
       if (key === modelName && val) {
         queryStr += `id: ${parseInt(val["id"])} `;
         return;
       }
 
-      let type = getTypeColumnBySchema(key, schema[modelName].fields);
+      let [type, schemaColumn] = getTypeColumnBySchema(
+        key,
+        schema[modelName].fields
+      );
 
       if (type === "object") {
         let identifierField = getIdentifierField(schema[key]);
         if (identifierField) {
           let name = identifierField.name;
 
-          queryStr += `${key.replace("s", "Id")} : ${val[name]} `;
+          queryStr += `${schemaColumn.name}Id : ${val[name]} `;
           return;
         } else {
           return;
@@ -69,6 +72,10 @@ export const queryBuilder = (
       let schemaModel = _getSchema();
 
       return schemaModel.fields.map((field) => {
+        if (field.name === "createdBy") return null;
+
+        if (field.name.slice(-3) === "Set") return;
+
         if (returnValues && !returnValues.includes(field.name)) {
           return null;
         }
@@ -86,6 +93,8 @@ export const queryBuilder = (
   const createReturnString = (returnValues) => {
     let str = "";
     returnValues.forEach((value) => {
+      // console.log("value = ", value);
+
       if (!value) return;
       if (typeof value === "string") {
         str += value + " ";
@@ -107,6 +116,7 @@ export const queryBuilder = (
       var returnString = returnValues ? returnValues : RETURN_VALUES[modelName];
     } else {
       var returnValues_ = buildReturnQuery(schema, modelName);
+
       var returnString = createReturnString(returnValues_);
     }
 
@@ -122,6 +132,10 @@ export const queryBuilder = (
     listBuiltQueries.forEach((query) => {
       str += query + " ";
     });
+
+    if (queryList[0].modelName !== "__schema") {
+      // console.log(str);
+    }
 
     return gql`
       ${QUERY_TRANSLATE[queryType]} {
@@ -142,12 +156,15 @@ export const queryBuilder = (
   const loopQueries = () => {
     queryList.map((query) => {
       var { modelName, parameter } = query;
+      // console.log("PARAMETER = ", parameter);
 
       const queryName = getQueryName(modelName, queryType);
+      // console.log("queryname", queryName);
 
       const queryStr = setQueryString(parameter, modelName);
 
       const builtQuery = buildQuery(queryName, queryStr, modelName);
+      // console.log(builtQuery);
 
       listBuiltQueries.push(builtQuery);
     });

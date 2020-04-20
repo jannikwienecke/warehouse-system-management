@@ -20,6 +20,7 @@ export const getArrInput = (dataType, sizeFields, currentSchema) => {
   };
 
   const isSearchParameter = (key) => {
+    // debugger;
     var isSearchParameter = currentSchema[dataType].parameter.find(
       (para) => para.name === key || para.name === key + "Id"
     );
@@ -30,10 +31,12 @@ export const getArrInput = (dataType, sizeFields, currentSchema) => {
     arrInput_ = [getInputField(dataType, "object")];
     schemaFields.forEach((column) => {
       const key = column.name;
-      if (key.includes("__type")) return;
+
+      if (key.includes("__type") || key === "id") return;
       if (!isSearchParameter(key)) return;
 
-      let typeColumn = getTypeColumnBySchema(column.name, schemaFields);
+      let result = getTypeColumnBySchema(column.name, schemaFields);
+      let typeColumn = result[0];
 
       let inputField = getInputField(column.name, typeColumn);
 
@@ -51,10 +54,13 @@ export const getArrInput = (dataType, sizeFields, currentSchema) => {
 
   loopKeysTable();
   addFuzzySearch(arrInput_);
+
   return arrInput_;
 };
 
 export const getIdentifierField = (schemaField) => {
+  // console.log("field.......", schemaField);
+
   let identifierField = schemaField.fields.find((field) => {
     if (!field.type.ofType) return false;
     return field.type.ofType.name === "ID";

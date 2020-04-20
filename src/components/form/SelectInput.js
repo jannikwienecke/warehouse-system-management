@@ -15,6 +15,7 @@ const errorStyles = {
 const SelectInput = (props) => {
   const state = useSelector((state) => state);
   const { input, values, formFunc, errors } = props;
+
   const _parse = () => {
     if (input.setOptions) {
       input["options"] = input.setOptions(state, input.name);

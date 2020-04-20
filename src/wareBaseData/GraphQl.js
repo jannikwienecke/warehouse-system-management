@@ -15,7 +15,7 @@ import { GraphqlTable } from "./GraphqlTable";
 const UPDATE_BTN_TEXT = "Ändern";
 
 const GraphQl = (props) => {
-  const [dataType, setDataType] = useState("packagings");
+  const [dataType, setDataType] = useState("rows");
   const [successScreen, showSuccessScreen] = useState(null);
   const [newElementForm, showNewElementForm] = useState(null);
 

@@ -21,6 +21,9 @@ export const getInputField = (name, typeColumn) => {
   const handleObjectType = () => {
     input = getField(name);
     if (!input) input = getField(name + "s", name + "s");
+    if (!input) {
+      input = getField(name.slice(0, -1) + "ies", name.slice(0, -1) + "ies");
+    }
   };
   const handleNonObjectTypes = () => {
     input = getField(typeColumn, name);
@@ -118,6 +121,12 @@ export const INPUT = {
   products: () => setInput("products", "id", "name"),
   employees: () => setInput("employees", "id", "name"),
   packagings: () => setInput("packagings", "id", "name"),
+  customers: () => setInput("customers", "id", "name"),
+  symbuildings: () => setInput("symbuildings", "id", "name"),
+  symfactories: () => setInput("symfactories", "id", "name"),
+  warehouses: () => setInput("warehouses", "id", "name"),
+  compartments: () => setInput("compartments", "id", "name"),
+  rows: () => setInput("rows", "id", "name"),
   boolean: (name) => setInput(name, "value", "label", booleanValues),
 
   dateStart: {
@@ -207,4 +216,10 @@ export const OPTIONS_BASE_DATA = [
   { value: "products", label: "Produkte" },
   { value: "packagings", label: "Verpackungen" },
   { value: "employees", label: "Mitarbeiter" },
+  { value: "customers", label: "Kunden" },
+  { value: "symfactories", label: "Werke Sym." },
+  { value: "symbuildings", label: "Gebäude Sym" },
+  { value: "warehouses", label: "Lager" },
+  { value: "compartments", label: "Abteilung" },
+  { value: "rows", label: "Reihen" },
 ];

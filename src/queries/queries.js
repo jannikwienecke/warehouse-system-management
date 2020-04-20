@@ -28,10 +28,51 @@ export const QUERY_DICT = {
   },
   employees: {
     get: "employees",
-    // put: "updatePackaging",
-    // delete: "deletePackaging",
+    put: "updateEmployee",
+    delete: "deleteEmployee",
     post: "createEmployee",
   },
+
+  customers: {
+    get: "customers",
+    put: "updateCustomer",
+    delete: "deleteCustomer",
+    post: "createCustomer",
+  },
+
+  symbuildings: {
+    get: "symbuildings",
+    put: "updateSymbuilding",
+    delete: "deleteSymbuilding",
+    post: "createSymbuilding",
+  },
+  symfactories: {
+    get: "symfactories",
+    put: "updateSymfactory",
+    delete: "deleteSymfactory",
+    post: "createSymfactory",
+  },
+  warehouses: {
+    get: "warehouses",
+    put: "updateWarehouse",
+    delete: "deleteWarehouse",
+    post: "createWarehouse",
+  },
+
+  compartments: {
+    get: "compartments",
+    put: "updateCompartment",
+    delete: "deleteCompartment",
+    post: "createCompartment",
+  },
+
+  rows: {
+    get: "rows",
+    put: "updateRow",
+    delete: "deleteRow",
+    post: "createRow",
+  },
+
   __schema: {
     get: "__schema",
   },
@@ -39,39 +80,19 @@ export const QUERY_DICT = {
 
 export const nullQuery = gql`
   query {
-    test
+    employees {
+      id
+    }
   }
 `;
 
 export const nullMutation = gql`
   mutation {
-    test
+    nullQuery
   }
 `;
 
 export const RETURN_VALUES = {
-  products: `
-      id
-      name
-      productNumber
-      threeInRow
-      packaging {
-        name
-      }
-      notesPicking
-      notesPutaway
-  `,
-  packagings: `
-    id
-    name
-    length
-    width
-`,
-  employees: `
-    id
-    name
-
-`,
   __schema: `
       queryType {
         name
@@ -170,7 +191,17 @@ export const RETURN_VALUES = {
 `,
 };
 
-const INIT_TYPES = ["products", "packagings", "employees"];
+const INIT_TYPES = [
+  "products",
+  "packagings",
+  "employees",
+  "customers",
+  "symbuildings",
+  "symfactories",
+  "warehouses",
+  "compartments",
+  "rows",
+];
 
 export const useInitQuery = (store) => {
   const [currentSchema, setCurrentSchema] = useState(null);
@@ -181,6 +212,8 @@ export const useInitQuery = (store) => {
 
   useEffect(() => {
     if (data && data.__schema) {
+      // console.log("SCHE", data.__schema);
+
       store.dispatch(setSchema(data.__schema));
       set__schema(data.__schema);
     } else if (data) {
@@ -210,6 +243,7 @@ export const useInitQuery = (store) => {
     var schemaMapper = {};
     INIT_TYPES.forEach((type) => {
       const schema = findModelSchema(type, __schema);
+
       schemaMapper[type] = schema;
     });
 

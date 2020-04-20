@@ -46,9 +46,9 @@ export const useGraphqlApi = (dataType, options) => {
   }, [dataType, currentSchema]);
 
   useEffect(() => {
-    if (tableData.length > 0 && tableColumns.length === 0) {
-      setTableColumns(getTableColumns());
-    }
+    // if (tableData.length > 0 && tableColumns.length === 0) {
+    setTableColumns(getTableColumns());
+    // }
   }, [tableData]);
 
   useEffect(() => {
@@ -69,10 +69,13 @@ export const useGraphqlApi = (dataType, options) => {
   };
 
   const getTableColumns = () => {
+    // console.log("data", dataType);
+
     let columnFields = currentSchema[dataType].fields;
     let columns = [];
     columnFields.forEach((column) => {
-      let type = getTypeColumnBySchema(column.name, columnFields);
+      let result = getTypeColumnBySchema(column.name, columnFields);
+      let type = result[0];
       if (type === "object") return null;
 
       columns.push([translate(column.name), column.name]);

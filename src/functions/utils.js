@@ -229,8 +229,6 @@ export const createErrListFromApiError = (
       )}`;
       dispatch(showAlert(msgPrefix + errMsg));
     });
-
-    // errorList.forEach((errMsg) => store.dispatch(showAlert(errMsg)));
   });
   const errorMsg = errorList[0].message;
   const errorParameter = _extractErrorParameter(errorMsg);
@@ -255,9 +253,16 @@ export const findModelSchema = (dataType, __schema) => {
   };
 
   const _getModelType = (nameToFind) => {
-    return __schema.types.find((type) =>
-      type.name.toLowerCase().includes(nameToFind.toLowerCase().slice(0, -1))
-    );
+    nameToFind =
+      nameToFind.length > 5
+        ? nameToFind.toLowerCase().slice(0, -3)
+        : nameToFind.toLowerCase().slice(0, -1);
+    var modelType_ = __schema.types.find((type) => {
+      // console.log("NAME TO FIND", nameToFind);
+
+      return type.name.toLowerCase().includes(nameToFind);
+    });
+    return Object.assign({}, modelType_);
   };
 
   const _updateSchema = (name, fields) => {
@@ -266,6 +271,7 @@ export const findModelSchema = (dataType, __schema) => {
 
       return ofType && ofType.name === name;
     });
+
     modelToUpdate["fields"] = fields;
   };
 
@@ -276,11 +282,10 @@ export const findModelSchema = (dataType, __schema) => {
       if (ofType && ofType.kind === "OBJECT") {
         const nameOfType = field.type.ofType.name;
 
+        // const modelType = _getModelType(nameOfType);
         const modelType = _getModelType(nameOfType);
-        // console.log("MODEL", modelType);
-        modelType.fields = modelType.fields.filter((field) => {
-          // console.log("FIELD = ", field);
 
+        modelType.fields = modelType.fields.filter((field) => {
           if (!field.type.ofType) return true;
           if (field.type.ofType.kind !== "OBJECT") return true;
         });
@@ -292,19 +297,71 @@ export const findModelSchema = (dataType, __schema) => {
 
   let schema;
   _getSchema();
+
   let modelType = _getModelType(dataType);
+
   _parse();
+
   modelType["parameter"] = schema.args;
+
+  // if (dataType === "compartments") {
+  //   modelType.fields.push(WarehouseType);
+  // }
+
   return modelType;
+};
+
+const WarehouseType = {
+  name: "warehouse",
+  fields: [{ name: "id" }, { name: "name" }],
+  type: {
+    kind: "NON_NULL",
+    name: null,
+    ofType: {
+      kind: "OBJECT",
+      name: "WarehouseType",
+      ofType: null,
+    },
+  },
+};
+
+const ProductType = {
+  name: "product",
+  fields: [{ name: "id" }, { name: "name" }],
+  type: {
+    kind: "NON_NULL",
+    name: null,
+    ofType: {
+      kind: "OBJECT",
+      name: "ProductType",
+      ofType: null,
+    },
+  },
+};
+
+const CompartmentType = {
+  name: "compartment",
+  fields: [{ name: "id" }, { name: "name" }],
+  type: {
+    kind: "NON_NULL",
+    name: null,
+    ofType: {
+      kind: "OBJECT",
+      name: "CompartmentType",
+      ofType: null,
+    },
+  },
 };
 
 export const getTypeColumnBySchema = (columnName, schemaFields) => {
   if (columnName === "search") return "string";
 
-  const schemaColumn = schemaFields.find(
-    (field) =>
-      field.name === columnName || field.name === columnName.slice(0, -1)
-  );
+  let toFind =
+    columnName.length > 4 ? columnName.slice(0, -3) : columnName.slice(0, -1);
+
+  const schemaColumn = schemaFields.find((field) => {
+    return field.name === columnName || field.name.includes(toFind);
+  });
 
   if (!schemaColumn) return;
 
@@ -318,7 +375,7 @@ export const getTypeColumnBySchema = (columnName, schemaFields) => {
   } else {
     typeColumn = typeColumn.name;
   }
-  return typeColumn.toLowerCase();
+  return [typeColumn.toLowerCase(), schemaColumn];
 };
 
 export const _parseColumns = (columnsArr) => {
