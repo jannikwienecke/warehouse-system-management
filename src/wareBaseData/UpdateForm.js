@@ -9,7 +9,7 @@ import { useMutation } from "react-apollo";
 import { nullMutation } from "../queries/queries";
 import { useSelector } from "react-redux";
 import { GraphQlForm } from "./GraphQlForm";
-import { UpdateFormElement } from "./UpdateFormElement";
+import ModularForm from "../components/form/ModularForm";
 
 export const UpdateForm = ({
   setValues,
@@ -79,10 +79,6 @@ export const UpdateForm = ({
 
   const runMutation = async () => {
     const id = parseInt(values["id"]);
-    console.log("UPDATE PARAMETER", updateParameter);
-    console.log("val", values);
-    console.log(dataType);
-
     const mutation_ = queryBuilder(
       [
         {
@@ -124,9 +120,9 @@ export const UpdateForm = ({
         submit={runDelete}
       />
       <ListWrapper>
-        <UpdateFormElement
+        <ModularForm
           arrInput={parseArrInput(arrInput, values, dataType)}
-          apiFunc={(parameter) => setUpdateParamter(parameter)}
+          submitFunc={(parameter) => setUpdateParamter(parameter)}
         />
       </ListWrapper>
 

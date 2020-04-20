@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Parent } from "../baseComponents/Parent";
 import { ListWrapper, ButtonWrapper } from "./StylesDetailView";
 import { MyButton } from "../components/button/MyButton";
-import { extractIdentifier } from "../functions/middleware";
 import { removeErrors } from "../functions/utils";
+import ModularForm from "../components/form/ModularForm";
 
 export const FormNewElement = ({
   arrInput,
@@ -50,16 +49,9 @@ export const FormNewElement = ({
   return (
     <>
       <ListWrapper>
-        <Parent
-          form={{
-            cardWrapper: false,
-            marginTop: "2rem",
-            arrInput: prepareArrInput(),
-            hideSubmitBtn: true,
-            middlewareParse: [extractIdentifier],
-            requiredArguments: [""],
-            apiFunc: (dispatch, parameter) => setValues(parameter),
-          }}
+        <ModularForm
+          arrInput={prepareArrInput()}
+          submitFunc={(parameter) => setValues(parameter)}
         />
       </ListWrapper>
 
@@ -72,5 +64,3 @@ export const FormNewElement = ({
     </>
   );
 };
-
-// z-index: 1;

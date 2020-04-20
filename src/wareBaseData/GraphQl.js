@@ -83,61 +83,6 @@ const GraphQl = (props) => {
             fetchData={fetchData}
             dataType={dataType}
           />
-
-          {/* <Parent
-            table={{
-              columnsArr: tableColumns,
-              data: tableData,
-              initFunc: (dispatch) => null,
-              middleware: [(data) => null],
-              clickRow: {
-                func: (rowData) => {
-                  return {
-                    header: rowData.original.name,
-                    btnList: [
-                      {
-                        func: (updatedRow) => null,
-                        text: UPDATE_BTN_TEXT,
-                      },
-                    ],
-                    children: (
-                      <DetailView
-                        rowData={rowData}
-                        arrInput={arrInput}
-                        dataType={dataType}
-                        client={props.client}
-                        trigger={UPDATE_BTN_TEXT}
-                        fetchData={fetchData}
-                      />
-                    ),
-                  };
-                },
-                baseComponent: {
-                  type: "Popup",
-                  settings: {
-                    height: "80vh",
-                    heightHeader: "35%",
-                    header: "Detail Ansicht",
-                  },
-                },
-              },
-            }}
-            form={{
-              formTitle: translate(dataType),
-              arrInput: arrInput,
-              btnText: "Neu Anlegen",
-              replaceFuncSubmit: {
-                func: () => showNewElementForm(true),
-                text: "Neu",
-              },
-
-              // middlewareValidation: [],
-              // middlewareParse: [],
-              // requiredArguments: [],
-              cardWrapper: true,
-              apiFunc: (dispatch, parameter) => fetchData(parameter),
-            }}
-          /> */}
         </>
       )}
     </>
