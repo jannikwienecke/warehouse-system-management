@@ -2,8 +2,40 @@ import { customers, products } from "../testData";
 import { mockAPI, translate } from "../functions/utils";
 export const IDENTIFIER = ["id", "value"];
 
+const TYPES = {
+  rows: "rows",
+  products: "products",
+  packagings: "packagings",
+  employees: "employees",
+  customers: "customers",
+  symbuildings: "symbuildings",
+  symfactories: "symfactories",
+  warehouses: "warehouses",
+  compartments: "compartments",
+  vehicles: "vehicles",
+};
+
+export const INIT_TYPES = [
+  TYPES.products,
+  TYPES.packagings,
+  TYPES.employees,
+  TYPES.customers,
+  TYPES.symbuildings,
+  TYPES.symfactories,
+  TYPES.warehouses,
+  TYPES.rows,
+  TYPES.compartments,
+  TYPES.vehicles,
+];
+
+export const SET_OPTIONS_BASE_DATA = () => {
+  return Object.keys(TYPES).map((key) => {
+    return { value: key, label: translate(key) };
+  });
+};
+
 const setInput = (name, identifier, labelName, funcReturnValue) => {
-  let input = Object.assign({}, INPUT.INPUT_BASE);
+  let input = Object.assign({}, INPUT_BASE);
   input.name = name;
   input.identifier = identifier;
   input.labelName = labelName;
@@ -20,7 +52,9 @@ const setInput = (name, identifier, labelName, funcReturnValue) => {
 export const getInputField = (name, typeColumn) => {
   const handleObjectType = () => {
     input = getField(name);
-    if (!input) input = getField(name + "s", name + "s");
+    if (!input) {
+      input = getField(name + "s", name + "s");
+    }
     if (!input) {
       input = getField(name.slice(0, -1) + "ies", name.slice(0, -1) + "ies");
     }
@@ -35,6 +69,7 @@ export const getInputField = (name, typeColumn) => {
   } else {
     handleNonObjectTypes();
   }
+
   return input;
 };
 
@@ -48,105 +83,19 @@ export const getField = (name, nameOverride) => {
   return Object.assign({}, input);
 };
 
-export const INPUT = {
-  INPUT_BASE: {
-    name: "",
-    placeholder: "",
-    type: "input",
-    identifier: "value",
-    labelName: "label",
-    size: 6,
-    setOptions: (state, name) => {
-      return state.base[name];
-    },
+const INPUT_BASE = {
+  name: "",
+  placeholder: "",
+  type: "input",
+  identifier: "value",
+  labelName: "label",
+  size: 6,
+  setOptions: (state, name) => {
+    return state.base[name];
   },
-  storage: {
-    type: "input",
-    name: "storage",
-    identifier: "row_id",
-    labelName: "row_name",
-    placeholder: "Lagerplatz",
-    setOptions: (options) => options[INPUT.storage.name],
-    func: (state) => {
-      return {
-        name: INPUT.storage.name,
-        data: state.base[INPUT.storage.name],
-      };
-    },
-  },
-  storageBridges: {
-    type: "input",
-    name: "storageBridges",
-    identifier: "bridge_id",
-    labelName: "bridge_number",
-    placeholder: "Brücke",
-    setOptions: (options) => options[INPUT.storageBridges.name],
-    func: (state) => {
-      return {
-        name: INPUT.storageBridges.name,
-        data: state.base[INPUT.storageBridges.name],
-      };
-    },
-  },
-  customers: {
-    type: "input",
-    name: "customers",
-    identifier: "customer_id",
-    labelName: "customer_name",
-    placeholder: "Kunde",
-    setOptions: (options) => options[INPUT.customers.name],
-    func: (state) => {
-      return {
-        name: INPUT.customers.name,
-        data: state.base[INPUT.customers.name],
-      };
-    },
-  },
+};
 
-  symBuildings: {
-    type: "input",
-    name: "symBuildings",
-    identifier: "symBuilding_id",
-    labelName: "symBuilding_name",
-    placeholder: "SYM Gebäude",
-    setOptions: (options) => options[INPUT.symBuildings.name],
-    func: (state) => {
-      return {
-        name: INPUT.symBuildings.name,
-        data: state.base[INPUT.symBuildings.name],
-      };
-    },
-  },
-
-  products: () => setInput("products", "id", "name"),
-  employees: () => setInput("employees", "id", "name"),
-  packagings: () => setInput("packagings", "id", "name"),
-  customers: () => setInput("customers", "id", "name"),
-  symbuildings: () => setInput("symbuildings", "id", "name"),
-  symfactories: () => setInput("symfactories", "id", "name"),
-  warehouses: () => setInput("warehouses", "id", "name"),
-  compartments: () => setInput("compartments", "id", "name"),
-  rows: () => setInput("rows", "id", "name"),
-  boolean: (name) => setInput(name, "value", "label", booleanValues),
-
-  dateStart: {
-    name: "dateStart",
-    placeholder: "Datum Beginn",
-    type: "date",
-    size: 6,
-  },
-  dateEnd: {
-    name: "dateEnd",
-    placeholder: "Datum Ende",
-    type: "date",
-    size: 6,
-  },
-  quantity: {
-    name: "quantity",
-    placeholder: "Anzahl",
-    type: "number",
-    size: 6,
-  },
+export const INPUT_DEFAULTS = {
   id: {
     name: "id",
     placeholder: "ID",
@@ -161,7 +110,7 @@ export const INPUT = {
   },
   text: {
     name: "text",
-    placeholder: "TEST TEXT!!!!",
+    placeholder: "Text",
     type: "text",
     size: 6,
   },
@@ -177,7 +126,22 @@ export const INPUT = {
     type: "number",
     size: 6,
   },
+  boolean: (name) => setInput(name, "value", "label", booleanValues),
 };
+
+const SET_INPUT_FIELDS = () => {
+  let inputs = {};
+  Object.keys(TYPES).forEach((key) => {
+    let id = key.id ? key.id : "id";
+    let name = key.name ? key.name : "name";
+
+    inputs[key] = () => setInput(key, id, name);
+  });
+
+  return inputs;
+};
+
+export const INPUT = Object.assign(INPUT_DEFAULTS, SET_INPUT_FIELDS());
 
 const booleanValues = [
   { label: "Ja", value: true },
@@ -212,14 +176,22 @@ export const COLUMNS = {
   factory: ["Werk", "factory"],
 };
 
-export const OPTIONS_BASE_DATA = [
-  { value: "products", label: "Produkte" },
-  { value: "packagings", label: "Verpackungen" },
-  { value: "employees", label: "Mitarbeiter" },
-  { value: "customers", label: "Kunden" },
-  { value: "symfactories", label: "Werke Sym." },
-  { value: "symbuildings", label: "Gebäude Sym" },
-  { value: "warehouses", label: "Lager" },
-  { value: "compartments", label: "Abteilung" },
-  { value: "rows", label: "Reihen" },
-];
+const toTitleCase = (x) => {
+  return x.slice(0, 1).toUpperCase() + x.slice(1);
+};
+const getSingularUpperCase = (key) => {
+  if (key.slice(-3) === "ies") {
+    key = key.replace("ies", "y");
+  }
+
+  return toTitleCase(key);
+};
+export const BASE_QUERIES = Object.keys(TYPES).map((type) => {
+  return {
+    [type]: {
+      get: type,
+      put: "update" + getSingularUpperCase(type),
+      // delete :
+    },
+  };
+});

@@ -5,9 +5,9 @@ import {
   getTypeColumnBySchema,
   _parseColumns,
 } from "../utils";
-import { queryBuilder } from "../../queries/queryBuilder";
+import { useQueryBuilder } from "./useQueryBuilder";
 import { useQuery } from "react-apollo";
-import { nullQuery } from "../../queries/queries";
+import { nullQuery } from "../../queries"
 import { useDispatch, useSelector } from "react-redux";
 import {
   getArrInput,
@@ -20,20 +20,21 @@ export const useGraphqlApi = (dataType, options) => {
   const [tableData, setTableData] = useState([]);
   const [tableColumns, setTableColumns] = useState([]);
   const [arrInput, setArrInput] = useState(null);
-  const [query, setQuery] = useState({ query: nullQuery });
-
+  const [parameter, setParameter] = useState(null);
   const currentSchema = useSelector((state) => state.base.currentSchema);
+  const query = useQueryBuilder([{ modelName: dataType, parameter }], "get");
 
-  const { data, error } = useQuery(query.query, {
-    ...query.options,
+  const { data, error } = useQuery(query, {
+    options,
     onError: (err) =>
       createErrListFromApiError(error, dispatch, "useGraphqlApi Fetching"),
   });
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (data) {
+    if (data && dataType in data) {
       setTableData(data[dataType]);
+      setArrInput(getArrInput(dataType, sizeFields, currentSchema));
     }
   }, [data]);
 
@@ -46,31 +47,16 @@ export const useGraphqlApi = (dataType, options) => {
   }, [dataType, currentSchema]);
 
   useEffect(() => {
-    // if (tableData.length > 0 && tableColumns.length === 0) {
-    setTableColumns(getTableColumns());
-    // }
+    if (tableData.length > 0) setTableColumns(getTableColumns());
   }, [tableData]);
-
-  useEffect(() => {
-    if (tableColumns.length > 0) {
-      setArrInput(getArrInput(dataType, sizeFields, currentSchema));
-    }
-  }, [tableColumns]);
 
   const fetchData = async (parameter) => {
     parameter = _parseParameter(parameter, dataType, currentSchema);
 
-    const query_ = queryBuilder(
-      [{ modelName: dataType, parameter }],
-      "get",
-      currentSchema
-    );
-    setQuery({ query: query_ });
+    setParameter(parameter);
   };
 
   const getTableColumns = () => {
-    // console.log("data", dataType);
-
     let columnFields = currentSchema[dataType].fields;
     let columns = [];
     columnFields.forEach((column) => {

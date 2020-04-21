@@ -68,13 +68,6 @@ export const setArrInputSize = (arr, size) => {
 };
 
 export const traceDataName = (state, toFind, traceKeys) => {
-  // RETURNS KEY HIERACHY TILL THE INPUT KEY IS FOUND
-  // obj = {
-  // person: {
-  // name : {last: Wienecke, first: Jannik}
-  // }
-  // }
-  // toFind 'first' --> ['person', ['name']]
   if (!state || typeof state !== "object" || state.length) {
     traceKeys = [];
     return;
@@ -262,6 +255,7 @@ export const findModelSchema = (dataType, __schema) => {
 
       return type.name.toLowerCase().includes(nameToFind);
     });
+
     return Object.assign({}, modelType_);
   };
 
@@ -269,29 +263,35 @@ export const findModelSchema = (dataType, __schema) => {
     var modelToUpdate = modelType.fields.find((field) => {
       const ofType = field.type.ofType;
 
-      return ofType && ofType.name === name;
+      return (ofType && ofType.name === name) || field.type.name === name;
     });
 
     modelToUpdate["fields"] = fields;
   };
 
+  const isObjectModel = (field) => {
+    const ofType = field.type.ofType;
+    if (ofType && ofType.kind === "OBJECT") {
+      return field.type.ofType.name;
+    }
+    if (field.type.kind === "OBJECT") {
+      return field.type.name;
+    }
+  };
+
   const _parse = () => {
     modelType.fields.forEach((field) => {
-      const ofType = field.type.ofType;
+      const nameOfType = isObjectModel(field);
+      if (!nameOfType) return;
 
-      if (ofType && ofType.kind === "OBJECT") {
-        const nameOfType = field.type.ofType.name;
+      const modelType = _getModelType(nameOfType);
 
-        // const modelType = _getModelType(nameOfType);
-        const modelType = _getModelType(nameOfType);
+      modelType.fields = modelType.fields.filter((field) => {
+        if (!field.type.ofType) return true;
+        if (field.type.ofType.kind !== "OBJECT") return true;
+      });
 
-        modelType.fields = modelType.fields.filter((field) => {
-          if (!field.type.ofType) return true;
-          if (field.type.ofType.kind !== "OBJECT") return true;
-        });
-
-        _updateSchema(nameOfType, modelType.fields);
-      }
+      _updateSchema(nameOfType, modelType.fields);
     });
   };
 
@@ -304,53 +304,7 @@ export const findModelSchema = (dataType, __schema) => {
 
   modelType["parameter"] = schema.args;
 
-  // if (dataType === "compartments") {
-  //   modelType.fields.push(WarehouseType);
-  // }
-
   return modelType;
-};
-
-const WarehouseType = {
-  name: "warehouse",
-  fields: [{ name: "id" }, { name: "name" }],
-  type: {
-    kind: "NON_NULL",
-    name: null,
-    ofType: {
-      kind: "OBJECT",
-      name: "WarehouseType",
-      ofType: null,
-    },
-  },
-};
-
-const ProductType = {
-  name: "product",
-  fields: [{ name: "id" }, { name: "name" }],
-  type: {
-    kind: "NON_NULL",
-    name: null,
-    ofType: {
-      kind: "OBJECT",
-      name: "ProductType",
-      ofType: null,
-    },
-  },
-};
-
-const CompartmentType = {
-  name: "compartment",
-  fields: [{ name: "id" }, { name: "name" }],
-  type: {
-    kind: "NON_NULL",
-    name: null,
-    ofType: {
-      kind: "OBJECT",
-      name: "CompartmentType",
-      ofType: null,
-    },
-  },
 };
 
 export const getTypeColumnBySchema = (columnName, schemaFields) => {
@@ -366,12 +320,15 @@ export const getTypeColumnBySchema = (columnName, schemaFields) => {
   if (!schemaColumn) return;
 
   let typeColumn = schemaColumn.type;
+
   if (typeColumn.ofType) {
     if (typeColumn.ofType.kind.toLowerCase() === "object") {
       typeColumn = typeColumn.ofType.kind;
     } else {
       typeColumn = typeColumn.ofType.name;
     }
+  } else if (typeColumn.kind.toLowerCase() === "object") {
+    typeColumn = "OBJECT";
   } else {
     typeColumn = typeColumn.name;
   }
@@ -394,5 +351,4 @@ export const _parseColumns = (columnsArr) => {
   }
 
   return columns;
-  // setColumns(columns_);
 };

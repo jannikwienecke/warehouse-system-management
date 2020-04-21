@@ -23,8 +23,8 @@ const columns = [
 const arrInput = [
   INPUT.customers,
   INPUT.products,
-  INPUT.dateStart,
-  INPUT.dateEnd,
+  // INPUT.dateStart,
+  // INPUT.dateEnd,
 ];
 
 setArrInputSize(arrInput, 6);

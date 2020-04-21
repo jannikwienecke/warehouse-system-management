@@ -5,7 +5,7 @@ import Pagination from "./Pagination";
 import TableHead from "./TableHead";
 import TableBody from "./TableBody";
 
-const Table = props => {
+const Table = (props) => {
   const {
     //user props
     handleClick,
@@ -27,14 +27,13 @@ const Table = props => {
     previousPage,
     setPageSize,
     selectedFlatRows,
-    state: { selectedRowIds, pageIndex, pageSize }
+    state: { selectedRowIds, pageIndex, pageSize },
   } = props;
 
   return (
     <>
       <Table_ {...getTableProps()}>
         <TableHead headerGroups={headerGroups} />
-
         <TableBody
           getTableBodyProps={getTableBodyProps}
           page={page}
@@ -42,7 +41,6 @@ const Table = props => {
           handleClick={handleClick}
         />
       </Table_>
-
       {pagination && (
         <Pagination
           canPreviousPage={canPreviousPage}

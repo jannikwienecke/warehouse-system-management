@@ -3,7 +3,11 @@ import { withApollo } from "react-apollo";
 
 import { translate } from "../functions/utils";
 import { Parent } from "../baseComponents/Parent";
-import { INPUT, OPTIONS_BASE_DATA } from "../baseComponents/base";
+import {
+  INPUT,
+  OPTIONS_BASE_DATA,
+  SET_OPTIONS_BASE_DATA,
+} from "../baseComponents/base";
 import DetailView from "./DetailView";
 import styled from "styled-components";
 import { MySelect } from "../components/select/MySelect";
@@ -15,7 +19,7 @@ import { GraphqlTable } from "./GraphqlTable";
 const UPDATE_BTN_TEXT = "Ändern";
 
 const GraphQl = (props) => {
-  const [dataType, setDataType] = useState("rows");
+  const [dataType, setDataType] = useState("vehicles");
   const [successScreen, showSuccessScreen] = useState(null);
   const [newElementForm, showNewElementForm] = useState(null);
 
@@ -66,7 +70,7 @@ const GraphQl = (props) => {
             <MySelect
               placeholder={"Stammdaten"}
               setValue={validateSelection}
-              optionData={OPTIONS_BASE_DATA}
+              optionData={SET_OPTIONS_BASE_DATA()}
             />
           </div>
 

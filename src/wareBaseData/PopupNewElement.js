@@ -8,24 +8,28 @@ import {
   createErrListFromApiError,
   removeErrors,
 } from "../functions/utils";
-import { queryBuilder, updateStore } from "../queries/queryBuilder";
+import {
+  useQueryBuilder,
+  useUpdateStore,
+} from "../functions/hooks.js/useQueryBuilder";
 import { useMutation } from "@apollo/react-hooks";
 import { useDispatch, useSelector } from "react-redux";
-import { nullQuery, QUERY_DICT, nullMutation } from "../queries/queries";
+import { QUERY_DICT, nullMutation } from "../queries";
 
 export const PopupNewElement = (props) => {
-  const { show, close, arrInput, dataType, client, fetchData } = props;
-
-  const dispatch = useDispatch();
-  const [mutation, setMutation] = useState({ mutation: nullMutation });
-  const [missingValues, setMissingValues] = useState(null);
-
-  const [addElement, { data, error, loading }] = useMutation(
-    mutation.mutation,
-    mutation.options
-  );
-
   const currentSchema = useSelector((state) => state.base.currentSchema);
+  const { show, close, arrInput, dataType, client, fetchData } = props;
+  const dispatch = useDispatch();
+  const [queryList, setQueryList] = useState(null);
+  const [missingValues, setMissingValues] = useState(null);
+  const query = useQueryBuilder(queryList, "post");
+  const updateStore = useUpdateStore(dataType);
+
+  const [addElement, { data, error, loading }] = useMutation(query, {
+    update: (cache, { data }) => {
+      updateStore(cache, data, { action: "post", currentSchema });
+    },
+  });
 
   useEffect(() => {
     if (error) {
@@ -40,35 +44,26 @@ export const PopupNewElement = (props) => {
 
   useEffect(() => {
     if (data) {
-      fetchData();
       removeErrors(arrInput);
       close();
     }
   }, [data]);
 
+  useEffect(() => {
+    if (queryList) {
+      setTimeout(() => {
+        addElement();
+      });
+    }
+  }, [queryList]);
+
   const runCreateMutation = async (values) => {
-    const mutation_ = queryBuilder(
-      [
-        {
-          modelName: dataType,
-          parameter: { ...values },
-        },
-      ],
-      "post",
-      currentSchema
-    );
-
-    setMutation({
-      mutation: mutation_,
-      options: {
-        update: (cache, { data }) =>
-          updateStore(cache, data, dataType, { action: "add", currentSchema }),
+    setQueryList([
+      {
+        modelName: dataType,
+        parameter: { ...values },
       },
-    });
-
-    setTimeout(() => {
-      addElement();
-    }, 10);
+    ]);
   };
 
   if (!show) return null;

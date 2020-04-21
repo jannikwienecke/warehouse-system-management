@@ -48,30 +48,6 @@ export const LayoutBase = ({ width, children }) => {
   return (
     <>
       {errorBanners.length > 0 && <ErrorWrapper>{errorBanners}</ErrorWrapper>}
-
-      {/* <Query query={FEED_QUERY}>
-        {({ loading, error, data, subscribeToMore }) => {
-          if (loading) return <div>Fetching</div>;
-          if (error) {
-            return (
-              <div>Error: {error.graphQLErrors.map((err) => err.message)}</div>
-            );
-          }
-
-          console.log("link==", data);
-
-          return (
-            <>
-              {data.links.map((link, index) => (
-                <p key={link.id} link={link} index={index}>
-                  {link.url}
-                </p>
-              ))}
-            </>
-          );
-        }}
-      </Query> */}
-
       <Layout>
         <OpenSidebarBtn
           isVisible={isVisible}

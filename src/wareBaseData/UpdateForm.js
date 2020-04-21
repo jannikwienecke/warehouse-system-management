@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { ListWrapper, ButtonWrapper } from "./StylesDetailView";
 import { Parent } from "../baseComponents/Parent";
-import { queryBuilder, updateStore } from "../queries/queryBuilder";
+import {
+  useQueryBuilder,
+  useUpdateStore,
+} from "../functions/hooks.js/useQueryBuilder";
 import { extractIdentifier } from "../functions/middleware";
 import { MyButton } from "../components/button/MyButton";
 import { ValidateDeleteModal } from "./ValidateDeleteModal";
 import { useMutation } from "react-apollo";
-import { nullMutation } from "../queries/queries";
+import { nullMutation } from "../queries";
 import { useSelector } from "react-redux";
 import { GraphQlForm } from "./GraphQlForm";
 import ModularForm from "../components/form/ModularForm";
@@ -23,25 +26,35 @@ export const UpdateForm = ({
   const [updateParameter, setUpdateParamter] = useState(null);
   const [mutationResult, setMutationResult] = useState(null);
   const [validateDelete, setValidateDelete] = useState(null);
-  const [mutation, setMutation] = useState({ mutation: nullMutation });
-  const [updateElement, { data, error, loading }] = useMutation(
-    mutation.mutation,
-    mutation.options
-  );
+  const [queryType, setQueryType] = useState("put");
+  const [queryList, setQueryList] = useState();
+  const query = useQueryBuilder(queryList, queryType);
+  const updateStore = useUpdateStore(dataType);
+
+  const [updateElement, { data, error, loading }] = useMutation(query, {
+    update: (cache, { data }) => {
+      updateStore(cache, data, {
+        action: queryType,
+        currentSchema,
+        id: values.id,
+      });
+    },
+  });
 
   const currentSchema = useSelector((state) => state.base.currentSchema);
 
   useEffect(() => {
-    if (mutation && mutation.options) {
-      updateElement();
+    if (queryList && query) {
+      setTimeout(() => {
+        updateElement();
+        setRow(null);
+        setValues(null);
+      }, 10);
     }
-  }, [mutation]);
+  }, [queryList, query]);
 
   useEffect(() => {
     if (data) {
-      setRow(null);
-      setValues(null);
-      fetchData();
     }
   }, [data]);
 
@@ -53,54 +66,24 @@ export const UpdateForm = ({
 
   const runDelete = async () => {
     const id = parseInt(values["id"]);
-    const mutation_ = queryBuilder(
-      [
-        {
-          modelName: dataType,
-          parameter: { id },
-        },
-      ],
-      "delete",
-      currentSchema,
-      ["id"]
-    );
-    setMutation({
-      mutation: mutation_,
-      options: {
-        update: (cache, { data }) =>
-          updateStore(cache, data, dataType, {
-            action: "delete",
-            id,
-            currentSchema,
-          }),
+    setQueryType("delete");
+    setQueryList([
+      {
+        modelName: dataType,
+        parameter: { id },
       },
-    });
+    ]);
   };
 
   const runMutation = async () => {
     const id = parseInt(values["id"]);
-    const mutation_ = queryBuilder(
-      [
-        {
-          modelName: dataType,
-          parameter: { id, ...updateParameter },
-        },
-      ],
-      "put",
-      currentSchema
-    );
-
-    setMutation({
-      mutation: mutation_,
-      options: {
-        update: (cache, { data }) =>
-          updateStore(cache, data, dataType, {
-            action: "update",
-            id,
-            currentSchema,
-          }),
+    setQueryType("put");
+    setQueryList([
+      {
+        modelName: dataType,
+        parameter: { id, ...updateParameter },
       },
-    });
+    ]);
   };
 
   const updateValues = () => {

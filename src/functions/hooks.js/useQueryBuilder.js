@@ -1,16 +1,36 @@
 import gql from "graphql-tag";
 
-import { RETURN_VALUES, QUERY_DICT, QUERY_TRANSLATE } from "./queries";
-import { getTypeColumnBySchema } from "../functions/utils";
-import { getIdentifierField } from "../wareBaseData/helperUseGraphql";
+import {
+  RETURN_VALUES,
+  QUERY_TRANSLATE,
+  nullQuery,
+  nullMutation,
+} from "../../queries";
+import { getTypeColumnBySchema } from "../utils";
+import { getIdentifierField } from "../../wareBaseData/helperUseGraphql";
+import { useSelector } from "react-redux";
+import { useState, useEffect } from "react";
 
 const numberTypes = ["boolean", "number", "id", "int"];
-export const queryBuilder = (
+export const useQueryBuilder = (
   queryList,
   queryType = "get",
-  schema,
+  options,
   returnValues = null
 ) => {
+  const [query, setQuery] = useState(
+    queryType === "get" ? nullQuery : nullMutation
+  );
+
+  const __schema = useSelector((state) => state.base.__schema);
+  const schema = useSelector((state) => state.base.currentSchema);
+
+  useEffect(() => {
+    if (queryList && queryType) {
+      loopQueries();
+    }
+  }, [queryList, queryType]);
+
   const setQueryString = (parameter, modelName) => {
     let queryStr = "";
     if (!parameter) return queryStr;
@@ -72,6 +92,8 @@ export const queryBuilder = (
       let schemaModel = _getSchema();
 
       return schemaModel.fields.map((field) => {
+        // console.log("FIELD = ", field);
+
         if (field.name === "createdBy") return null;
 
         if (field.name.slice(-3) === "Set") return;
@@ -112,10 +134,14 @@ export const queryBuilder = (
   };
 
   const buildQuery = (queryName, queryStr, modelName) => {
-    if (schema === "__schema") {
+    if (options && options.queryName === "__schema") {
       var returnString = returnValues ? returnValues : RETURN_VALUES[modelName];
     } else {
-      var returnValues_ = buildReturnQuery(schema, modelName);
+      if (queryType === "delete") {
+        var returnValues_ = ["id"];
+      } else {
+        var returnValues_ = buildReturnQuery(schema, modelName);
+      }
 
       var returnString = createReturnString(returnValues_);
     }
@@ -127,36 +153,54 @@ export const queryBuilder = (
   `;
   };
 
-  const completeQuery = (type) => {
-    let str = "";
-    listBuiltQueries.forEach((query) => {
-      str += query + " ";
-    });
+  const getQueryName = (modelName) => {
+    const queryNameMapper = {
+      put: "update",
+      post: "create",
+      delete: "delete",
+    };
 
-    if (queryList[0].modelName !== "__schema") {
-      // console.log(str);
+    let query = queryNameMapper[queryType];
+    if (queryType === "get") {
+      return modelName;
     }
 
-    return gql`
+    // dbugger",
+    modelName =
+      modelName.slice(-3) === "ies"
+        ? modelName.replace("ies", "y")
+        : modelName.slice(0, -1);
+
+    let queryObject = __schema.types.find((type) => {
+      type = type.name.toLowerCase();
+      return type.includes(query) && type.includes(modelName);
+    });
+
+    let name = queryObject.name;
+    return name.slice(0, 1).toLowerCase() + name.slice(1);
+  };
+
+  const loopQueries = () => {
+    const completeQuery = (type) => {
+      let str = "";
+      listBuiltQueries.forEach((query) => {
+        str += query + " ";
+      });
+
+      if (queryList[0].modelName !== "__schema") {
+        console.log(str);
+      }
+
+      return gql`
       ${QUERY_TRANSLATE[queryType]} {
        ${str}
       }
     `;
-  };
+    };
 
-  const getQueryName = (modelName) => {
-    if (!QUERY_DICT[modelName] || !QUERY_DICT[modelName][queryType]) {
-      alert("NOT IMPLEMENTED");
-      return false;
-    }
-
-    return QUERY_DICT[modelName][queryType];
-  };
-
-  const loopQueries = () => {
+    var listBuiltQueries = [];
     queryList.map((query) => {
       var { modelName, parameter } = query;
-      // console.log("PARAMETER = ", parameter);
 
       const queryName = getQueryName(modelName, queryType);
       // console.log("queryname", queryName);
@@ -169,50 +213,45 @@ export const queryBuilder = (
       listBuiltQueries.push(builtQuery);
     });
 
-    return completeQuery();
+    setQuery(completeQuery());
   };
 
-  let listBuiltQueries = [];
-  return loopQueries();
+  return query;
 };
 
-export const updateStore = (cache, data, dataType, parameter) => {
-  const GET_ALL_ELEMENTS = queryBuilder(
-    [{ modelName: dataType }],
-    "get",
-    parameter.currentSchema
-  );
-  const response = cache.readQuery({ query: GET_ALL_ELEMENTS });
-  const fetchElements = data[Object.keys(data)[0]];
+export const useUpdateStore = (dataType) => {
+  const GET_ALL_ELEMENTS = useQueryBuilder([{ modelName: dataType }], "get");
 
-  const _add = () => {
-    return response[dataType].concat([fetchElements]);
-  };
-
-  const _update = () => {
-    return response[dataType].map((data) => {
-      if (parseInt(data.id) === parameter.id) {
-        return fetchElements;
-      } else {
-        return data;
-      }
+  const updateStore = (cache, data, parameter) => {
+    const response = cache.readQuery({ query: GET_ALL_ELEMENTS });
+    const fetchElements = data[Object.keys(data)[0]];
+    const _add = () => {
+      return response[dataType].concat([fetchElements]);
+    };
+    const _update = () => {
+      return response[dataType].map((data) => {
+        if (parseInt(data.id) == parameter.id) {
+          return fetchElements;
+        } else {
+          return data;
+        }
+      });
+    };
+    const _delete = () => {
+      return response[dataType].filter(
+        (data) => parseInt(data.id) !== parameter.id
+      );
+    };
+    const dict_func = {
+      put: _update,
+      delete: _delete,
+      post: _add,
+    };
+    cache.writeQuery({
+      query: GET_ALL_ELEMENTS,
+      data: { [dataType]: dict_func[parameter.action]() },
     });
   };
 
-  const _delete = () => {
-    return response[dataType].filter(
-      (data) => parseInt(data.id) !== parameter.id
-    );
-  };
-
-  const dict_func = {
-    update: _update,
-    delete: _delete,
-    add: _add,
-  };
-
-  cache.writeQuery({
-    query: GET_ALL_ELEMENTS,
-    data: { [dataType]: dict_func[parameter.action]() },
-  });
+  return updateStore;
 };

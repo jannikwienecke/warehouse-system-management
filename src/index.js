@@ -12,7 +12,7 @@ import App from "./App";
 import { setInitData } from "./baseComponents/store/actions";
 
 import { useDispatch } from "react-redux";
-import { INIT_QUERY } from "./queries/queries";
+import { INIT_QUERY } from "./queries";
 
 const httpLink = createHttpLink({
   uri: "http://localhost:8000/graphql/",

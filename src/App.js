@@ -20,9 +20,10 @@ import {
 import { MyStorage } from "./templates/MyStorage";
 import GraphQl from "./wareBaseData/GraphQl";
 import { createErrListFromApiError } from "./functions/utils";
-import { useInitQuery } from "./queries/queries";
 import { ModularGraphQl } from "./templates/ModularGraphQl";
 import { GraphQlForm } from "./templates/GraphQlForm";
+import { useInitQuery } from "./functions/hooks.js/useInitQuery";
+import { Loader } from "./common/Loader";
 
 const initializeData = (data) => {
   store.dispatch(setInitData(data));
@@ -45,30 +46,37 @@ const setError = (error) => {
 };
 
 export default function App() {
-  const { loadingInitData } = useInitQuery(store);
-
-  if (loadingInitData) return <h1>LOADING...</h1>;
   return (
     <Provider store={store}>
       <Router>
-        <div className="App">
-          <Switch>
-            <PageRouter exact path="/" component={GraphQl} />
-
-            <PageRouter
-              exact
-              path="/auslagerung"
-              component={DashboardAuslagerung}
-            />
-            <PageRouter
-              exact
-              path="/einlagerung"
-              component={DashboardEinlagerung}
-            />
-          </Switch>
-        </div>
+        <AppContent />
       </Router>
-      >
     </Provider>
   );
 }
+
+export const AppContent = () => {
+  const { loadingInitData } = useInitQuery();
+  if (loadingInitData) {
+    return <Loader marginTop="35vh" time={0} />;
+  }
+
+  return (
+    <div className="App">
+      <Switch>
+        <PageRouter exact path="/" component={GraphQl} />
+
+        <PageRouter
+          exact
+          path="/auslagerung"
+          component={DashboardAuslagerung}
+        />
+        <PageRouter
+          exact
+          path="/einlagerung"
+          component={DashboardEinlagerung}
+        />
+      </Switch>
+    </div>
+  );
+};
