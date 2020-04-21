@@ -26,10 +26,12 @@ export const UpdateForm = ({
   const [updateParameter, setUpdateParamter] = useState(null);
   const [mutationResult, setMutationResult] = useState(null);
   const [validateDelete, setValidateDelete] = useState(null);
-  const [queryType, setQueryType] = useState("put");
+  const [queryType, setQueryType] = useState(null);
   const [queryList, setQueryList] = useState();
   const query = useQueryBuilder(queryList, queryType);
   const updateStore = useUpdateStore(dataType);
+
+  console.log("queryType = ", queryType);
 
   const [updateElement, { data, error, loading }] = useMutation(query, {
     update: (cache, { data }) => {
@@ -46,23 +48,25 @@ export const UpdateForm = ({
   useEffect(() => {
     if (queryList && query) {
       setTimeout(() => {
+        console.log("RUN UPDATE........");
+
         updateElement();
         setRow(null);
         setValues(null);
       }, 10);
     }
-  }, [queryList, query]);
+  }, [query]);
 
   useEffect(() => {
     if (data) {
     }
   }, [data]);
 
-  useEffect(() => {
-    if (mutationResult) {
-      updateValues();
-    }
-  }, [mutationResult]);
+  // useEffect(() => {
+  //   if (mutationResult) {
+  //     updateValues();
+  //   }
+  // }, [mutationResult]);
 
   const runDelete = async () => {
     const id = parseInt(values["id"]);
@@ -95,6 +99,8 @@ export const UpdateForm = ({
     setRunFunc(null);
   };
 
+  console.log("INPUT = ", arrInput);
+
   return (
     <>
       <ValidateDeleteModal
@@ -104,6 +110,7 @@ export const UpdateForm = ({
       />
       <ListWrapper>
         <ModularForm
+          fullSize={true}
           arrInput={parseArrInput(arrInput, values, dataType)}
           submitFunc={(parameter) => setUpdateParamter(parameter)}
         />

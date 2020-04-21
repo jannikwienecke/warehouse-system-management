@@ -47,23 +47,24 @@ const ModularForm = (props) => {
   );
 
   return (
-    <Form>
-      <Header>
-        <Headline scheme={colorScheme}>{headline}</Headline>
-        <ButtonElement
-          scheme={colorScheme}
-          arrBtns={arrBtns}
-          formFunc={formFunc}
-        />
-      </Header>
-
+    <>
+      {headline && (
+        <Header>
+          <Headline scheme={colorScheme}>{headline}</Headline>
+          <ButtonElement
+            scheme={colorScheme}
+            arrBtns={arrBtns}
+            formFunc={formFunc}
+          />
+        </Header>
+      )}{" "}
       <FormElement
         {...props}
         formFunc={formFunc}
         errors={errors}
         values={values}
       />
-    </Form>
+    </>
   );
 };
 

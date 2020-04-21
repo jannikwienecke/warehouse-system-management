@@ -13,6 +13,8 @@ const TYPES = {
   warehouses: "warehouses",
   compartments: "compartments",
   vehicles: "vehicles",
+  tours: "tours",
+  withdrawals: "withdrawals",
 };
 
 export const INIT_TYPES = [
@@ -26,6 +28,8 @@ export const INIT_TYPES = [
   TYPES.rows,
   TYPES.compartments,
   TYPES.vehicles,
+  TYPES.tours,
+  TYPES.withdrawals,
 ];
 
 export const SET_OPTIONS_BASE_DATA = () => {

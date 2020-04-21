@@ -1,8 +1,15 @@
 import React from "react";
 import styled from "styled-components";
 
-const StandardInput = ({ input, values, formFunc, colorScheme, errors }) => {
-  // console.log("input error....", input);
+const StandardInput = ({
+  input,
+  values,
+  formFunc,
+  colorScheme,
+  errors,
+  isFullSize,
+}) => {
+  console.log("input fullsize....", isFullSize);
   // console.log("inpujt.errr", input.error);
 
   const hasError = () => {
@@ -22,6 +29,7 @@ const StandardInput = ({ input, values, formFunc, colorScheme, errors }) => {
 
   return (
     <InputElement
+      isFullSize={isFullSize}
       type={input.type}
       name={input.name}
       placeholder={input.placeholder ? input.placeholder : input.name}
@@ -52,8 +60,17 @@ const InputElement = styled.input`
   border: 0.04rem solid #cecece;
   position: relative;
   right: 1%;
+  padding-left: 1.5rem;
   background-color: transparent;
   // color: #efefef;
+
+      ${({ isFullSize }) =>
+        isFullSize &&
+        `
+        padding: .6rem;
+        padding-left: 1.5rem;
+
+`}
 
   ${({ error }) =>
     error &&
@@ -85,5 +102,6 @@ border: 1px solid red;
         color: #3f51b5;
 
 `}
+
   }
 `;

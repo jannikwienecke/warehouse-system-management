@@ -30,9 +30,12 @@ export const getArrInput = (dataType, sizeFields, currentSchema) => {
   const loopKeysTable = () => {
     arrInput_ = [getInputField(dataType, "object")];
     schemaFields.forEach((column) => {
+      // console.log("COLUMN====", column);
+
       const key = column.name;
 
       if (key.includes("__type") || key === "id") return;
+
       if (!isSearchParameter(key)) return;
 
       let result = getTypeColumnBySchema(column.name, schemaFields);
@@ -54,6 +57,8 @@ export const getArrInput = (dataType, sizeFields, currentSchema) => {
 
   loopKeysTable();
   addFuzzySearch(arrInput_);
+
+  // console.log("AdRR INPUT", arrInput_);
 
   return arrInput_;
 };

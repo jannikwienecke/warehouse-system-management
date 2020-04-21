@@ -14,7 +14,7 @@ const errorStyles = {
 
 const SelectInput = (props) => {
   const state = useSelector((state) => state);
-  const { input, values, formFunc, errors } = props;
+  const { input, values, formFunc, errors, isFullSize } = props;
 
   const _parse = () => {
     if (input.setOptions) {
@@ -50,11 +50,13 @@ const SelectInput = (props) => {
     }
   };
 
+  let className = input.class ? input.class : "formInput";
+  className = isFullSize ? className + " fullSize" : className;
   return (
     <>
       <Select
         components={makeAnimated()}
-        className={input.class ? input.class : "formInput"}
+        className={className}
         name={input.name}
         options={input.options}
         onBlur={formFunc.handleBlur}

@@ -19,7 +19,7 @@ import { GraphqlTable } from "./GraphqlTable";
 const UPDATE_BTN_TEXT = "Ändern";
 
 const GraphQl = (props) => {
-  const [dataType, setDataType] = useState("vehicles");
+  const [dataType, setDataType] = useState("tours");
   const [successScreen, showSuccessScreen] = useState(null);
   const [newElementForm, showNewElementForm] = useState(null);
 
@@ -40,6 +40,8 @@ const GraphQl = (props) => {
       setDataType(selection.option.value);
     }
   };
+
+  console.log("ARR", arrInput);
 
   return (
     <>

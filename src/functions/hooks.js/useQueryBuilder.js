@@ -14,7 +14,7 @@ import { useState, useEffect } from "react";
 const numberTypes = ["boolean", "number", "id", "int"];
 export const useQueryBuilder = (
   queryList,
-  queryType = "get",
+  queryType,
   options,
   returnValues = null
 ) => {
@@ -92,9 +92,7 @@ export const useQueryBuilder = (
       let schemaModel = _getSchema();
 
       return schemaModel.fields.map((field) => {
-        // console.log("FIELD = ", field);
-
-        if (field.name === "createdBy") return null;
+        if (["createdBy", "createdAt"].includes(field.name)) return null;
 
         if (field.name.slice(-3) === "Set") return;
 
@@ -188,7 +186,7 @@ export const useQueryBuilder = (
       });
 
       if (queryList[0].modelName !== "__schema") {
-        console.log(str);
+        // console.log(str);
       }
 
       return gql`
@@ -239,7 +237,7 @@ export const useUpdateStore = (dataType) => {
     };
     const _delete = () => {
       return response[dataType].filter(
-        (data) => parseInt(data.id) !== parameter.id
+        (data) => parseInt(data.id) !== parseInt(parameter.id)
       );
     };
     const dict_func = {
@@ -247,9 +245,11 @@ export const useUpdateStore = (dataType) => {
       delete: _delete,
       post: _add,
     };
+    var data_ = dict_func[parameter.action]();
+
     cache.writeQuery({
       query: GET_ALL_ELEMENTS,
-      data: { [dataType]: dict_func[parameter.action]() },
+      data: { [dataType]: data_ },
     });
   };
 
