@@ -31,7 +31,7 @@ export const Modal = ({
   };
 
   const childrenWithProps = React.Children.map(children, (child) =>
-    React.cloneElement(child, { isSubmitted: isSubmitted })
+    React.cloneElement(child, { isSubmitted, setValues })
   );
 
   // console.log("btnLIST = ", btnList);

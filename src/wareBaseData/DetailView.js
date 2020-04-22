@@ -7,8 +7,6 @@ import { UpdateForm } from "./UpdateForm";
 const DetailView = (props) => {
   const { rowData, isSubmitted, runFunc } = props;
 
-  console.log("ROW DATA = ", rowData);
-
   const [row, setRow] = useState(null);
 
   useEffect(() => {
@@ -18,8 +16,6 @@ const DetailView = (props) => {
   }, [rowData]);
 
   const rowDataList = () => {
-    console.log("ROW = ", row);
-
     const columns = Object.keys(row);
 
     return columns.map((column, index) => {

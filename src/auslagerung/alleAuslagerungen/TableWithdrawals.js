@@ -1,8 +1,7 @@
 import React from "react";
 import { Table } from "../../baseComponents/Table";
-import { ValidationModal } from "./ValidationModal";
 
-export const TableTours = ({
+export const TableWithdrawals = ({
   tableColumns,
   tableData,
   arrInput,
@@ -18,7 +17,7 @@ export const TableTours = ({
         clickRow={{
           func: (rowData) => {
             return {
-              children: <ValidationModal tour={rowData} />,
+              children: <h1>Tour Abschließen</h1>,
               props: {
                 header: "HEADDER NAME",
                 type: "Modal",

@@ -34,8 +34,6 @@ const Overview = ({ selectOpenTour, type }) => {
     dataType
   );
 
-  console.log("type", type);
-
   let openWithdrawals = type === "Offene Auslagerungen";
   return (
     <div style={{ marginTop: "2rem" }}>
@@ -58,9 +56,6 @@ const Overview = ({ selectOpenTour, type }) => {
         fetchData={fetchData}
         dataType={dataType}
         update={(openTour, x) => {
-          console.log("x = ", x);
-          console.log("open", openTour);
-
           selectOpenTour(openTour);
         }}
       />

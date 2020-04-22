@@ -21,17 +21,17 @@ export const getArrInput = (dataType, sizeFields, currentSchema) => {
 
   const isSearchParameter = (key) => {
     // debugger;
+
     var isSearchParameter = currentSchema[dataType].parameter.find(
       (para) => para.name === key || para.name === key + "Id"
     );
+
     if (isSearchParameter) return true;
   };
 
   const loopKeysTable = () => {
     arrInput_ = [getInputField(dataType, "object")];
     schemaFields.forEach((column) => {
-      // console.log("COLUMN====", column);
-
       const key = column.name;
 
       if (key.includes("__type") || key === "id") return;

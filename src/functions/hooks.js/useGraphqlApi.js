@@ -21,8 +21,8 @@ export const useGraphqlApi = (dataType, options) => {
   const [tableColumns, setTableColumns] = useState([]);
   const [arrInput, setArrInput] = useState(null);
   const [parameter, setParameter] = useState(null);
-  // const [parameter, setParameter] = useState(options && options.parameter);
   const currentSchema = useSelector((state) => state.base.currentSchema);
+
   const query = useQueryBuilder([{ modelName: dataType, parameter }], "get");
 
   const { data, error } = useQuery(query, {
@@ -52,8 +52,6 @@ export const useGraphqlApi = (dataType, options) => {
   }, [tableData]);
 
   const fetchData = (parameter) => {
-    console.log("para", parameter);
-
     parameter = _parseParameter(parameter, dataType, currentSchema);
 
     setParameter(parameter);

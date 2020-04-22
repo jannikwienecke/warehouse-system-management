@@ -26,6 +26,8 @@ import { useInitQuery } from "./functions/hooks.js/useInitQuery";
 import { Loader } from "./common/Loader";
 
 const initializeData = (data) => {
+  console.log("hier set init");
+
   store.dispatch(setInitData(data));
   const funcArr = [
     fetchCustomer,

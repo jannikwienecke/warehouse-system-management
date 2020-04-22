@@ -1,5 +1,7 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useGraphqlApi } from "../../functions/hooks.js/useGraphqlApi";
+import { TableTours } from "./TableTours";
+import { TableWithdrawals } from "./TableWithdrawals";
 
 function usePrevious(value) {
   const ref = useRef();
@@ -10,13 +12,21 @@ function usePrevious(value) {
 }
 
 export const SingleView = ({ tour, type, selectOpenTour }) => {
-  console.log("tours", tour);
+  const [dataType, setDataType] = useState(null);
   const { arrInput, tableData, tableColumns, fetchData } = useGraphqlApi(
-    "withdrawals",
-    {
-      parameter: { tours: { id: tour.original.id } },
-    }
+    dataType
   );
+
+  useEffect(() => {
+    console.log("tours", tour);
+    setDataType("withdrawals");
+  }, []);
+
+  useEffect(() => {
+    if (dataType) {
+      fetchData({ tours: { id: tour.original.id } });
+    }
+  }, [dataType]);
 
   let previousType = usePrevious(type);
 
@@ -28,5 +38,19 @@ export const SingleView = ({ tour, type, selectOpenTour }) => {
 
   console.log("tableData", tableData);
 
-  return <div>SINGLE VIEW</div>;
+  return (
+    <div>
+      SINGLE VIEW
+      <TableWithdrawals
+        tableColumns={tableColumns}
+        tableData={tableData}
+        arrInput={arrInput}
+        fetchData={fetchData}
+        dataType={"withdrawals"}
+        update={(openTour, x) => {
+          selectOpenTour(openTour);
+        }}
+      />
+    </div>
+  );
 };

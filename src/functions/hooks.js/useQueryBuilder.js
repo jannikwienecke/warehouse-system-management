@@ -26,8 +26,12 @@ export const useQueryBuilder = (
   const schema = useSelector((state) => state.base.currentSchema);
 
   useEffect(() => {
-    if (queryList && queryType) {
+    if (queryList && queryList.length > 0 && queryType) {
+      // console.log("LOOP QUER.......", queryList, queryType);
+
       loopQueries();
+    } else if (queryType && queryList.length == 0) {
+      setQuery(queryType === "get" ? nullQuery : nullMutation);
     }
   }, [queryList, queryType]);
 
@@ -36,8 +40,7 @@ export const useQueryBuilder = (
     if (!parameter) return queryStr;
     Object.keys(parameter).forEach((key) => {
       var val = parameter[key];
-
-      if (!val && val !== 0) return;
+      if (!val && val !== 0 && val !== false) return;
 
       if (key === modelName && val) {
         queryStr += `id: ${parseInt(val["id"])} `;
@@ -64,7 +67,9 @@ export const useQueryBuilder = (
       if (!type) return;
 
       if (type === "boolean") {
-        val = val.value;
+        if (typeof val !== "boolean") {
+          val = val.value;
+        }
       }
 
       if (numberTypes.includes(type)) {
@@ -90,7 +95,9 @@ export const useQueryBuilder = (
 
     const _loopFields = () => {
       let schemaModel = _getSchema();
-
+      if (!schemaModel.fields) {
+        return;
+      }
       return schemaModel.fields.map((field) => {
         if (["createdBy", "createdAt"].includes(field.name)) return null;
 
@@ -131,7 +138,9 @@ export const useQueryBuilder = (
     return str;
   };
 
-  const buildQuery = (queryName, queryStr, modelName) => {
+  const buildQuery = (queryName, queryStr, modelName, alias) => {
+    // console.log(queryName, queryStr, modelName, alias);
+
     if (options && options.queryName === "__schema") {
       var returnString = returnValues ? returnValues : RETURN_VALUES[modelName];
     } else {
@@ -143,9 +152,12 @@ export const useQueryBuilder = (
 
       var returnString = createReturnString(returnValues_);
     }
+    let queryAlias = queryType + "_" + "counter";
+
+    let aliasStr = alias ? `${alias}: ` : "";
 
     return `
-    ${queryName} ${queryStr}{
+    ${aliasStr} ${queryName} ${queryStr}{
       ${returnString}
     }
   `;
@@ -197,15 +209,22 @@ export const useQueryBuilder = (
     };
 
     var listBuiltQueries = [];
+    if (!queryList[0].modelName) {
+      setQuery(queryType === "get" ? nullQuery : nullMutation);
+      return;
+    }
     queryList.map((query) => {
-      var { modelName, parameter } = query;
+      var { modelName, parameter, alias } = query;
+
+      // console.log("mode", modelName);
+      // console.log("para", parameter);
 
       const queryName = getQueryName(modelName, queryType);
       // console.log("queryname", queryName);
 
       const queryStr = setQueryString(parameter, modelName);
 
-      const builtQuery = buildQuery(queryName, queryStr, modelName);
+      const builtQuery = buildQuery(queryName, queryStr, modelName, alias);
       // console.log(builtQuery);
 
       listBuiltQueries.push(builtQuery);
@@ -216,6 +235,12 @@ export const useQueryBuilder = (
 
   return query;
 };
+
+// '---------------------------------------'
+// '---------------------------------------'
+// '---------------------------------------'
+// '---------------------------------------'
+// '---------------------------------------'
 
 export const useUpdateStore = (dataType) => {
   const GET_ALL_ELEMENTS = useQueryBuilder([{ modelName: dataType }], "get");
@@ -245,12 +270,26 @@ export const useUpdateStore = (dataType) => {
       delete: _delete,
       post: _add,
     };
-    var data_ = dict_func[parameter.action]();
 
-    cache.writeQuery({
-      query: GET_ALL_ELEMENTS,
-      data: { [dataType]: data_ },
-    });
+    if (typeof parameter.id === "object") {
+      var idList = parameter.id.map((id) => id);
+      idList.forEach((id) => {
+        parameter.id = id;
+        var data_ = dict_func[parameter.action]();
+
+        cache.writeQuery({
+          query: GET_ALL_ELEMENTS,
+          data: { [dataType]: data_ },
+        });
+      });
+    } else {
+      var data_ = dict_func[parameter.action]();
+
+      cache.writeQuery({
+        query: GET_ALL_ELEMENTS,
+        data: { [dataType]: data_ },
+      });
+    }
   };
 
   return updateStore;

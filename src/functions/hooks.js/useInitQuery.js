@@ -14,18 +14,23 @@ export const useInitQuery = () => {
   const [__schema, set__schema] = useState(null);
   const [loadingInitData, setLoading] = useState(true);
   const [options, setOptions] = useState({ queryName: "__schema" });
+  const [polling, setPolling] = useState(true);
 
   const query = useQueryBuilder(queryList, "get", options);
-  const { data, loading, error } = useQuery(query);
+  const { data, loading, error, stopPolling } = useQuery(query);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
+    if (!polling) return;
+
     if (data && data.__schema) {
       dispatch(setSchema(data.__schema));
       set__schema(data.__schema);
     } else if (data) {
       saveData();
+      setPolling(false);
+      setQueryList([]);
     }
   }, [data]);
 

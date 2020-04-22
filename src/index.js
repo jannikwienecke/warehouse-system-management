@@ -14,6 +14,9 @@ import { setInitData } from "./baseComponents/store/actions";
 import { useDispatch } from "react-redux";
 import { INIT_QUERY } from "./queries";
 
+const TOKEN =
+  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiZXhwIjoxNTg3NTUyOTE2LCJvcmlnSWF0IjoxNTg3NTUyNjE2fQ.UGTdCIy2-I6MH4riRgt_ZfEJgG5c60_kBmmO6Q6qD-M";
+
 const httpLink = createHttpLink({
   uri: "http://localhost:8000/graphql/",
 });
@@ -23,7 +26,8 @@ const authLink = setContext((_, { headers }) => {
   return {
     headers: {
       ...headers,
-      authorization: token ? `JWT ${token}` : "",
+      // authorization: token ? `JWT ${token}` : "",
+      authorization: TOKEN ? `JWT ${TOKEN}` : "",
     },
   };
 });

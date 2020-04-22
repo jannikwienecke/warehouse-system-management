@@ -332,7 +332,8 @@ export const getTypeColumnBySchema = (columnName, schemaFields) => {
   } else {
     typeColumn = typeColumn.name;
   }
-  return [typeColumn.toLowerCase(), schemaColumn];
+  typeColumn = typeColumn ? typeColumn.toLowerCase() : typeColumn;
+  return [typeColumn, schemaColumn];
 };
 
 export const _parseColumns = (columnsArr) => {
