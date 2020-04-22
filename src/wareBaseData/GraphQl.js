@@ -41,8 +41,6 @@ const GraphQl = (props) => {
     }
   };
 
-  console.log("ARR", arrInput);
-
   return (
     <>
       <Parent

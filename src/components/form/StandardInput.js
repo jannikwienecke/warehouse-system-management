@@ -9,9 +9,6 @@ const StandardInput = ({
   errors,
   isFullSize,
 }) => {
-  console.log("input fullsize....", isFullSize);
-  // console.log("inpujt.errr", input.error);
-
   const hasError = () => {
     const name = input.name;
     if (errors[name]) {

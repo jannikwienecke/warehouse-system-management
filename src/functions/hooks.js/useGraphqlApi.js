@@ -7,7 +7,7 @@ import {
 } from "../utils";
 import { useQueryBuilder } from "./useQueryBuilder";
 import { useQuery } from "react-apollo";
-import { nullQuery } from "../../queries"
+import { nullQuery } from "../../queries";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getArrInput,
@@ -21,6 +21,7 @@ export const useGraphqlApi = (dataType, options) => {
   const [tableColumns, setTableColumns] = useState([]);
   const [arrInput, setArrInput] = useState(null);
   const [parameter, setParameter] = useState(null);
+  // const [parameter, setParameter] = useState(options && options.parameter);
   const currentSchema = useSelector((state) => state.base.currentSchema);
   const query = useQueryBuilder([{ modelName: dataType, parameter }], "get");
 
@@ -50,7 +51,9 @@ export const useGraphqlApi = (dataType, options) => {
     if (tableData.length > 0) setTableColumns(getTableColumns());
   }, [tableData]);
 
-  const fetchData = async (parameter) => {
+  const fetchData = (parameter) => {
+    console.log("para", parameter);
+
     parameter = _parseParameter(parameter, dataType, currentSchema);
 
     setParameter(parameter);

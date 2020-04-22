@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { NeueAuslagerung } from "./neueAuslagerung/NeueAuslagerung";
-import AlleAuslagerungen from "./alleAuslagerungen/alleAuslagerungen";
+import {
+  AlleAuslagerungen,
+  Auslagerungen,
+} from "./alleAuslagerungen/alleAuslagerungen";
 import Dashboard from "../baseComponents/Dashboard";
 
 import {
@@ -12,8 +15,8 @@ import {
 
 const components = {
   [NEUE_AUSLAGERUNG.name]: NeueAuslagerung,
-  [OFFENE_AUSLAGERUNGEN.name]: null,
-  [ALLE_AUSLAGERUNGEN.name]: AlleAuslagerungen,
+  [OFFENE_AUSLAGERUNGEN.name]: Auslagerungen,
+  [ALLE_AUSLAGERUNGEN.name]: Auslagerungen,
 };
 
 export const DashboardAuslagerung = () => {

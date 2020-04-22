@@ -31,8 +31,6 @@ export const UpdateForm = ({
   const query = useQueryBuilder(queryList, queryType);
   const updateStore = useUpdateStore(dataType);
 
-  console.log("queryType = ", queryType);
-
   const [updateElement, { data, error, loading }] = useMutation(query, {
     update: (cache, { data }) => {
       updateStore(cache, data, {
@@ -48,8 +46,6 @@ export const UpdateForm = ({
   useEffect(() => {
     if (queryList && query) {
       setTimeout(() => {
-        console.log("RUN UPDATE........");
-
         updateElement();
         setRow(null);
         setValues(null);
@@ -61,12 +57,6 @@ export const UpdateForm = ({
     if (data) {
     }
   }, [data]);
-
-  // useEffect(() => {
-  //   if (mutationResult) {
-  //     updateValues();
-  //   }
-  // }, [mutationResult]);
 
   const runDelete = async () => {
     const id = parseInt(values["id"]);
@@ -98,8 +88,6 @@ export const UpdateForm = ({
     setRow(values);
     setRunFunc(null);
   };
-
-  console.log("INPUT = ", arrInput);
 
   return (
     <>

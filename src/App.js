@@ -64,7 +64,8 @@ export const AppContent = () => {
   return (
     <div className="App">
       <Switch>
-        <PageRouter exact path="/" component={GraphQl} />
+        <PageRouter exact path="/" component={DashboardAuslagerung} />
+        <PageRouter exact path="/base" component={GraphQl} />
 
         <PageRouter
           exact
