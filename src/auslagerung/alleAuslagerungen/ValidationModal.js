@@ -10,7 +10,9 @@ export const ValidationModal = ({ tour, isSubmitted, setValues }) => {
   const { data, updateElement, query } = useUpdate(mutationParameter);
 
   useEffect(() => {
-    validateMutationResult();
+    if (data) {
+      validateMutationResult();
+    }
   }, [data]);
 
   useEffect(() => {
@@ -32,6 +34,11 @@ export const ValidationModal = ({ tour, isSubmitted, setValues }) => {
   }, [dataType]);
 
   const runMutationWithdrawals = () => {
+    if (tableData.length === 0) {
+      setValues(null);
+      return;
+    }
+
     let queryList = tableData.map((withdrawal, index) => {
       return {
         modelName: "withdrawals",

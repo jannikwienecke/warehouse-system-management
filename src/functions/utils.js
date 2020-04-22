@@ -353,3 +353,45 @@ export const _parseColumns = (columnsArr) => {
 
   return columns;
 };
+
+export const parseArrInput = (arrInput, values, dataType) => {
+  const handleInputType = (input) => {
+    const { name, identifier, labelName, id } = input;
+    const valueName = name.slice(0, -1);
+
+    let identifierVal;
+    let labelNameVal;
+
+    if (typeof values[name] === "boolean") {
+      identifierVal = values[name];
+      labelNameVal = identifierVal ? "Ja" : "Nein";
+    } else if (values[valueName]) {
+      identifierVal = values[valueName][identifier];
+      labelNameVal = values[valueName][labelName];
+    }
+
+    input.default = {
+      [identifier]: identifierVal,
+      [labelName]: labelNameVal,
+    };
+  };
+
+  const loopArr = () => {
+    arrInput.forEach((input) => {
+      if (ignoreInputList.includes(input.name)) {
+        return null;
+      } else if (input.type === "input") {
+        handleInputType(input);
+      } else {
+        input.default = values[input.name];
+      }
+      return arrInput_.push(input);
+    });
+  };
+
+  const ignoreInputList = ["search", "id", dataType];
+  let arrInput_ = [];
+  loopArr();
+
+  return arrInput_;
+};

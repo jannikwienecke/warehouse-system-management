@@ -210,6 +210,7 @@ export const useQueryBuilder = (
     var listBuiltQueries = [];
     if (!queryList[0].modelName) {
       setQuery(queryType === "get" ? nullQuery : nullMutation);
+      setQuery(queryType === "get" ? nullQuery : nullMutation);
       return;
     }
     queryList.map((query) => {

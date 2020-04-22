@@ -3,24 +3,27 @@ import { useSelector } from "react-redux";
 import { useQueryBuilder } from "./useQueryBuilder";
 import { useUpdateStore } from "./useUpdateStore";
 
-export const useUpdate = (mutationParameter) => {
-  mutationParameter = mutationParameter ? mutationParameter : {};
-
+export const useUpdate = ({
+  queryList,
+  type,
+  onCompleted,
+  dataType,
+  idsToUpdate,
+}) => {
   const currentSchema = useSelector((state) => state.base.currentSchema);
-  const query = useQueryBuilder(
-    mutationParameter.queryList,
-    mutationParameter.type
-  );
-  const updateStore = useUpdateStore(mutationParameter.dataType);
+  const query = useQueryBuilder(queryList, type);
+  const updateStore = useUpdateStore(dataType);
 
+  // let query = query ? query :
   const [updateElement, { data, error, loading }] = useMutation(query, {
     update: (cache, { data }) => {
       updateStore(cache, data, {
-        action: mutationParameter.type,
+        action: type,
         currentSchema,
-        id: mutationParameter.idsToUpdate,
+        id: idsToUpdate,
       });
     },
+    onCompleted,
   });
 
   return { updateElement, data, error, loading, query };

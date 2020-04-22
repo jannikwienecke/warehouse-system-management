@@ -8,7 +8,7 @@ export const QUERY_TRANSLATE = {
 
 export const nullQuery = gql`
   query {
-    employees {
+    nulls {
       id
     }
   }
@@ -16,7 +16,9 @@ export const nullQuery = gql`
 
 export const nullMutation = gql`
   mutation {
-    nullQuery
+    nullMutation {
+      id
+    }
   }
 `;
 
