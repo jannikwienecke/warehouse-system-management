@@ -7,14 +7,10 @@ import {
 import { useMutation } from "react-apollo";
 import { useSelector } from "react-redux";
 
-const useUpdate = (mutationParameter) => {};
+const useUpdate = (mutationParameter) => {
+  mutationParameter = mutationParameter ? mutationParameter : {};
 
-export const ValidationModal = ({ tour, isSubmitted, setValues }) => {
   const currentSchema = useSelector((state) => state.base.currentSchema);
-  const [dataType, setDataType] = useState(null);
-  const { tableData, fetchData } = useGraphqlApi(dataType);
-  const [mutationParameter, setMutationParameter] = useState({});
-
   const query = useQueryBuilder(
     mutationParameter.queryList,
     mutationParameter.type
@@ -30,6 +26,16 @@ export const ValidationModal = ({ tour, isSubmitted, setValues }) => {
       });
     },
   });
+
+  return { updateElement, data, query };
+};
+
+export const ValidationModal = ({ tour, isSubmitted, setValues }) => {
+  const [dataType, setDataType] = useState(null);
+  const { tableData, fetchData } = useGraphqlApi(dataType);
+  const [mutationParameter, setMutationParameter] = useState({});
+
+  const { data, updateElement, query } = useUpdate(mutationParameter);
 
   useEffect(() => {
     if (data) {

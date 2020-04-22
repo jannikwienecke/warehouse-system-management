@@ -23,8 +23,6 @@ import {
   compartments,
 } from "../../testData";
 
-// const apiCall = (obj) => setTimeout(() => obj, 200);
-
 export const setSchema = (schema) => (dispatch, getState) => {
   dispatch({ type: SET_SCHEMA, payload: schema });
 };

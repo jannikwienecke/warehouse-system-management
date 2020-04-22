@@ -8,8 +8,9 @@ import {
 } from "../../queries";
 import { getTypeColumnBySchema } from "../utils";
 import { getIdentifierField } from "../../wareBaseData/helperUseGraphql";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useState, useEffect } from "react";
+import { setInitData } from "../../baseComponents/store/actions";
 
 const numberTypes = ["boolean", "number", "id", "int"];
 export const useQueryBuilder = (
@@ -243,6 +244,8 @@ export const useQueryBuilder = (
 // '---------------------------------------'
 
 export const useUpdateStore = (dataType) => {
+  const dispatch = useDispatch();
+
   const GET_ALL_ELEMENTS = useQueryBuilder([{ modelName: dataType }], "get");
 
   const updateStore = (cache, data, parameter) => {
@@ -265,6 +268,25 @@ export const useUpdateStore = (dataType) => {
         (data) => parseInt(data.id) !== parseInt(parameter.id)
       );
     };
+
+    const writeChanges = (data_) => {
+      const writeRedux = () => {
+        dispatch(
+          setInitData({
+            [dataType]: data_,
+          })
+        );
+      };
+      const writeApollo = () => {
+        cache.writeQuery({
+          query: GET_ALL_ELEMENTS,
+          data: { [dataType]: data_ },
+        });
+      };
+      writeRedux();
+      writeApollo();
+    };
+
     const dict_func = {
       put: _update,
       delete: _delete,
@@ -276,19 +298,11 @@ export const useUpdateStore = (dataType) => {
       idList.forEach((id) => {
         parameter.id = id;
         var data_ = dict_func[parameter.action]();
-
-        cache.writeQuery({
-          query: GET_ALL_ELEMENTS,
-          data: { [dataType]: data_ },
-        });
+        writeChanges(data_);
       });
     } else {
       var data_ = dict_func[parameter.action]();
-
-      cache.writeQuery({
-        query: GET_ALL_ELEMENTS,
-        data: { [dataType]: data_ },
-      });
+      writeChanges(data_);
     }
   };
 
