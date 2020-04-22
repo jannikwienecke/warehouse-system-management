@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { ListWrapper, ButtonWrapper } from "./StylesDetailView";
 import { Parent } from "../baseComponents/Parent";
-import {
-  useQueryBuilder,
-  useUpdateStore,
-} from "../functions/hooks.js/useQueryBuilder";
+import { useQueryBuilder } from "../functions/hooks.js/useQueryBuilder";
 import { extractIdentifier } from "../functions/middleware";
 import { MyButton } from "../components/button/MyButton";
 import { ValidateDeleteModal } from "./ValidateDeleteModal";
@@ -13,6 +10,7 @@ import { nullMutation } from "../queries";
 import { useSelector } from "react-redux";
 import { GraphQlForm } from "./GraphQlForm";
 import ModularForm from "../components/form/ModularForm";
+import { useUpdateStore } from "../functions/hooks.js/useUpdateStore";
 
 export const UpdateForm = ({
   setValues,

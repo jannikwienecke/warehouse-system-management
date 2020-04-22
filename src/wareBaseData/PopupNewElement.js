@@ -8,13 +8,11 @@ import {
   createErrListFromApiError,
   removeErrors,
 } from "../functions/utils";
-import {
-  useQueryBuilder,
-  useUpdateStore,
-} from "../functions/hooks.js/useQueryBuilder";
+import { useQueryBuilder } from "../functions/hooks.js/useQueryBuilder";
 import { useMutation } from "@apollo/react-hooks";
 import { useDispatch, useSelector } from "react-redux";
 import { QUERY_DICT, nullMutation } from "../queries";
+import { useUpdateStore } from "../functions/hooks.js/useUpdateStore";
 
 export const PopupNewElement = (props) => {
   const currentSchema = useSelector((state) => state.base.currentSchema);

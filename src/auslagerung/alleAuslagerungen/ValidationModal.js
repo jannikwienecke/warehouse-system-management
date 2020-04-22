@@ -1,59 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { useGraphqlApi } from "../../functions/hooks.js/useGraphqlApi";
-import {
-  useQueryBuilder,
-  useUpdateStore,
-} from "../../functions/hooks.js/useQueryBuilder";
-import { useMutation } from "react-apollo";
-import { useSelector } from "react-redux";
-
-const useUpdate = (mutationParameter) => {
-  mutationParameter = mutationParameter ? mutationParameter : {};
-
-  const currentSchema = useSelector((state) => state.base.currentSchema);
-  const query = useQueryBuilder(
-    mutationParameter.queryList,
-    mutationParameter.type
-  );
-  const updateStore = useUpdateStore(mutationParameter.dataType);
-
-  const [updateElement, { data, error, loading }] = useMutation(query, {
-    update: (cache, { data }) => {
-      updateStore(cache, data, {
-        action: mutationParameter.type,
-        currentSchema,
-        id: mutationParameter.idsToUpdate,
-      });
-    },
-  });
-
-  return { updateElement, data, query };
-};
+import { useUpdate } from "../../functions/hooks.js/useUpdate";
 
 export const ValidationModal = ({ tour, isSubmitted, setValues }) => {
-  const [dataType, setDataType] = useState(null);
-  const { tableData, fetchData } = useGraphqlApi(dataType);
+  const [dataType, setDataType] = useState("withdrawals");
   const [mutationParameter, setMutationParameter] = useState({});
 
+  const { tableData, fetchData } = useGraphqlApi(dataType);
   const { data, updateElement, query } = useUpdate(mutationParameter);
 
   useEffect(() => {
-    if (data) {
-      console.log("done...", data);
-      if (Object.keys(data)[0].includes("updateWithdrawal")) {
-        setValues(null);
-      } else {
-        console.log("run widthdrawals....");
-        runMutationWithdrawals();
-      }
-    }
+    validateMutationResult();
   }, [data]);
 
   useEffect(() => {
     if (mutationParameter.queryList && query) {
-      setTimeout(() => {
-        updateElement();
-      }, 10);
+      updateElement();
     }
   }, [query]);
 
@@ -62,10 +24,6 @@ export const ValidationModal = ({ tour, isSubmitted, setValues }) => {
       runMutation();
     }
   }, [isSubmitted]);
-
-  useEffect(() => {
-    setDataType("withdrawals");
-  }, []);
 
   useEffect(() => {
     if (dataType) {
@@ -106,6 +64,16 @@ export const ValidationModal = ({ tour, isSubmitted, setValues }) => {
       dataType: "tours",
       idsToUpdate: id,
     });
+  };
+
+  const validateMutationResult = () => {
+    if (data) {
+      if (Object.keys(data)[0].includes("updateWithdrawal")) {
+        setValues(null);
+      } else {
+        runMutationWithdrawals();
+      }
+    }
   };
 
   return (
