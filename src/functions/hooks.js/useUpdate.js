@@ -23,5 +23,5 @@ export const useUpdate = (mutationParameter) => {
     },
   });
 
-  return { updateElement, data, query };
+  return { updateElement, data, error, loading, query };
 };

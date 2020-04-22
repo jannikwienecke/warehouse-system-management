@@ -28,10 +28,8 @@ export const useQueryBuilder = (
 
   useEffect(() => {
     if (queryList && queryList.length > 0 && queryType) {
-      // console.log("LOOP QUER.......", queryList, queryType);
-
       loopQueries();
-    } else if (queryType && queryList.length == 0) {
+    } else if (queryType && queryList && queryList.length == 0) {
       setQuery(queryType === "get" ? nullQuery : nullMutation);
     }
   }, [queryList, queryType]);

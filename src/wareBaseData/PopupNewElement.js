@@ -1,56 +1,46 @@
 import React, { useState, useEffect } from "react";
-
 import Popup from "../components/popup/Popup";
-import { Button } from "react-bootstrap";
 import { FormNewElement } from "./FormNewElement";
 import {
   translate,
   createErrListFromApiError,
   removeErrors,
 } from "../functions/utils";
-import { useQueryBuilder } from "../functions/hooks.js/useQueryBuilder";
-import { useMutation } from "@apollo/react-hooks";
-import { useDispatch, useSelector } from "react-redux";
-import { QUERY_DICT, nullMutation } from "../queries";
+import { useDispatch } from "react-redux";
 import { useUpdateStore } from "../functions/hooks.js/useUpdateStore";
+import { useUpdate } from "../functions/hooks.js/useUpdate";
 
 export const PopupNewElement = (props) => {
-  const currentSchema = useSelector((state) => state.base.currentSchema);
-  const { show, close, arrInput, dataType, client, fetchData } = props;
   const dispatch = useDispatch();
+
+  const { show, close, arrInput, dataType } = props;
   const [queryList, setQueryList] = useState(null);
   const [missingValues, setMissingValues] = useState(null);
-  const query = useQueryBuilder(queryList, "post");
-  const updateStore = useUpdateStore(dataType);
-
-  const [addElement, { data, error, loading }] = useMutation(query, {
-    update: (cache, { data }) => {
-      updateStore(cache, data, { action: "post", currentSchema });
-    },
+  const { data, error, updateElement } = useUpdate({
+    dataType,
+    type: "post",
+    queryList,
   });
 
   useEffect(() => {
     if (error) {
-      const { errorMsg, errorParameter } = createErrListFromApiError(
-        error,
-        dispatch
-      );
+      const { errorParameter } = createErrListFromApiError(error, dispatch);
 
       setMissingValues(errorParameter);
     }
-  }, [error]);
+  }, [error, dispatch]);
 
   useEffect(() => {
     if (data) {
       removeErrors(arrInput);
       close();
     }
-  }, [data]);
+  }, [data, close, arrInput]);
 
   useEffect(() => {
     if (queryList) {
       setTimeout(() => {
-        addElement();
+        updateElement();
       });
     }
   }, [queryList]);
