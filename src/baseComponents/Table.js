@@ -8,6 +8,7 @@ import { Modal } from "./Modal";
 import { Button } from "react-bootstrap";
 import { Popup_ } from "./Popup_";
 import { Empty } from "./Empty";
+import { usePrevious } from "../functions/hooks.js/usePrevious";
 
 const baseComponents = {
   Modal: Modal,
@@ -17,16 +18,19 @@ const baseComponents = {
 
 export const Table = ({
   tableData,
-  // columnsArr,
   columns,
   middleware,
   clickRow,
   filterFuncStack,
   parseFuncStack,
+  columnSelection,
+  onChildUnmounts,
 }) => {
   const [ClickRowComponent, setClickRowComponent] = useState(null);
   const [rowData, setRowData] = useState(null);
   const [preparedData, setPreparedData] = useState(null);
+
+  let prevRowData = usePrevious(rowData);
 
   useEffect(() => {
     if (tableData) {
@@ -35,6 +39,12 @@ export const Table = ({
       setPreparedData(data);
     }
   }, [tableData]);
+
+  useEffect(() => {
+    if (prevRowData && !rowData) {
+      if (onChildUnmounts) onChildUnmounts();
+    }
+  }, [rowData]);
 
   const parse = (data) => {
     if (parseFuncStack) {
@@ -83,12 +93,20 @@ export const Table = ({
     var BaseComponent = null;
   }
 
+  const filterColumns = () => {
+    if (!columns || columns.length === 0 || !columnSelection) return columns;
+
+    return columnSelection.map((column) => {
+      return columns.find((column_) => column === column_.accessor);
+    });
+  };
+
   return (
     <>
       <Wrapper>
         <ModularTable
           data={preparedData}
-          columns={columns}
+          columns={filterColumns()}
           pagination={true}
           handleClick={handleClick}
         />

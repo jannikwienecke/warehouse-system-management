@@ -75,7 +75,6 @@ export const getIdentifierField = (schemaField) => {
 
 export const _parseParameter = (parameter, dataType, currentSchema) => {
   if (!parameter) return parameter;
-
   let columnFields = currentSchema[dataType].fields;
 
   Object.keys(parameter).forEach((key) => {

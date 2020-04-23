@@ -35,6 +35,7 @@ const Overview = ({ selectOpenTour, type }) => {
   );
 
   let openWithdrawals = type === "Offene Auslagerungen";
+
   return (
     <div style={{ marginTop: "2rem" }}>
       {!openWithdrawals ? (
@@ -48,14 +49,13 @@ const Overview = ({ selectOpenTour, type }) => {
       )}
 
       <TableTours
+        openWithdrawals={openWithdrawals}
         tableColumns={tableColumns}
-        tableData={tableData.filter(
-          (data) => (data.isOpen && openWithdrawals) || !openWithdrawals
-        )}
+        tableData={tableData}
         arrInput={arrInput}
         fetchData={fetchData}
         dataType={dataType}
-        update={(openTour, x) => {
+        update={(openTour) => {
           selectOpenTour(openTour);
         }}
       />

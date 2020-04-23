@@ -5,9 +5,9 @@ import { FaAngleDown, FaAngleUp } from "react-icons/fa";
 const TableHead = ({ headerGroups }) => {
   return (
     <Head>
-      {headerGroups.map(headerGroup => (
+      {headerGroups.map((headerGroup) => (
         <TableRow {...headerGroup.getHeaderGroupProps()}>
-          {headerGroup.headers.map(column => {
+          {headerGroup.headers.map((column) => {
             return (
               <TableHeadInner
                 {...column.getHeaderProps(column.getSortByToggleProps())}
@@ -49,5 +49,6 @@ const TableHeadInner = styled.th`
   position: sticky;
   top: 0;
   box-shadow: 2px 5px 5px 0px rgba(0, 0, 0, 0.1);
+  width: 20px;
 `;
 const TableRow = styled.tr``;

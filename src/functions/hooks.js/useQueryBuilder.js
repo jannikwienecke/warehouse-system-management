@@ -67,7 +67,7 @@ export const useQueryBuilder = (
 
       if (type === "boolean") {
         if (typeof val !== "boolean") {
-          val = val.value;
+          val = val.value === "Ja" ? true : false;
         }
       }
 
@@ -97,8 +97,13 @@ export const useQueryBuilder = (
       if (!schemaModel.fields) {
         return;
       }
+
       return schemaModel.fields.map((field) => {
         if (["createdBy", "createdAt"].includes(field.name)) return null;
+        if (field.name.slice(-5) === "_name") {
+          console.log("RETURN HIER", field);
+          return;
+        }
 
         if (field.name.slice(-3) === "Set") return;
 
@@ -147,6 +152,7 @@ export const useQueryBuilder = (
         var returnValues_ = ["id"];
       } else {
         var returnValues_ = buildReturnQuery(schema, modelName);
+        // console.log("restul ", returnValues_);
       }
 
       var returnString = createReturnString(returnValues_);

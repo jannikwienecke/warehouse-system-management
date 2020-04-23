@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
 import { useSelector } from "react-redux";
+import { usePrevious } from "../../functions/hooks.js/usePrevious";
 
 const errorStyles = {
   control: (provided, state) => {
@@ -13,12 +14,15 @@ const errorStyles = {
 };
 
 const SelectInput = (props) => {
-  const state = useSelector((state) => state);
   const { input, values, formFunc, errors, isFullSize } = props;
+
+  const state = useSelector((state) => state);
+  const prevValues = usePrevious(values);
+  const [loading, setLoading] = useState(false);
 
   const _parse = () => {
     if (input.setOptions) {
-      input["options"] = input.setOptions(state, input.name);
+      input.options = input.setOptions(state, input.name);
     }
 
     input.options.map((option) => {
@@ -28,12 +32,22 @@ const SelectInput = (props) => {
     });
 
     if (input.default && typeof input.default === "object") {
-      input.default["value"] = input.default[input.identifier];
-      input.default["label"] = input.default[input.labelName];
+      if (input.options.length === 0) {
+        input.default = null;
+        return;
+      }
     }
-  };
 
-  if (input.identifier) _parse();
+      if (input.default && typeof input.default === "object") {
+        input.default["value"] = input.default[input.identifier];
+        input.default["label"] = input.default[input.labelName];
+      }
+    }
+  
+
+  if (input.identifier) {
+    _parse();
+  }
 
   const hasError = () => {
     const name = input.name;
@@ -52,12 +66,43 @@ const SelectInput = (props) => {
 
   let className = input.class ? input.class : "formInput";
   className = isFullSize ? className + " fullSize" : className;
-  return (
-    <>
+
+ 
+  if (values) {
+    var hasValues = Object.keys(values).find((name) => {
+      return values[name] && values[name].id;
+    });
+  } else {
+    var hasValues = false;
+  }
+  if (!hasValues) {
+    return (
+      <>
+        <Select
+          components={makeAnimated()}
+          className={className}
+          name={input.name}
+          options={input.options}
+          onBlur={formFunc.handleBlur}
+          onChange={(data) => formFunc.handleInputChange(data, input.name)}
+          isMulti={input.multiSelect}
+          defaultValue={input.default}
+          isDisabled={input.disable && true}
+          placeholder={input.placeholder ? input.placeholder : ""}
+          styles={hasError() ? errorStyles : {}}
+        />
+      </>
+    );
+  } else {
+    return (
       <Select
         components={makeAnimated()}
         className={className}
         name={input.name}
+        value={{
+          value: values[input.name].id,
+          label: values[input.name].name,
+        }}
         options={input.options}
         onBlur={formFunc.handleBlur}
         onChange={(data) => formFunc.handleInputChange(data, input.name)}
@@ -67,8 +112,8 @@ const SelectInput = (props) => {
         placeholder={input.placeholder ? input.placeholder : ""}
         styles={hasError() ? errorStyles : {}}
       />
-    </>
-  );
+    );
+  }
 };
 
 export default SelectInput;

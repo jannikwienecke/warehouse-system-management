@@ -38,6 +38,7 @@ export const myDictonary = {
   products: "Produkt",
   employees: "Mitarbeiter",
   customers: "Kunde",
+  vehicles: "Fahrzeug",
   chargennummer: "Chargennummer",
   datetime: "Datum",
   notes: "Notizen",
@@ -46,18 +47,30 @@ export const myDictonary = {
   id: "ID",
   packagings: "Verpackung",
   name: "Name",
-  productNumber: "Produkt Nr.",
-  notesPicking: "Notiz Auslagerung",
-  notesPutaway: "Notiz Einlagerung",
-  threeInRow: "3 Pal. Möglich",
+  productnumber: "Produkt Nr.",
+  notespicking: "Notiz Auslagerung",
+  notesputaway: "Notiz Einlagerung",
+  threeinrow: "3 Pal. Möglich",
+  tournumber: "Tour Nr.",
+  totalstockpositions: "Kapazität",
+  compartments: "Abteilung",
+  currentstockpositions: "Belegte Stellpläze",
+  warehouse: "Lager",
+  isopen: "Offen",
+  tours: "Tour",
+  row: "Reihe",
 };
 
 export const translate = (text, dictonary) => {
+  text = text.includes("_name") ? text.split("_name")[0] : text;
+  text = text.toLowerCase();
   let dictonary_ = dictonary ? dictonary : myDictonary;
   if (text in dictonary_) {
     return dictonary_[text];
   }
-
+  if (text + "s" in dictonary_) {
+    return dictonary_[text + "s"];
+  }
   return text;
 };
 
@@ -362,10 +375,11 @@ export const parseArrInput = (arrInput, values, dataType) => {
     let identifierVal;
     let labelNameVal;
 
-    if (typeof values[name] === "boolean") {
+    if (typeof values[name] !== "object") {
       identifierVal = values[name];
-      labelNameVal = identifierVal ? "Ja" : "Nein";
-    } else if (values[valueName]) {
+      labelNameVal = values[name];
+    }
+    if (values[valueName]) {
       identifierVal = values[valueName][identifier];
       labelNameVal = values[valueName][labelName];
     }
@@ -394,4 +408,8 @@ export const parseArrInput = (arrInput, values, dataType) => {
   loopArr();
 
   return arrInput_;
+};
+
+export const isQuery = (query) => {
+  return query && !query.loc.source.body.includes("nullMutation");
 };

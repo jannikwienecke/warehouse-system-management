@@ -29,7 +29,7 @@ export const ValidationModal = ({ tour, isSubmitted, setValues }) => {
 
   useEffect(() => {
     if (dataType) {
-      fetchData({ tours: { id: tour.original.id } });
+      fetchData({ tours: { id: tour.id } });
     }
   }, [dataType]);
 

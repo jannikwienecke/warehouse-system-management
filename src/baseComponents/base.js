@@ -95,7 +95,7 @@ const INPUT_BASE = {
   labelName: "label",
   size: 6,
   setOptions: (state, name) => {
-    return state.base[name];
+    return [...state.base[name]];
   },
 };
 
@@ -148,8 +148,8 @@ const SET_INPUT_FIELDS = () => {
 export const INPUT = Object.assign(INPUT_DEFAULTS, SET_INPUT_FIELDS());
 
 const booleanValues = [
-  { label: "Ja", value: true },
-  { label: "Nein", value: false },
+  { label: "Ja", value: "Ja" },
+  { label: "Nein", value: "Nein" },
 ];
 
 var ValidationException = {};

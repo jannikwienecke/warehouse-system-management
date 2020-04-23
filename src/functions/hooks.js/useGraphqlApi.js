@@ -16,24 +16,26 @@ import {
 
 const sizeFields = 6;
 
-export const useGraphqlApi = (dataType, options) => {
+export const useGraphqlApi = (dataType, options, parameter_) => {
   const [tableData, setTableData] = useState([]);
   const [tableColumns, setTableColumns] = useState([]);
   const [arrInput, setArrInput] = useState(null);
-  const [parameter, setParameter] = useState(null);
+  const [parameter, setParameter] = useState(parameter_);
   const currentSchema = useSelector((state) => state.base.currentSchema);
 
   const query = useQueryBuilder([{ modelName: dataType, parameter }], "get");
 
-  const { data, error } = useQuery(query, {
+  const { data, error, refetch } = useQuery(query, {
     options,
     onError: (err) =>
       createErrListFromApiError(error, dispatch, "useGraphqlApi Fetching"),
   });
+
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (data && dataType in data) {
+      extractNameValuesFromObjects();
       setTableData(data[dataType]);
       setArrInput(getArrInput(dataType, sizeFields, currentSchema));
     }
@@ -43,7 +45,7 @@ export const useGraphqlApi = (dataType, options) => {
     if (dataType && currentSchema) {
       setTableData([]);
       setTableColumns([]);
-      fetchData();
+      fetchData(parameter_);
     }
   }, [dataType, currentSchema]);
 
@@ -51,9 +53,32 @@ export const useGraphqlApi = (dataType, options) => {
     if (tableData.length > 0) setTableColumns(getTableColumns());
   }, [tableData]);
 
-  const fetchData = (parameter) => {
-    parameter = _parseParameter(parameter, dataType, currentSchema);
+  const extractNameValuesFromObjects = () => {
+    data[dataType].forEach((data) => {
+      Object.keys(data).forEach((name) => {
+        let val = data[name];
+        if (typeof val !== "object") {
+          if (typeof val === "boolean") {
+            data[name] = val ? "Ja" : "Nein";
+          }
+          return;
+        }
+        if (!val || (val && !val.name)) return;
 
+        if (name.slice(-5) === "_name") {
+          return;
+        }
+        data[name + "_name"] = val.name;
+      });
+    });
+  };
+
+  const fetchData = (parameter) => {
+    if (!dataType) {
+      console.log("Missing Datatype");
+      return;
+    }
+    parameter = _parseParameter(parameter, dataType, currentSchema);
     setParameter(parameter);
   };
 
@@ -61,14 +86,24 @@ export const useGraphqlApi = (dataType, options) => {
     let columnFields = currentSchema[dataType].fields;
     let columns = [];
     columnFields.forEach((column) => {
+      let nameColumn = column.name;
       let result = getTypeColumnBySchema(column.name, columnFields);
       let type = result[0];
-      if (type === "object") return null;
-
-      columns.push([translate(column.name), column.name]);
+      if (type === "object") {
+        if (column.name.slice(-5) !== "_name") {
+          nameColumn = nameColumn + "_name";
+        }
+      }
+      if (
+        ["createdAt", "createdBy"].includes(column.name) ||
+        column.name.slice(-3) === "Set"
+      )
+        return null;
+      columns.push([translate(nameColumn), nameColumn]);
     });
+
     return _parseColumns(columns);
   };
 
-  return { arrInput, tableColumns, tableData, fetchData };
+  return { arrInput, tableColumns, tableData, fetchData, refetch };
 };

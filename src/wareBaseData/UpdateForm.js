@@ -3,7 +3,7 @@ import { ListWrapper, ButtonWrapper } from "./StylesDetailView";
 import { MyButton } from "../components/button/MyButton";
 import { ValidateDeleteModal } from "./ValidateDeleteModal";
 import ModularForm from "../components/form/ModularForm";
-import { parseArrInput } from "../functions/utils";
+import { parseArrInput, isQuery } from "../functions/utils";
 import { useUpdate } from "../functions/hooks.js/useUpdate";
 
 export const UpdateForm = (props) => {
@@ -19,8 +19,7 @@ export const UpdateForm = (props) => {
   const { updateElement, query } = useUpdate(mutationParammeter);
 
   useEffect(() => {
-    console.log("query", query);
-    if (mutationParammeter.queryList && query) {
+    if (isQuery(query)) {
       updateElement();
     }
   }, [query]);

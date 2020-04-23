@@ -9,6 +9,7 @@ export const Popup_ = ({
   children,
   header,
   btnList,
+  hideSubmitBtn,
 }) => {
   const [showModal, setShowModal] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -35,10 +36,14 @@ export const Popup_ = ({
     setShowModal(true);
   }, [values]);
 
-  const defaultBtns = [
-    { func: _cancel, text: "Schließen" },
-    { func: _validate, text: "Submit" },
-  ];
+  if (hideSubmitBtn) {
+    var defaultBtns = [{ func: _cancel, text: "Schließen" }];
+  } else {
+    var defaultBtns = [
+      { func: _cancel, text: "Schließen" },
+      { func: _validate, text: "Submit" },
+    ];
+  }
 
   const wrapper = (func) => {
     const inner = () => {

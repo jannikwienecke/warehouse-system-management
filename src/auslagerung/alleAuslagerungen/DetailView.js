@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { withApollo } from "react-apollo";
-import { ListWrapper, ListItem, ValueText } from "./StylesDetailView";
-import { translate } from "../functions/utils";
+import {
+  ListWrapper,
+  ListItem,
+  ValueText,
+} from "../../wareBaseData/StylesDetailView";
+import { translate } from "../../functions/utils";
 import { UpdateForm } from "./UpdateForm";
 
 const DetailView = (props) => {

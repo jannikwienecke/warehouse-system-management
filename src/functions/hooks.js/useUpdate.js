@@ -14,7 +14,6 @@ export const useUpdate = ({
   const query = useQueryBuilder(queryList, type);
   const updateStore = useUpdateStore(dataType);
 
-  // let query = query ? query :
   const [updateElement, { data, error, loading }] = useMutation(query, {
     update: (cache, { data }) => {
       updateStore(cache, data, {
