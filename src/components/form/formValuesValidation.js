@@ -2,7 +2,10 @@ export default function validateAuth(values, requiredArguments, authFuncArr) {
   let errors = {};
 
   Object.entries(values).forEach(([key, value]) => {
-    if (requiredArguments && requiredArguments.includes(key)) {
+    if (
+      requiredArguments &&
+      (requiredArguments.includes(key) || requiredArguments.includes("all"))
+    ) {
       if ((!value && value !== 0) || value === "") {
         errors[key] = key + " is required";
       }
@@ -15,7 +18,7 @@ export default function validateAuth(values, requiredArguments, authFuncArr) {
   });
 
   if (authFuncArr) {
-    authFuncArr.forEach(func => {
+    authFuncArr.forEach((func) => {
       var error = func(values);
 
       if (error) errors[error.key] = error.msg;
@@ -25,7 +28,7 @@ export default function validateAuth(values, requiredArguments, authFuncArr) {
   return errors;
 }
 
-const validateEmail = email => {
+const validateEmail = (email) => {
   if (email == null) return;
   if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(email)) {
     return "Invalid email address";

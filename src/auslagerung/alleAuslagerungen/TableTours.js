@@ -59,7 +59,7 @@ export const TableTours = ({
   return (
     <div>
       <Table
-        filterFuncStack={openWithdrawals && [filterOpenWithdrawals]}
+        filterFuncStack={openWithdrawals ? [filterOpenWithdrawals] : []}
         columns={tableColumns}
         tableData={tableData}
         clickRow={!openWithdrawals ? PopupConfigurations : ModalConfigurations}

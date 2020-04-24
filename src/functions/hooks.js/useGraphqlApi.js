@@ -105,5 +105,5 @@ export const useGraphqlApi = (dataType, options, parameter_) => {
     return _parseColumns(columns);
   };
 
-  return { arrInput, tableColumns, tableData, fetchData, refetch };
+  return { arrInput, tableColumns, tableData, fetchData, refetch, data, error };
 };

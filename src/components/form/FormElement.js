@@ -48,6 +48,7 @@ const FormElement = (props) => {
 export default FormElement;
 
 const InputHolder = styled.div`
+  position: relative;
   // width: 10%;
   height: 30px;
   margin-bottom: 1rem;

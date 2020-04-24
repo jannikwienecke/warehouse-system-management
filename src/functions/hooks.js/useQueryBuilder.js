@@ -35,11 +35,31 @@ export const useQueryBuilder = (
   }, [queryList, queryType]);
 
   const setQueryString = (parameter, modelName) => {
+    const _validateVal = (val) => {
+      if (typeof val === "string") {
+        let val_ = parseInt(val);
+        if (String(val_) !== "NaN") {
+          val = val_;
+        }
+      }
+
+      if (typeof val === "number" && isNaN(val)) {
+        val = 0;
+      }
+      if (!val && val !== 0 && val !== false && val !== "") val = undefined;
+
+      return val;
+    };
+
     let queryStr = "";
     if (!parameter) return queryStr;
     Object.keys(parameter).forEach((key) => {
       var val = parameter[key];
-      if (!val && val !== 0 && val !== false) return;
+      console.log("BEFORE= ", val);
+      val = _validateVal(val);
+      console.log("VAL = ", val);
+
+      if (val === undefined) return;
 
       if (key === modelName && val) {
         queryStr += `id: ${parseInt(val["id"])} `;

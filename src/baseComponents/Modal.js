@@ -14,6 +14,9 @@ export const Modal = ({
   const [isSubmitted, setIsSubmitted] = useState(false);
   useEffect(() => {
     if (values) setShowModal(true);
+    else {
+      setShowModal(false);
+    }
   }, [values]);
 
   const _validate = () => {

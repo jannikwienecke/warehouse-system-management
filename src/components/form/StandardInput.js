@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
 const StandardInput = ({
@@ -9,6 +9,25 @@ const StandardInput = ({
   errors,
   isFullSize,
 }) => {
+  const [error, setError] = useState(null);
+  const [hover, setHover] = useState(null);
+
+  useEffect(() => {
+    if (input.max) {
+      addError();
+    }
+  }, [values]);
+
+  const addError = () => {
+    if (input.max) {
+      if (input.max < values[input.name]) {
+        setError(`Anzahl muss kleiner bzw.gleich ${input.max} sein`);
+      } else {
+        setError(null);
+      }
+    }
+  };
+
   const hasError = () => {
     const name = input.name;
     if (errors[name]) {
@@ -25,26 +44,52 @@ const StandardInput = ({
   };
 
   return (
-    <InputElement
-      isFullSize={isFullSize}
-      type={input.type}
-      name={input.name}
-      placeholder={input.placeholder ? input.placeholder : input.name}
-      onChange={(e) => formFunc.handleChange(e, input.type)}
-      onBlur={formFunc.handleBlur}
-      defaultValue={input.default}
-      disabled={input.disable && true}
-      scheme={colorScheme}
-      error={hasError()}
-      max={input.max}
-      style={input.style}
-    />
+    <>
+      {error && <ToolTip show={hover}>{error}</ToolTip>}
+      <InputElement
+        onMouseOver={() => setHover(true)}
+        onMouseLeave={() => setHover(false)}
+        isFullSize={isFullSize}
+        type={input.type}
+        name={input.name}
+        placeholder={input.placeholder ? input.placeholder : input.name}
+        onChange={(e) => formFunc.handleChange(e, input.type)}
+        onBlur={formFunc.handleBlur}
+        defaultValue={input.default}
+        disabled={input.disable && true}
+        scheme={colorScheme}
+        error={hasError() || error}
+        max={input.max}
+        style={input.style}
+      />
+    </>
   );
 };
 
 export default StandardInput;
 
+const ToolTip = styled.div`
+  position: absolute;
+  z-index: 1;
+  background: #333;
+  padding: 0.5rem 1rem 0.5rem 1rem;
+  border: none;
+  border-radius: 0.2rem;
+  top: -2rem;
+  left: 0%;
+  box-shadow: 2px 2px 10px 1px rgba(0, 0, 0, 0.1);
+  color: red;
+  opacity: 0;
+  transition: 1s;
+
+  ${({ show }) =>
+    show &&
+    `
+    opacity: 1;
+  `}
+`;
 const InputElement = styled.input`
+position: relative;
   width: 95%;
   font-size: 1rem;
   padding: 0.3rem;

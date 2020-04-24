@@ -190,7 +190,12 @@ export const _extractErrorParameter = (msg) => {
 
   var words = [];
   let currentWord = "";
-  if (msg.includes("missing") && msg.includes("positional")) {
+  if (
+    (msg.includes("missing") && msg.includes("positional")) ||
+    msg.includes("fieldValidation")
+  ) {
+    console.log("msg ==== ", msg);
+
     let isWord = false;
     Object.values(msg).forEach((letter) => {
       if (!currentWord && letter === "'") {

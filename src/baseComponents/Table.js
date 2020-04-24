@@ -38,7 +38,7 @@ export const Table = ({
 
       setPreparedData(data);
     }
-  }, [tableData]);
+  }, [tableData, filterFuncStack]);
 
   useEffect(() => {
     if (prevRowData && !rowData) {

@@ -14,7 +14,7 @@ export const UpdateForm = (props) => {
   const { setValues, setRow, dataType, arrInput, values } = props;
   const [updateParameter, setUpdateParamter] = useState();
   const [validateDelete, setValidateDelete] = useState(null);
-
+  const [formHasError, setFormHasError] = useState(null);
   const rows = useSelector((state) => state.base.rows);
 
   const [mutationParammeter, setMutationParameter] = useState({
@@ -22,7 +22,9 @@ export const UpdateForm = (props) => {
     dataType,
   });
 
-  const { updateElement, query } = useUpdate(mutationParammeter);
+  const { updateElement, query, errorParameter } = useUpdate(
+    mutationParammeter
+  );
 
   useEffect(() => {
     if (isQuery(query)) {
@@ -83,15 +85,25 @@ export const UpdateForm = (props) => {
           name: row.name,
         };
       }
-      setUpdateParamter(parameter);
+      return parameter;
+    };
+    const validateQuantity = () => {
+      let row = rows.find((row) => row.id === parameter.rows.id);
+      if (parameter.quantity > row.stock) {
+        setFormHasError(true);
+      } else {
+        if (formHasError) setFormHasError(false);
+      }
     };
 
-    if (productIsInCurrentRow()) {
-      setUpdateParamter(parameter);
-    } else {
+    if (!productIsInCurrentRow()) {
       let row = findRowContainsProduct();
-      updateParameter(row);
+      parameter = updateParameter(row);
     }
+
+    validateQuantity();
+
+    setUpdateParamter(parameter);
   };
 
   const setOptionsProducts = () => {
@@ -140,10 +152,17 @@ export const UpdateForm = (props) => {
         }
       });
     };
+    const setMaxQuantity = () => {
+      let row = rows.find((row) => row.id === values.row.id);
+      arrInput_.forEach((input) => {
+        if (input.name === "quantity") input.max = row.stock;
+      });
+    };
 
     let arrInput_;
     filterInputElements();
     filterInputOptions();
+    setMaxQuantity();
     return arrInput_;
   };
 
@@ -159,11 +178,12 @@ export const UpdateForm = (props) => {
           fullSize={true}
           arrInput={parseArrInput(parseArrInputSpecial(), values, dataType)}
           submitFunc={validate}
+          requiredArguments={["all"]}
         />
       </ListWrapper>
 
       <ButtonWrapper>
-        <MyButton color="#4caf50" onClick={runUpdate}>
+        <MyButton color="#4caf50" onClick={!formHasError && runUpdate}>
           Speichern
         </MyButton>
         <MyButton onClick={() => setValidateDelete(true)}>Löschen</MyButton>

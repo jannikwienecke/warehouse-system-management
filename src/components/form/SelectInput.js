@@ -38,12 +38,11 @@ const SelectInput = (props) => {
       }
     }
 
-      if (input.default && typeof input.default === "object") {
-        input.default["value"] = input.default[input.identifier];
-        input.default["label"] = input.default[input.labelName];
-      }
+    if (input.default && typeof input.default === "object") {
+      input.default["value"] = input.default[input.identifier];
+      input.default["label"] = input.default[input.labelName];
     }
-  
+  };
 
   if (input.identifier) {
     _parse();
@@ -67,10 +66,9 @@ const SelectInput = (props) => {
   let className = input.class ? input.class : "formInput";
   className = isFullSize ? className + " fullSize" : className;
 
- 
   if (values) {
     var hasValues = Object.keys(values).find((name) => {
-      return values[name] && values[name].id;
+      return values[input.name] && values[input.name].id;
     });
   } else {
     var hasValues = false;

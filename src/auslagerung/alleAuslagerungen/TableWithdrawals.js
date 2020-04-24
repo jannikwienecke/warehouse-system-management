@@ -30,7 +30,7 @@ export const TableWithdrawals = ({
           hideSubmitBtn: true,
           btnList: [
             {
-              func: (updatedRow) => console.log("updatedRow", updatedRow),
+              func: (updatedRow) => null,
               triggerName: "update",
               text: "Update",
             },
@@ -40,8 +40,6 @@ export const TableWithdrawals = ({
     },
   };
 
-  console.log("tableColumns", tableColumns);
-
   return (
     <div>
       <Table
@@ -50,12 +48,7 @@ export const TableWithdrawals = ({
         tableData={tableData}
         clickRow={PopupConfigurations}
         onChildUnmounts={() => {
-          console.log("fetch......");
           fetchData();
-          // setTimeout(() => {
-          //   // fetchData({ tours: { id: tour.id } )
-          //   fetchData({ tours: { id: 2 } });
-          // }, 5000);
         }}
       />
     </div>

@@ -36,6 +36,10 @@ const Overview = ({ selectOpenTour, type }) => {
 
   let openWithdrawals = type === "Offene Auslagerungen";
 
+  if (tableData && tableData.length === 0) {
+    return <h1>Keine Offenen Auslagerungen</h1>;
+  }
+
   return (
     <div style={{ marginTop: "2rem" }}>
       {!openWithdrawals ? (
