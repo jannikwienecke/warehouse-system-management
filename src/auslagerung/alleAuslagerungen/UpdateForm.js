@@ -109,8 +109,10 @@ export const UpdateForm = (props) => {
   const setOptionsProducts = () => {
     let productIds = {};
     let options = [];
+    console.log("ROW = ", rows);
+    
     rows.forEach((row) => {
-      if (!(row.product.id in productIds)) {
+      if (row.product && !(row.product.id in productIds)) {
         options.push(row.product);
         productIds[row.product.id] = true;
       }
@@ -119,14 +121,14 @@ export const UpdateForm = (props) => {
   };
 
   const setOptionsRows = () => {
-    let opt = rows.filter((option) => {
+    return rows.filter((option) => {
+      if (!option.product) return
       if (updateParameter) {
         return option.product.id === updateParameter.products.id;
       } else {
         return option.product.id === values.product.id;
       }
     });
-    return opt;
   };
 
   const parseArrInputSpecial = () => {

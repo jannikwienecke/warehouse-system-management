@@ -37,10 +37,12 @@ export const useQueryBuilder = (
   const setQueryString = (parameter, modelName) => {
     const _validateVal = (val) => {
       if (typeof val === "string") {
-        let val_ = parseInt(val);
-        if (String(val_) !== "NaN") {
-          val = val_;
+        if (isNaN(val) === false) {
+        val = parseInt(val);
         }
+        // if (String(val_) !== "NaN") {
+        //   val = val_;
+        // }
       }
 
       if (typeof val === "number" && isNaN(val)) {
@@ -55,12 +57,12 @@ export const useQueryBuilder = (
     if (!parameter) return queryStr;
     Object.keys(parameter).forEach((key) => {
       var val = parameter[key];
-      console.log("BEFORE= ", val);
+      console.log("BEFORE= ", val, key);
       val = _validateVal(val);
       console.log("VAL = ", val);
 
       if (val === undefined) return;
-
+      
       if (key === modelName && val) {
         queryStr += `id: ${parseInt(val["id"])} `;
         return;
@@ -72,6 +74,7 @@ export const useQueryBuilder = (
       );
 
       if (type === "object") {
+        if (val && !val.id) return
         let identifierField = getIdentifierField(schema[key]);
         if (identifierField) {
           let name = identifierField.name;

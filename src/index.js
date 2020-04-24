@@ -15,8 +15,7 @@ import { useDispatch } from "react-redux";
 import { INIT_QUERY } from "./queries";
 
 const TOKEN =
-  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiZXhwIjoxNTg3NTUyOTE2LCJvcmlnSWF0IjoxNTg3NTUyNjE2fQ.UGTdCIy2-I6MH4riRgt_ZfEJgG5c60_kBmmO6Q6qD-M";
-
+  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiZXhwIjoxNTg3NzQ2NzM1LCJvcmlnSWF0IjoxNTg3NzQ2NDM1fQ.fcLcbmwddG1AQtMQsFNosTpbztQmG3bXe0LU-C6GZ2s";
 const httpLink = createHttpLink({
   uri: "http://localhost:8000/graphql/",
 });
