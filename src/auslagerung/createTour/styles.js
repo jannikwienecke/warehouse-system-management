@@ -74,23 +74,23 @@ transition: .5s background;
 }
 
 
-${({ type }) =>
-  type === "euro" &&
+${({ packagingId }) =>
+  packagingId == 1 &&
   `
   width : 120px;
   height: 80px;
  `}
 
-${({ type }) =>
-  type === "industry" &&
+${({ packagingId }) =>
+  packagingId == 2 &&
   `
   width : 100px;
   height: 120px;
  `}
 
-${({ turn, type }) =>
+${({ turn, packagingId }) =>
   turn &&
-  type === "euro" &&
+  packagingId == 1 &&
   `
   width : 80px;
   height: 120px;

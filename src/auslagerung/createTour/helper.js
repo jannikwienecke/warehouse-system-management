@@ -1,11 +1,11 @@
 import { EURO, INDUSTRY, DIMENSIONS } from "./constants";
 
 export const compare = (a, b) => {
-  if (a.factory === 1 && b.factory === 2) {
+  if (a.factoryId === "1" && b.factoryId === "2") {
     return -1;
   }
-  if (a.factory === b.factory) {
-    if (a.type === EURO && b.type === INDUSTRY) {
+  if (a.factoryId === b.factoryId) {
+    if (a.packagingId === EURO && b.packagingId === INDUSTRY) {
       return -1;
     }
   } else return 1;
@@ -21,7 +21,7 @@ export const removeValidatedPallets = (pallets, indexRemove) => {
 export const getIndexOfType = (palletArr, type) => {
   var indexOfType = [];
   palletArr.forEach((pallet, index) => {
-    if (pallet.type === type) {
+    if (pallet.packagingId === type) {
       indexOfType.push(index);
     }
   });

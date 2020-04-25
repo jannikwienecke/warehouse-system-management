@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./styles.css";
 import Paletts from "./Pallets";
-import {TABLE_VIEW } from "./data";
+import { TABLE_VIEW, ANMITION_VIEW } from "./data";
 import { EURO, INDUSTRY } from "./constants";
 import { copy } from "./helper";
 import { extractIdentifier } from "../../functions/middleware";
@@ -13,7 +13,7 @@ export default function CreateTour() {
   const [delivery, setDelivery] = useState(null);
   const [counter, incrCounter] = useState(0);
   const [rerender, setRerender] = useState();
-  const [view, setView] = useState(TABLE_VIEW);
+  const [view, setView] = useState(ANMITION_VIEW);
 
   return (
     <div>

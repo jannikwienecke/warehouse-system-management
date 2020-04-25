@@ -38,7 +38,7 @@ export const useQueryBuilder = (
     const _validateVal = (val) => {
       if (typeof val === "string") {
         if (isNaN(val) === false) {
-        val = parseInt(val);
+          val = parseInt(val);
         }
         // if (String(val_) !== "NaN") {
         //   val = val_;
@@ -62,7 +62,7 @@ export const useQueryBuilder = (
       console.log("VAL = ", val);
 
       if (val === undefined) return;
-      
+
       if (key === modelName && val) {
         queryStr += `id: ${parseInt(val["id"])} `;
         return;
@@ -74,7 +74,7 @@ export const useQueryBuilder = (
       );
 
       if (type === "object") {
-        if (val && !val.id) return
+        if (val && !val.id) return;
         let identifierField = getIdentifierField(schema[key]);
         if (identifierField) {
           let name = identifierField.name;
@@ -117,14 +117,14 @@ export const useQueryBuilder = (
 
     const _loopFields = () => {
       let schemaModel = _getSchema();
-      if (!schemaModel.fields) {
+      if (!schemaModel || !schemaModel.fields) {
+        console.log("NO SCHEMA FOUND ");
         return;
       }
 
       return schemaModel.fields.map((field) => {
         if (["createdBy", "createdAt"].includes(field.name)) return null;
         if (field.name.slice(-5) === "_name") {
-          console.log("RETURN HIER", field);
           return;
         }
 
@@ -147,8 +147,6 @@ export const useQueryBuilder = (
   const createReturnString = (returnValues) => {
     let str = "";
     returnValues.forEach((value) => {
-      // console.log("value = ", value);
-
       if (!value) return;
       if (typeof value === "string") {
         str += value + " ";
@@ -175,7 +173,6 @@ export const useQueryBuilder = (
         var returnValues_ = ["id"];
       } else {
         var returnValues_ = buildReturnQuery(schema, modelName);
-        // console.log("restul ", returnValues_);
       }
 
       var returnString = createReturnString(returnValues_);

@@ -126,7 +126,7 @@ export const INPUT_DEFAULTS = {
   },
   int: {
     name: "number",
-    placeholder: "text",
+    placeholder: "Anzahl",
     type: "number",
     size: 6,
   },

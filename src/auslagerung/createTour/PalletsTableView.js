@@ -2,19 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Parent } from "../../baseComponents/Parent";
 import { COLUMNS } from "../../baseComponents/base";
 import { copy } from "./helper";
-
-const columns = [
-  COLUMNS.id,
-  COLUMNS.product,
-  COLUMNS.quantity,
-  COLUMNS.building,
-  COLUMNS.factory,
-  COLUMNS.type,
-];
-
-// 0: {id: "0_0", type: "euro", product_id: "227445", quantity: 3, factory: "1", …}
-// 1: {id: "0_1", type: "euro", product_id: "227445", quantity: 3, factory: "1", …}
-// 2: {id: "0_2", type: "euro", product_id: "227445", quantity: 3, factory: "1", …}
+import { Table } from "../../baseComponents/Table";
 
 export const PalletsTableView = ({ trucks }) => {
   const [trucksUpdated, setTrucksUpadated] = useState(null);
@@ -60,33 +48,31 @@ export const PalletsTableView = ({ trucks }) => {
 
   if (!trucksUpdated) return <>Loading</>;
 
-  console.log("TRUCK FINAL ===", trucksUpdated);
-
   const truckTableList = () => {
+    console.log("truck", trucksUpdated);
+
     return trucksUpdated.map((truck) => {
       return (
-        <Parent
-          table={{
-            columnsArr: columns,
-            data: truck.condensedOrders,
-            //   initFunc: (dispatch) => dispat()),
-            middleware: [(data) => console.log("DATA VALIDATION")],
-            clickRow: {
-              func: (rowData) => console.log("ROW ", rowData),
-              // func: (rowData) => <DetailView rowData={rowData} />,
-              // baseComponent: {
-              //   type: "Popup",
-              //   settings: {
-              //     height: "80vh",
-              //     heightHeader: "35%",
-              //   },
-              // },
-            },
-          }}
+        <Table
+          tableData={truck.condensedOrders}
+          columns={columns}
+          minHeight="0vh"
         />
       );
     });
   };
 
-  return truckTableList();
+  return (
+    <>
+      <h1>Tourenliste</h1>
+      {truckTableList()}
+    </>
+  );
 };
+
+const columns = [
+  { accessor: "productName", Header: "Produkt" },
+  { accessor: "buildingName", Header: "Gebäude" },
+  { accessor: "factoryName", Header: "Werk" },
+  { accessor: "quantity", Header: "Anzahl" },
+];

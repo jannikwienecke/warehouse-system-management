@@ -71,7 +71,7 @@ const Pallets = ({ delivery, view }) => {
     console.log("CLICK FREE SPACE...", indexLkw, index, freeSpace);
     const { column, row } = freeSpace.position;
     if (palletFocus) {
-      const { width, height } = DIMENSIONS[palletFocus.pallet.type];
+      const { width, height } = DIMENSIONS[palletFocus.pallet.packagingId];
 
       if (width <= freeSpace.width && height <= freeSpace.height) {
         var indexPallet = findIndexPalletInArr(
@@ -115,8 +115,11 @@ const Pallets = ({ delivery, view }) => {
 
   const renderTrucks = () => {
     if (!trucks) return <h1>Loading..</h1>;
+    console.log("trucks", trucks);
+
     return trucks.map((loading, indexLkw) => {
       const { pallets, lkw } = loading;
+
       return (
         <Wrapper>
           <Box
@@ -142,12 +145,12 @@ const Pallets = ({ delivery, view }) => {
                         onClick={() =>
                           handleClickPallete(indexLkw, index, pallete)
                         }
-                        type={pallete.type}
+                        packagingId={pallete.packagingId}
                         isSelected={pallete.isSelected}
                       >
                         <PalletText>
-                          Gebäude: {pallete.building}({pallete.factory}),
-                          Produkt: {pallete.product}
+                          Gebäude: {pallete.buildingId}({pallete.factoryId}),
+                          Produkt: {pallete.productName}
                         </PalletText>
                       </PalleteWrapper>
                     );

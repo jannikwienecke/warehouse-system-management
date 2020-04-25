@@ -25,6 +25,7 @@ export const Table = ({
   parseFuncStack,
   columnSelection,
   onChildUnmounts,
+  minHeight,
 }) => {
   const [ClickRowComponent, setClickRowComponent] = useState(null);
   const [rowData, setRowData] = useState(null);
@@ -101,9 +102,12 @@ export const Table = ({
     });
   };
 
+  console.log("data", preparedData);
+  console.log("columns", filterColumns());
+
   return (
     <>
-      <Wrapper>
+      <Wrapper minHeight={minHeight}>
         <ModularTable
           data={preparedData}
           columns={filterColumns()}
@@ -128,4 +132,10 @@ export const Table = ({
 const Wrapper = styled.div`
   margin-top: 3rem;
   min-height: 75vh;
+
+  ${({ minHeight }) =>
+    minHeight &&
+    `
+  min-height: ${minHeight}
+  `}
 `;

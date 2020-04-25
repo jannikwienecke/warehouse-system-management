@@ -17,8 +17,10 @@ import {
 
 var BreakException = {};
 export const validate = (pallets) => {
+  // console.log("VALIDATE PALLETS = ", pallets);
+
   const fitsHeight = (pallet) => {
-    const { height } = DIMENSIONS[pallet.type];
+    const { height } = DIMENSIONS[pallet.packagingId];
     if (height_counter + height < MAX_HEIGHT) {
       return true;
     } else {
@@ -53,7 +55,7 @@ export const validate = (pallets) => {
     LKW = [];
     currentRow = [];
 
-    const { height, width } = DIMENSIONS[pallet.type];
+    const { height, width } = DIMENSIONS[pallet.packagingId];
 
     width_counter = width;
     height_counter = height;
@@ -85,9 +87,10 @@ export const validate = (pallets) => {
   };
 
   const addToDelivery = (pallet, index) => {
-    // console.log(`---Add To Delivery Index ${pallet.id}--- `);
+    // console.log(`---Add To Delivery Index--${pallet.id}- `);
+    // // console.log(pallet);
 
-    const { height, width } = DIMENSIONS[pallet.type];
+    const { height, width } = DIMENSIONS[pallet.packagingId];
 
     indexRemove.push(pallet.id);
 
@@ -113,15 +116,16 @@ export const validate = (pallets) => {
     }
   };
 
-  const getPalletsOfType = (type, availablePallets) => {
-    return availablePallets.filter((pallet) => pallet.type === type);
+  const getPalletsOfType = (packagingId, availablePallets) => {
+    return availablePallets.filter(
+      (pallet) => pallet.packagingId === packagingId
+    );
   };
 
-  const isOddQuantityOfType = (type, availablePallets) => {
-    var palletsOfType = getPalletsOfType(type, availablePallets);
-    // console.log(palletsOfType);
+  const isOddQuantityOfType = (packagingId, availablePallets) => {
+    var palletsOfType = getPalletsOfType(packagingId, availablePallets);
 
-    var divider = type === EURO ? 3 : 2;
+    var divider = packagingId === EURO ? 3 : 2;
     return palletsOfType.length % divider !== 0;
   };
 
@@ -134,12 +138,12 @@ export const validate = (pallets) => {
     const allTypes = getSortedListBy(typeToFind);
     var indexOfType = null;
 
-    allTypes.forEach((type) => {
+    allTypes.forEach((packagingId) => {
       if (!indexOfType) {
-        var isOdd = isOddQuantityOfType(type, availablePallets);
+        var isOdd = isOddQuantityOfType(packagingId, availablePallets);
         if (isOdd) {
-          indexOfType = getIndexOfType(availablePallets, type);
-          if (type !== typeToFind) {
+          indexOfType = getIndexOfType(availablePallets, packagingId);
+          if (packagingId !== typeToFind) {
             addCurrentIndex = currentIndex;
           }
         }
@@ -191,15 +195,17 @@ export const validate = (pallets) => {
 
     const indexList = findSinglePalletIndex(availablePallets, typeToFind);
 
-    if (indexList) {
+    if (indexList && indexList[0] !== undefined) {
       addPalletsOfIndexToDelivery(pallets, index, indexList);
+      return true;
     } else {
+      // addToDelivery(pallet, index);
       return false;
     }
   };
 
   const handlePalletOnNextRow = (pallet, index) => {
-    console.log("handlePalletOnNextRow...");
+    // console.log("handlePalletOnNextRow...");
     addToDelivery(pallet, index);
   };
 
@@ -210,25 +216,35 @@ export const validate = (pallets) => {
 
   const handlePalletFitsNotPerfectOnRow = (pallet, index, heightLeft) => {
     // console.log("handlePalletFitsNotPerfectOnRow...", heightLeft);
-    const type = pallet.type;
+    const packagingId = pallet.packagingId;
 
+    let result;
     if (heightLeft >= 80) {
       addToDelivery(pallet, index);
-    } else if (type === EURO && heightLeft > 40 && heightLeft < 80) {
-      validateIfOtherPalletFits(pallet, index, INDUSTRY);
-    } else if (type === INDUSTRY && heightLeft > 40 && heightLeft < 120) {
-      validateIfOtherPalletFits(pallet, index, EURO);
+      return;
+    } else if (packagingId === EURO && heightLeft > 40 && heightLeft < 80) {
+      result = validateIfOtherPalletFits(pallet, index, INDUSTRY);
+    } else if (
+      packagingId === INDUSTRY &&
+      heightLeft > 40 &&
+      heightLeft < 120
+    ) {
+      result = validateIfOtherPalletFits(pallet, index, EURO);
+    }
+    if (!result) {
+      // console.log("-------------------------------------------------ADDDDDD");
+      addToDelivery(pallet, index);
     }
   };
 
   const handlePalletDoesNotFit = (pallet, index, heightLeft) => {
     // console.log("handlePalletDoesNotFit...");
-    const type = pallet.type;
-    const { height } = DIMENSIONS[pallet.type];
+    const packagingId = pallet.packagingId;
+    const { height } = DIMENSIONS[pallet.packagingId];
 
     heightLeft += height;
 
-    if (type === INDUSTRY && heightLeft >= 80) {
+    if (packagingId === INDUSTRY && heightLeft >= 80) {
       var typeToFind = EURO;
     }
 
@@ -239,12 +255,12 @@ export const validate = (pallets) => {
 
   const sort_ = (pallets_) => {
     pallets_.forEach((pallet, index) => {
-      //   console.log(`------------${pallet.id}----------`);
+      // console.log(`------------${pallet.id}----------`);
 
       currentIndex = index;
       addCurrentIndex = false;
 
-      const { height } = DIMENSIONS[pallet.type];
+      const { height } = DIMENSIONS[pallet.packagingId];
       const heightLeft = MAX_HEIGHT - height_counter - height;
 
       if (!fitsAny()) {
@@ -315,12 +331,10 @@ const reorderLoadings_ = (trucks) => {
 };
 
 const insertFreeSpacesInto = (trucks) => {
-  // console.log("insertFreeSpacesInto", trucks);
+  // // console.log("insertFreeSpacesInto", trucks);
 
   const loopLoadings = (trucks) => {
     const insertSpace = (space) => {
-      console.log("insert space..", space);
-
       currentLoading.pallets.splice(space.palletIndex, 0, space);
     };
 
@@ -341,9 +355,9 @@ const insertFreeSpacesInto = (trucks) => {
 };
 
 const findFreeSpaces = (trucks) => {
-  const addToFreeSpaces = (width, height, type) => {
+  const addToFreeSpaces = (width, height, packagingId) => {
     freeSpaces.push({
-      freeSpaceType: type,
+      freeSpaceType: packagingId,
       height,
       width,
       position: {
@@ -400,7 +414,7 @@ const findFreeSpaces = (trucks) => {
 
     const loopColumn = () => {
       column.forEach((pallet) => {
-        const { width, height } = DIMENSIONS[pallet.type];
+        const { width, height } = DIMENSIONS[pallet.packagingId];
         updateColumnValues(width, height);
       });
     };
@@ -457,7 +471,7 @@ const validateTrucks = (trucks) => {
 
     const loopColumn = () => {
       column.forEach((pallet) => {
-        const { height, width } = DIMENSIONS[pallet.type];
+        const { height, width } = DIMENSIONS[pallet.packagingId];
         if (palletsToMoveNextRow.length > 0) {
           palletsToMoveNextRow.push(copy(pallet));
         } else {
