@@ -16,30 +16,31 @@ import {
 } from "./helper";
 
 var BreakException = {};
-export const validate = (pallets) => {
+export const validate = (pallets, vehicles) => {
   // console.log("VALIDATE PALLETS = ", pallets);
 
   const fitsHeight = (pallet) => {
-    const { height } = DIMENSIONS[pallet.packagingId];
-    if (height_counter + height < MAX_HEIGHT) {
+    // const { length } = DIMENSIONS[pallet.packagingId];
+    const { length } = pallet;
+    if (height_counter + length < MAX_HEIGHT) {
       return true;
     } else {
       return false;
     }
   };
 
-  const fitsAny = (height) => {
+  const fitsAny = (length) => {
     const heightLeft = MAX_HEIGHT - height_counter;
 
-    if (height) {
-      if (heightLeft >= height) {
+    if (length) {
+      if (heightLeft >= length) {
         return true;
       } else {
         return false;
       }
     }
 
-    if (heightLeft >= 80) {
+    if (heightLeft >= 800) {
       return true;
     } else {
       return false;
@@ -55,22 +56,23 @@ export const validate = (pallets) => {
     LKW = [];
     currentRow = [];
 
-    const { height, width } = DIMENSIONS[pallet.packagingId];
+    const { length, width } = pallet;
+    // const { length, width } = DIMENSIONS[pallet.packagingId];
 
     width_counter = width;
-    height_counter = height;
+    height_counter = length;
 
     counter_lkw++;
-    var lkwIndex = counter_lkw % lkwList.length;
-    currentLKW = lkwList[lkwIndex];
+    var lkwIndex = counter_lkw % vehicles.length;
+    currentLKW = vehicles[lkwIndex];
   };
 
-  const addNewRowInLKW = (width, height, pallet) => {
+  const addNewRowInLKW = (width, length, pallet) => {
     width_counter += width;
-    height_counter = height;
+    height_counter = length;
 
     var newLkw = false;
-    if (width_counter > currentLKW.maxLoading) {
+    if (width_counter > currentLKW.lengthLoading) {
       nextLkw(pallet);
       newLkw = true;
       currentRow.push(pallet);
@@ -88,20 +90,21 @@ export const validate = (pallets) => {
 
   const addToDelivery = (pallet, index) => {
     // console.log(`---Add To Delivery Index--${pallet.id}- `);
-    // // console.log(pallet);
+    // console.log(pallet);
 
-    const { height, width } = DIMENSIONS[pallet.packagingId];
+    // const { length, width } = DIMENSIONS[pallet.packagingId];
+    const { length, width } = pallet;
 
     indexRemove.push(pallet.id);
 
     if (width_counter === 0) {
-      addNewRowInLKW(width, height, pallet);
-    } else if (!fitsAny(height)) {
-      addNewRowInLKW(width, height, pallet);
+      addNewRowInLKW(width, length, pallet);
+    } else if (!fitsAny(length)) {
+      addNewRowInLKW(width, length, pallet);
     } else {
       currentRow.push(copy(pallet));
 
-      height_counter += height;
+      height_counter += length;
     }
   };
 
@@ -219,15 +222,15 @@ export const validate = (pallets) => {
     const packagingId = pallet.packagingId;
 
     let result;
-    if (heightLeft >= 80) {
+    if (heightLeft >= 800) {
       addToDelivery(pallet, index);
       return;
-    } else if (packagingId === EURO && heightLeft > 40 && heightLeft < 80) {
+    } else if (packagingId === EURO && heightLeft > 400 && heightLeft < 800) {
       result = validateIfOtherPalletFits(pallet, index, INDUSTRY);
     } else if (
       packagingId === INDUSTRY &&
-      heightLeft > 40 &&
-      heightLeft < 120
+      heightLeft > 400 &&
+      heightLeft < 1200
     ) {
       result = validateIfOtherPalletFits(pallet, index, EURO);
     }
@@ -240,11 +243,12 @@ export const validate = (pallets) => {
   const handlePalletDoesNotFit = (pallet, index, heightLeft) => {
     // console.log("handlePalletDoesNotFit...");
     const packagingId = pallet.packagingId;
-    const { height } = DIMENSIONS[pallet.packagingId];
+    // const { length } = DIMENSIONS[pallet.packagingId];
+    const { length } = pallet;
 
-    heightLeft += height;
+    heightLeft += length;
 
-    if (packagingId === INDUSTRY && heightLeft >= 80) {
+    if (packagingId === INDUSTRY && heightLeft >= 800) {
       var typeToFind = EURO;
     }
 
@@ -256,18 +260,20 @@ export const validate = (pallets) => {
   const sort_ = (pallets_) => {
     pallets_.forEach((pallet, index) => {
       // console.log(`------------${pallet.id}----------`);
+      // console.log("pallet", pallet);
 
       currentIndex = index;
       addCurrentIndex = false;
 
-      const { height } = DIMENSIONS[pallet.packagingId];
-      const heightLeft = MAX_HEIGHT - height_counter - height;
+      const { length } = pallet;
+      // const { length } = DIMENSIONS[pallet.packagingId];
+      const heightLeft = MAX_HEIGHT - height_counter - length;
 
       if (!fitsAny()) {
         handlePalletOnNextRow(pallet, index);
-      } else if (fitsHeight(pallet) && heightLeft < 20) {
+      } else if (fitsHeight(pallet) && heightLeft < 200) {
         handlePalletFitsPerfectOnRow(pallet, index);
-      } else if (fitsHeight(pallet) && heightLeft >= 20) {
+      } else if (fitsHeight(pallet) && heightLeft >= 200) {
         handlePalletFitsNotPerfectOnRow(pallet, index, heightLeft);
       } else {
         handlePalletDoesNotFit(pallet, index, heightLeft);
@@ -300,10 +306,10 @@ export const validate = (pallets) => {
     });
   };
 
-  const lkwList = [LKW_12, LKW_7];
+  // const vehicles = [LKW_12, LKW_7];
   var trucks = [];
   var counter_lkw = 0;
-  var currentLKW = lkwList[0];
+  var currentLKW = vehicles[0];
   var indexRemove = [];
   var width_counter = 0;
   var height_counter = 0;
@@ -331,8 +337,6 @@ const reorderLoadings_ = (trucks) => {
 };
 
 const insertFreeSpacesInto = (trucks) => {
-  // // console.log("insertFreeSpacesInto", trucks);
-
   const loopLoadings = (trucks) => {
     const insertSpace = (space) => {
       currentLoading.pallets.splice(space.palletIndex, 0, space);
@@ -355,10 +359,10 @@ const insertFreeSpacesInto = (trucks) => {
 };
 
 const findFreeSpaces = (trucks) => {
-  const addToFreeSpaces = (width, height, packagingId) => {
+  const addToFreeSpaces = (width, length, packagingId) => {
     freeSpaces.push({
       freeSpaceType: packagingId,
-      height,
+      length,
       width,
       position: {
         row: rowCounter,
@@ -370,13 +374,13 @@ const findFreeSpaces = (trucks) => {
   };
 
   const validateTotalWidth = (loading) => {
-    const freeTotalWidth = currentLKW.maxLoading - totalWidth;
+    const freeTotalWidth = currentLKW.lengthLoading - totalWidth;
 
     rowCounter = 0;
     palletIndexCounter++;
 
-    if (isMinSpace(freeTotalWidth, currentLKW.maxHeight)) {
-      addToFreeSpaces(freeTotalWidth, currentLKW.maxHeight, "end");
+    if (isMinSpace(freeTotalWidth, currentLKW.width)) {
+      addToFreeSpaces(freeTotalWidth, currentLKW.width, "end");
     }
     loading["freeSpaces"] = freeSpaces;
     loading["totalWidth"] = totalWidth;
@@ -392,7 +396,7 @@ const findFreeSpaces = (trucks) => {
 
   const validateColumn = (column) => {
     const validateColumnValues = () => {
-      const freeHeight = currentLKW.maxHeight - currentHeight;
+      const freeHeight = currentLKW.width - currentHeight;
       const freeWidth = currentMaxWidth;
 
       if (isMinSpace(freeWidth, freeHeight)) {
@@ -403,10 +407,10 @@ const findFreeSpaces = (trucks) => {
       rowCounter = 0;
     };
 
-    const updateColumnValues = (width, height) => {
+    const updateColumnValues = (width, length) => {
       rowCounter++;
       palletIndexCounter++;
-      currentHeight += height;
+      currentHeight += length;
       if (width > currentMaxWidth) {
         currentMaxWidth = width;
       }
@@ -414,8 +418,9 @@ const findFreeSpaces = (trucks) => {
 
     const loopColumn = () => {
       column.forEach((pallet) => {
-        const { width, height } = DIMENSIONS[pallet.packagingId];
-        updateColumnValues(width, height);
+        const { width, length } = pallet;
+        // const { width, length } = DIMENSIONS[pallet.packagingId];
+        updateColumnValues(width, length);
       });
     };
 
@@ -456,12 +461,12 @@ const validateTrucks = (trucks) => {
   var currentLKW = null;
   var totalWidth = 0;
   const validateColumn = (column) => {
-    const updateColumnValues = (pallet, height, width) => {
-      currentHeight += height;
+    const updateColumnValues = (pallet, length, width) => {
+      currentHeight += length;
 
       if (totalWidth + width > currentLKW.lkw.maxLoading) {
         palletsMoveLKW.push(pallet);
-      } else if (currentHeight > 240) {
+      } else if (currentHeight > 2400) {
         palletsToMoveNextRow.push(copy(pallet));
         removeLastPallet = true;
       } else if (width > currentMaxWidth) {
@@ -471,11 +476,12 @@ const validateTrucks = (trucks) => {
 
     const loopColumn = () => {
       column.forEach((pallet) => {
-        const { height, width } = DIMENSIONS[pallet.packagingId];
+        const { width, length } = pallet;
+        // const { length, width } = DIMENSIONS[pallet.packagingId];
         if (palletsToMoveNextRow.length > 0) {
           palletsToMoveNextRow.push(copy(pallet));
         } else {
-          updateColumnValues(pallet, height, width);
+          updateColumnValues(pallet, length, width);
         }
       });
     };

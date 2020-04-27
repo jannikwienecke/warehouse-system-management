@@ -5,18 +5,19 @@ export const DIMENSIONS = {
   [INDUSTRY]: { width: 100, height: 120 },
 };
 
-export const MAX_HEIGHT = 255;
-export const MAX_WIDTH_12 = 620;
-export const MAX_WIDTH_7 = 510;
+export const namesDefaultVehicles = ["ra190", "ra490"];
+export const MAX_HEIGHT = 2550;
+export const MAX_WIDTH_12 = 6200;
+export const MAX_WIDTH_7 = 5100;
 
 export const LKW_12 = {
-  maxWidth: 720,
-  maxLoading: 620,
-  maxHeight: 240,
+  maxWidth: 7200,
+  maxLoading: 6200,
+  maxHeight: 2400,
 };
 
 export const LKW_7 = {
-  maxWidth: 610,
-  maxLoading: 510,
-  maxHeight: 240,
+  maxWidth: 6100,
+  maxLoading: 5100,
+  maxHeight: 2400,
 };

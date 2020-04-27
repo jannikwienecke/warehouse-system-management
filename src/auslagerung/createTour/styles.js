@@ -39,7 +39,7 @@ export const LKW = styled.div`
   ${({ width }) =>
     width &&
     `
-    width: ${width}px;
+    width: ${width / 10}px;
  `}
 `;
 
@@ -56,7 +56,7 @@ export const LoadingZone = styled.div`
   ${({ width }) =>
     width &&
     `
-    width: ${width}px;
+    width: ${width / 10}px;
  `}
 `;
 
@@ -106,8 +106,8 @@ ${({ turn, packagingId }) =>
    width &&
    height &&
    `
-width : ${width}px;
-height : ${height}px;
+width : ${width / 10}px;
+height : ${height / 10}px;
 `}
 
 ${({ freeSpaceType, width }) =>
@@ -116,7 +116,7 @@ ${({ freeSpaceType, width }) =>
   border : 2px solid #af4448;
   height : 96%;
   background : transparent;
-  width: ${width - 7}px;
+  width: ${width / 10 - 7}px;
   position: relative;
   top: 0.5px;
   left: 1.5px;

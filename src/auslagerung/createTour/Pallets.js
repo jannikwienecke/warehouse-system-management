@@ -1,22 +1,30 @@
 import React, { useState, useEffect } from "react";
 
 import { LoadingZone, PalleteWrapper, LKW } from "./styles";
-import { DIMENSIONS } from "./constants";
+import { DIMENSIONS, namesDefaultVehicles } from "./constants";
 import { compare, findIndexPalletInArr } from "./helper";
 import { validate, reorderLoadings } from "./algorithmus";
 import { Box } from "@material-ui/core";
 import styled from "styled-components";
 import { PalletsTableView } from "./PalletsTableView";
 import { ANMITION_VIEW, TABLE_VIEW } from "./data";
+import { FormChooseTruck } from "./FormChooseTruck";
+import { useSelector } from "react-redux";
 
 const Pallets = ({ delivery, view }) => {
+  const vehiclesState = useSelector((state) => state.base.vehicles);
+  let defaultVehicles = vehiclesState.filter((vehicle) =>
+    namesDefaultVehicles.includes(vehicle.name.replace(" ", "").toLowerCase())
+  );
+
   const [trucks, setTrucks] = useState(null);
+  const [vehicles, setVehicles] = useState(defaultVehicles);
   const [_, setRerender] = useState(null);
   const [palletFocus, setPalletFocus] = useState(null);
 
   useEffect(() => {
-    if (delivery) getTrucks();
-  }, [delivery]);
+    if (delivery && vehicles) getTrucks();
+  }, [delivery, vehicles]);
 
   const render_ = () => {
     setTrucks(trucks);
@@ -25,6 +33,15 @@ const Pallets = ({ delivery, view }) => {
     setTimeout(() => {
       setRerender(false);
     }, 5);
+  };
+
+  const setVehicle_ = (vehicle, indexLkw) => {
+    console.log("vehicle", vehicle);
+    console.log("index", indexLkw);
+    let vehicles_ = [...vehicles];
+    vehicle.id = parseInt(vehicle.id);
+    vehicles_[indexLkw] = vehicle;
+    setVehicles(vehicles_);
   };
 
   const switchSpaces = (index, indexLkw, pallet) => {
@@ -68,12 +85,11 @@ const Pallets = ({ delivery, view }) => {
   };
 
   const handleClickFreeSpace = (indexLkw, index, freeSpace) => {
-    console.log("CLICK FREE SPACE...", indexLkw, index, freeSpace);
+    // console.log("CLICK FREE SPACE...", indexLkw, index, freeSpace);
     const { column, row } = freeSpace.position;
     if (palletFocus) {
-      const { width, height } = DIMENSIONS[palletFocus.pallet.packagingId];
-
-      if (width <= freeSpace.width && height <= freeSpace.height) {
+      const { width, length } = palletFocus.pallet;
+      if (width <= freeSpace.width && length <= freeSpace.length) {
         var indexPallet = findIndexPalletInArr(
           trucks[palletFocus.indexLkw],
           palletFocus.pallet.id
@@ -115,7 +131,7 @@ const Pallets = ({ delivery, view }) => {
 
   const renderTrucks = () => {
     if (!trucks) return <h1>Loading..</h1>;
-    console.log("trucks", trucks);
+    // console.log("trucks", trucks);
 
     return trucks.map((loading, indexLkw) => {
       const { pallets, lkw } = loading;
@@ -130,9 +146,12 @@ const Pallets = ({ delivery, view }) => {
             // display="inline"
             style={{ margin: "1rem auto" }}
           >
+            <FormChooseTruck indexLkw={indexLkw} setVehicle={setVehicle_} />
             <LKW key={indexLkw} count={indexLkw + 1} width={lkw.maxWidth}>
               <LoadingZone width={lkw.maxLoading}>
                 {pallets.map((pallete, index) => {
+                  // console.log("pallete", pallete);
+
                   pallete["isSelected"] = false;
 
                   if (palletFocus && pallete.id === palletFocus.pallet.id) {
@@ -140,6 +159,8 @@ const Pallets = ({ delivery, view }) => {
                   }
 
                   if (!pallete.position) {
+                    // console.log("------hier------");
+
                     return (
                       <PalleteWrapper
                         onClick={() =>
@@ -155,6 +176,8 @@ const Pallets = ({ delivery, view }) => {
                       </PalleteWrapper>
                     );
                   } else {
+                    // console.log("hier....");
+
                     return (
                       <PalleteWrapper
                         onClick={() =>
@@ -162,7 +185,7 @@ const Pallets = ({ delivery, view }) => {
                         }
                         isSelected={pallete.isSelected}
                         width={pallete.width}
-                        height={pallete.height}
+                        height={pallete.length}
                         freeSpaceType={pallete.freeSpaceType}
                       />
                     );
@@ -178,7 +201,7 @@ const Pallets = ({ delivery, view }) => {
 
   const getTrucks = () => {
     const sorted = delivery.sort(compare);
-    const loadings = validate(sorted);
+    const loadings = validate(sorted, vehicles);
     setTrucks(loadings);
   };
 
