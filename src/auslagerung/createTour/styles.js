@@ -28,8 +28,8 @@ export const InputElement = styled.input`
 
 export const LKW = styled.div`
   border: 2px solid #232323;
-  width: 745px;
-  height: 255px;
+  // width: 745px;
+  // height: 250px;
   background: #111;
   position: relative;
   left: 50%;
@@ -39,13 +39,19 @@ export const LKW = styled.div`
   ${({ width }) =>
     width &&
     `
-    width: ${width / 10}px;
+    // height: ${width / 10}px;
+ `}
+
+  ${({ length }) =>
+    length &&
+    `
+    width: ${length / 10}px;
  `}
 `;
 
 export const LoadingZone = styled.div`
-  width: 400px;
-  height: 255px;
+  // width: 400px;
+  height: 250px;
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
@@ -53,10 +59,10 @@ export const LoadingZone = styled.div`
   align-content: flex-start;
   background: #232323;
 
-  ${({ width }) =>
-    width &&
+  ${({ length }) =>
+    length &&
     `
-    width: ${width / 10}px;
+    width: ${length / 10}px;
  `}
 `;
 

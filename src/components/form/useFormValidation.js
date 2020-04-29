@@ -34,8 +34,14 @@ function useFormValidation(
       ...values,
       [e.target.name]: val,
     });
-    handleSubmit();
   };
+
+  useEffect(() => {
+    if (values) {
+      const hasValues = Object.keys(values).find((key) => values[key]);
+      if (hasValues) handleSubmit();
+    }
+  }, [values]);
 
   const removeValue = (name) => {
     var oldValues = values;

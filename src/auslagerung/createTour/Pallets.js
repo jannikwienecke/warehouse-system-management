@@ -131,24 +131,31 @@ const Pallets = ({ delivery, view }) => {
 
   const renderTrucks = () => {
     if (!trucks) return <h1>Loading..</h1>;
-    // console.log("trucks", trucks);
 
     return trucks.map((loading, indexLkw) => {
       const { pallets, lkw } = loading;
 
       return (
-        <Wrapper>
+        <Wrapper key={indexLkw}>
           <Box
             boxShadow={3}
             bgcolor="background.paper"
             p={5}
             maxWidth="800px"
-            // display="inline"
             style={{ margin: "1rem auto" }}
           >
-            <FormChooseTruck indexLkw={indexLkw} setVehicle={setVehicle_} />
-            <LKW key={indexLkw} count={indexLkw + 1} width={lkw.maxWidth}>
-              <LoadingZone width={lkw.maxLoading}>
+            <FormChooseTruck
+              indexLkw={indexLkw}
+              setVehicle={setVehicle_}
+              vehicles={vehicles}
+            />
+            <LKW
+              key={indexLkw}
+              count={indexLkw + 1}
+              length={lkw.length}
+              width={lkw.width}
+            >
+              <LoadingZone length={lkw.lengthLoading} width={lkw.width}>
                 {pallets.map((pallete, index) => {
                   // console.log("pallete", pallete);
 
@@ -159,10 +166,9 @@ const Pallets = ({ delivery, view }) => {
                   }
 
                   if (!pallete.position) {
-                    // console.log("------hier------");
-
                     return (
                       <PalleteWrapper
+                        key={index}
                         onClick={() =>
                           handleClickPallete(indexLkw, index, pallete)
                         }
@@ -170,16 +176,16 @@ const Pallets = ({ delivery, view }) => {
                         isSelected={pallete.isSelected}
                       >
                         <PalletText>
-                          Gebäude: {pallete.buildingId}({pallete.factoryId}),
-                          Produkt: {pallete.productName}
+                          {pallete.productName} <br />
+                          Geb. {pallete.buildingName} <br />(
+                          {pallete.factoryName})
                         </PalletText>
                       </PalleteWrapper>
                     );
                   } else {
-                    // console.log("hier....");
-
                     return (
                       <PalleteWrapper
+                        key={index + "emptySpace"}
                         onClick={() =>
                           handleClickFreeSpace(indexLkw, index, pallete)
                         }

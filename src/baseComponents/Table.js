@@ -76,7 +76,7 @@ export const Table = ({
   const handleClick = (rowData) => {
     if (middleware && middleware.length > 0) {
       runClickRowMiddleware(middleware, rowData);
-    } else {
+    } else if (clickRow) {
       const PopupChildren = clickRow.func(rowData, setRowData);
 
       setRowData(rowData);

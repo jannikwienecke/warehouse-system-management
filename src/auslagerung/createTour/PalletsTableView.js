@@ -63,10 +63,10 @@ export const PalletsTableView = ({ trucks }) => {
   };
 
   return (
-    <>
+    <div className="mb-5">
       <h1>Tourenliste</h1>
       {truckTableList()}
-    </>
+    </div>
   );
 };
 

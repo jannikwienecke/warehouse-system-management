@@ -110,7 +110,7 @@ export const UpdateForm = (props) => {
     let productIds = {};
     let options = [];
     console.log("ROW = ", rows);
-    
+
     rows.forEach((row) => {
       if (row.product && !(row.product.id in productIds)) {
         options.push(row.product);
@@ -122,7 +122,7 @@ export const UpdateForm = (props) => {
 
   const setOptionsRows = () => {
     return rows.filter((option) => {
-      if (!option.product) return
+      if (!option.product) return;
       if (updateParameter) {
         return option.product.id === updateParameter.products.id;
       } else {
