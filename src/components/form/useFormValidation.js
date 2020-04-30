@@ -50,7 +50,6 @@ function useFormValidation(
   };
 
   const setMissingValues = (element) => {
-    // console.log('ELEMENT = ', element);
     var newValues = values;
     newValues[element.name] = element.defaultValues;
     setValues(newValues);

@@ -18,6 +18,8 @@ export const DELIVERY = [
       factoryName: "Werk Nord",
       buildingId: 1,
       buildingName: "A1",
+      rowId: "1",
+      rowName: "B01",
     },
     {
       id: 1,
@@ -33,6 +35,8 @@ export const DELIVERY = [
       factoryName: "Werk Nord",
       buildingId: 1,
       buildingName: "A1",
+      rowId: "2",
+      rowName: "B02",
     },
     // {
     //   id: 3,

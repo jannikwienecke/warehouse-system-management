@@ -11,13 +11,12 @@ import { ANMITION_VIEW, TABLE_VIEW } from "./data";
 import { FormChooseTruck } from "./FormChooseTruck";
 import { useSelector } from "react-redux";
 
-const Pallets = ({ delivery, view }) => {
+const Pallets = ({ delivery, view, trucks, setTrucks }) => {
   const vehiclesState = useSelector((state) => state.base.vehicles);
   let defaultVehicles = vehiclesState.filter((vehicle) =>
     namesDefaultVehicles.includes(vehicle.name.replace(" ", "").toLowerCase())
   );
 
-  const [trucks, setTrucks] = useState(null);
   const [vehicles, setVehicles] = useState(defaultVehicles);
   const [_, setRerender] = useState(null);
   const [palletFocus, setPalletFocus] = useState(null);

@@ -13,19 +13,19 @@ const StandardInput = ({
   const [hover, setHover] = useState(null);
 
   useEffect(() => {
-    if (input.max) {
+    if (input.max || input.max === 0) {
       addError();
     }
-  }, [values]);
+  }, [values, input.max]);
 
   const addError = () => {
-    if (input.max) {
-      if (input.max < values[input.name]) {
-        setError(`Anzahl muss kleiner bzw.gleich ${input.max} sein`);
-      } else {
-        setError(null);
-      }
-    }
+    let msg;
+    if (input.max === 0) msg = "Produkt nicht auf Lager";
+    else if (input.max < values[input.name])
+      msg = `Anzahl muss kleiner bzw.gleich ${input.max} sein`;
+
+    if (msg) setError(msg);
+    else setError(null);
   };
 
   const hasError = () => {

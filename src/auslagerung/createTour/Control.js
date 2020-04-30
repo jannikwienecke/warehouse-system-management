@@ -1,8 +1,9 @@
 import React from "react";
 import styled from "styled-components";
-import { FaExchangeAlt, FaSearch } from "react-icons/fa";
+import { FaExchangeAlt, FaSearch, FaCheckCircle } from "react-icons/fa";
 import { MyButton } from "../../components/button/MyButton";
 import { TABLE_VIEW, ANMITION_VIEW, DELIVERY } from "./data";
+import { condenseTruckLoading } from "./PalletsTableView";
 
 export const Control = ({
   incrCounter,
@@ -10,6 +11,7 @@ export const Control = ({
   setDelivery,
   delivery,
   setView,
+  trucks,
   view,
 }) => {
   const updateView = () => {
@@ -18,6 +20,12 @@ export const Control = ({
   const generateDelivery = () => {
     const randInt = parseInt(Math.random() * DELIVERY.length);
     setDelivery(DELIVERY[randInt]);
+  };
+
+  const submitTours = () => {
+    console.log("submit...", trucks);
+    const condensedOrders = condenseTruckLoading(trucks);
+    console.log("codensed", condensedOrders);
   };
 
   return (
@@ -30,6 +38,11 @@ export const Control = ({
         {delivery && (
           <MyButton onClick={updateView}>
             Ansicht Wechseln <FaExchangeAlt />
+          </MyButton>
+        )}
+        {delivery && (
+          <MyButton onClick={submitTours}>
+            Touren Abschließen <FaCheckCircle />
           </MyButton>
         )}
       </ButtonWrapper>

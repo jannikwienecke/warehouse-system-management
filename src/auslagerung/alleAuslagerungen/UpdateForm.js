@@ -65,7 +65,10 @@ export const UpdateForm = (props) => {
     const productIsInCurrentRow = () => {
       if (parameter.rows.id) {
         let currentRow = rows.find((row) => row.id === parameter.rows.id);
-        if (currentRow.product.id !== parameter.products.id) {
+        if (
+          !currentRow.product ||
+          currentRow.product.id !== parameter.products.id
+        ) {
           return false;
         } else {
           return true;
@@ -74,7 +77,9 @@ export const UpdateForm = (props) => {
     };
 
     const findRowContainsProduct = () => {
-      return rows.find((row) => row.product.id === parameter.products.id);
+      return rows.find(
+        (row) => row.product && row.product.id === parameter.products.id
+      );
     };
 
     const updateParameter = (row) => {
@@ -109,8 +114,6 @@ export const UpdateForm = (props) => {
   const setOptionsProducts = () => {
     let productIds = {};
     let options = [];
-    console.log("ROW = ", rows);
-
     rows.forEach((row) => {
       if (row.product && !(row.product.id in productIds)) {
         options.push(row.product);
@@ -133,13 +136,7 @@ export const UpdateForm = (props) => {
 
   const parseArrInputSpecial = () => {
     const filterInputElements = () => {
-      let selectedInputs = [
-        "employees",
-        "products",
-        "rows",
-        "notes",
-        "quantity",
-      ];
+      let selectedInputs = ["products", "rows", "notes", "quantity"];
       arrInput_ = arrInput.filter((input) =>
         selectedInputs.includes(input.name)
       );
@@ -155,9 +152,16 @@ export const UpdateForm = (props) => {
       });
     };
     const setMaxQuantity = () => {
-      let row = rows.find((row) => row.id === values.row.id);
+      const rowToFind =
+        updateParameter && updateParameter.rows
+          ? updateParameter.rows.id
+          : values.row.id;
+      let row = rows.find((row) => row.id === rowToFind);
+
       arrInput_.forEach((input) => {
-        if (input.name === "quantity") input.max = row.stock;
+        if (input.name === "quantity") {
+          input.max = row.stock;
+        }
       });
     };
 
@@ -167,6 +171,7 @@ export const UpdateForm = (props) => {
     setMaxQuantity();
     return arrInput_;
   };
+  let arrInput_ = parseArrInput(parseArrInputSpecial(), values, dataType);
 
   return (
     <>
@@ -178,9 +183,9 @@ export const UpdateForm = (props) => {
       <ListWrapper>
         <ModularForm
           fullSize={true}
-          arrInput={parseArrInput(parseArrInputSpecial(), values, dataType)}
+          arrInput={arrInput_}
           submitFunc={validate}
-          requiredArguments={["all"]}
+          requiredArguments={["products", "rows", "quantity"]}
         />
       </ListWrapper>
 

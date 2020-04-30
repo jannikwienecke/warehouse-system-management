@@ -58,7 +58,7 @@ const Header = (props) => {
   return (
     <>
       <h1 style={{ marginTop: "3rem" }}>
-        Dattum: {date} - Tour Nr. {tour_number}
+        Datum: {date} - Tour Nr. {tour_number}
       </h1>
       <h2>Mitarbeiter: {tour.employee.name}</h2>
       <h2>Fahrzeug: {tour.vehicle.name}</h2>

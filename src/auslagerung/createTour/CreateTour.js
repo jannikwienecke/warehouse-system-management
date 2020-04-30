@@ -13,6 +13,7 @@ export default function CreateTour() {
   const [delivery, setDelivery] = useState(null);
   const [counter, incrCounter] = useState(0);
   const [rerender, setRerender] = useState();
+  const [trucks, setTrucks] = useState(null);
   const [view, setView] = useState(ANMITION_VIEW);
 
   return (
@@ -26,9 +27,17 @@ export default function CreateTour() {
         counter={counter}
         setView={setView}
         view={view}
+        trucks={trucks}
       />
 
-      {delivery && <Paletts delivery={delivery} view={view} />}
+      {delivery && (
+        <Paletts
+          delivery={delivery}
+          view={view}
+          trucks={trucks}
+          setTrucks={setTrucks}
+        />
+      )}
 
       {/* {delivery.length > 0 && <Paletts delivery={delivery} />} */}
 

@@ -17,7 +17,6 @@ const SelectInput = (props) => {
   const { input, values, formFunc, errors, isFullSize } = props;
 
   const state = useSelector((state) => state);
-  const prevValues = usePrevious(values);
   const [loading, setLoading] = useState(false);
 
   const _parse = () => {
@@ -82,7 +81,9 @@ const SelectInput = (props) => {
           name={input.name}
           options={input.options}
           onBlur={formFunc.handleBlur}
-          onChange={(data) => formFunc.handleInputChange(data, input.name)}
+          onChange={(data) => {
+            formFunc.handleInputChange(data, input.name);
+          }}
           isMulti={input.multiSelect}
           defaultValue={input.default}
           isDisabled={input.disable && true}
@@ -103,7 +104,9 @@ const SelectInput = (props) => {
         }}
         options={input.options}
         onBlur={formFunc.handleBlur}
-        onChange={(data) => formFunc.handleInputChange(data, input.name)}
+        onChange={(data) => {
+          formFunc.handleInputChange(data, input.name);
+        }}
         isMulti={input.multiSelect}
         defaultValue={input.default}
         isDisabled={input.disable && true}

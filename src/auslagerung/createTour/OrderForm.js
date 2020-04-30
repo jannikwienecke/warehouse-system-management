@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Parent } from "../../baseComponents/Parent";
 import { extractIdentifier } from "../../functions/middleware";
 import { INPUT, INPUT_DEFAULTS } from "../../baseComponents/base";
@@ -15,8 +15,6 @@ export const OrderForm = ({ delivery, setDelivery }) => {
   const [formHasError, setFormHasError] = useState(null);
   const addOrderElement = (data) => {
     if (data.quantity <= 0) return;
-    console.log("data = ", data);
-
     const newOrder = {
       id: delivery ? delivery.length + 1 : 1,
       packagingId: data.products.packaging.id,
@@ -31,15 +29,13 @@ export const OrderForm = ({ delivery, setDelivery }) => {
       factoryName: data.symbuildings.symfactory.name,
       buildingId: data.symbuildings.id,
       buildingName: data.symbuildings.name,
+      rowId: data.rows.id,
+      rowName: data.rows.name,
     };
 
     if (delivery) {
-      // console.log("add to deliver", newOrder);
-
       setDelivery([...delivery, newOrder]);
     } else {
-      // console.log("NEW ORDER= ", newOrder);
-
       setDelivery([newOrder]);
     }
   };
@@ -50,6 +46,7 @@ export const OrderForm = ({ delivery, setDelivery }) => {
         submit={addOrderElement}
         setError={setFormHasError}
         hasError={formHasError}
+        delivery={delivery}
       />
     </div>
   );
@@ -61,6 +58,10 @@ export const Form = (props) => {
   const arrInput = useCombinedArrInput();
   const [formData, setFormData] = useState(null);
   const [missingInput, setMissingInput] = useState(null);
+
+  useEffect(() => {
+    validate(formData);
+  }, [props.delivery]);
 
   const setOptionsProducts = () => {
     let productIds = {};
@@ -75,16 +76,30 @@ export const Form = (props) => {
     return options;
   };
 
+  const getQuantityProductDelivery = (row) => {
+    let quantity = 0;
+    if (!props.delivery) return quantity;
+    props.delivery.forEach((order) => {
+      if (!row.product || row.product.id !== order.productId) return;
+      if (order.rowId !== row.id) return;
+      quantity += order.quantity;
+    });
+    return quantity;
+  };
+
   const setOptionsRows = () => {
     return rows.filter((option) => {
       if (!option.product || !formData || !formData.products) return;
-      return option.product.id === formData.products.id;
+      if (option.product.id === formData.products.id) {
+        const quantityProductDelivery = getQuantityProductDelivery(option);
+        const tempStock = option.stock - quantityProductDelivery;
+        if (tempStock <= 0) return;
+        return true;
+      }
     });
   };
 
   const validateSubmit = () => {
-    console.log("submit...", formData);
-
     const setMissingParameter = () => {
       Object.keys(formData).forEach((key) => {
         if (formData[key] === undefined) {
@@ -103,16 +118,52 @@ export const Form = (props) => {
   };
 
   const validate = (parameter) => {
+    if (!parameter) return;
+    const productIsInCurrentRow = () => {
+      if (parameter.rows && parameter.rows.id) {
+        let currentRow = rows.find((row) => row.id === parameter.rows.id);
+
+        if (currentRow && currentRow.product.id === parameter.products.id) {
+          const hasProductInStock =
+            currentRow.stock - getQuantityProductDelivery(currentRow);
+          if (hasProductInStock) return true;
+        }
+        let row = findRowContainsProduct();
+        updateParameter(row);
+      }
+    };
+
+    const findRowContainsProduct = () => {
+      return rows.find((row) => {
+        if (row.product && row.product.id !== parameter.products.id)
+          return false;
+
+        const hasProductInStock = row.stock - getQuantityProductDelivery(row);
+        if (hasProductInStock) return true;
+      });
+    };
+
+    const updateParameter = (row) => {
+      if (!row) parameter.rows = { id: -1, name: "Produkt nicht auf Lager" };
+      else {
+        parameter.rows = {
+          id: row.id,
+          name: row.name,
+        };
+      }
+    };
+
     const validateQunatity = () => {
       if (!parameter.rows) return;
       let row = rows.find((row) => row.id === parameter.rows.id);
-      if (parameter.quantity > row.stock) {
-        console.log("set error", parameter);
+      if (row && parameter.quantity > row.stock) {
         props.setError(true);
       } else {
         props.setError(false);
       }
     };
+
+    productIsInCurrentRow();
 
     validateQunatity();
     setFormData(parameter);
@@ -132,8 +183,10 @@ export const Form = (props) => {
       if (!formData || !formData.rows) return;
 
       let row = rows.find((row) => row.id === formData.rows.id);
+      if (!row) return;
       arrInput.forEach((input) => {
-        if (input.name === "quantity") input.max = row.stock;
+        if (input.name === "quantity")
+          input.max = row.stock - getQuantityProductDelivery(row);
       });
     };
 
