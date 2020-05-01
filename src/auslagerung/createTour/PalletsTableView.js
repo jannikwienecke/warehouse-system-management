@@ -16,11 +16,8 @@ export const condenseTruckLoading = (trucks) => {
   };
 
   const condense = (pallet) => {
-    console.log("pallet", pallet);
-
     const identifier =
       pallet.productId + "_" + pallet.rowId + "_" + pallet.buildingId;
-    // const orderNum = pallet.id.slice(0, 1);
     if (identifier in orders) {
       orders[identifier].push(pallet);
     } else {

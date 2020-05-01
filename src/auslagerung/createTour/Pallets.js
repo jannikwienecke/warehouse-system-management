@@ -9,7 +9,9 @@ import styled from "styled-components";
 import { PalletsTableView } from "./PalletsTableView";
 import { ANMITION_VIEW, TABLE_VIEW } from "./data";
 import { FormChooseTruck } from "./FormChooseTruck";
+import { FormChooseEmployee } from "./FormChooseEmployee";
 import { useSelector } from "react-redux";
+import { FormsTruck } from "./FormsTruck";
 
 const Pallets = ({ delivery, view, trucks, setTrucks }) => {
   const vehiclesState = useSelector((state) => state.base.vehicles);
@@ -18,12 +20,13 @@ const Pallets = ({ delivery, view, trucks, setTrucks }) => {
   );
 
   const [vehicles, setVehicles] = useState(defaultVehicles);
+  const [employees, setEmployees] = useState([]);
   const [_, setRerender] = useState(null);
   const [palletFocus, setPalletFocus] = useState(null);
 
   useEffect(() => {
     if (delivery && vehicles) getTrucks();
-  }, [delivery, vehicles]);
+  }, [delivery, vehicles, employees]);
 
   const render_ = () => {
     setTrucks(trucks);
@@ -35,12 +38,17 @@ const Pallets = ({ delivery, view, trucks, setTrucks }) => {
   };
 
   const setVehicle_ = (vehicle, indexLkw) => {
-    console.log("vehicle", vehicle);
-    console.log("index", indexLkw);
     let vehicles_ = [...vehicles];
     vehicle.id = parseInt(vehicle.id);
     vehicles_[indexLkw] = vehicle;
     setVehicles(vehicles_);
+  };
+
+  const setEmployee_ = (employee, indexLkw) => {
+    let employees_ = [...employees];
+    employee.id = parseInt(employee.id);
+    employees_[indexLkw] = employee;
+    setEmployees(employees_);
   };
 
   const switchSpaces = (index, indexLkw, pallet) => {
@@ -143,11 +151,13 @@ const Pallets = ({ delivery, view, trucks, setTrucks }) => {
             maxWidth="800px"
             style={{ margin: "1rem auto" }}
           >
-            <FormChooseTruck
+            <FormsTruck
               indexLkw={indexLkw}
-              setVehicle={setVehicle_}
               vehicles={vehicles}
+              setVehicle={setVehicle_}
+              setEmployee={setEmployee_}
             />
+
             <LKW
               key={indexLkw}
               count={indexLkw + 1}
@@ -204,10 +214,18 @@ const Pallets = ({ delivery, view, trucks, setTrucks }) => {
     });
   };
 
+  const addEmployeeToTruck = (trucks) => {
+    if (!trucks || !employees) return;
+    trucks.forEach((truck, index) => {
+      trucks[index]["employee"] = employees[index];
+    });
+  };
+
   const getTrucks = () => {
     const sorted = delivery.sort(compare);
-    const loadings = validate(sorted, vehicles);
-    setTrucks(loadings);
+    const trucks = validate(sorted, vehicles);
+    addEmployeeToTruck(trucks);
+    setTrucks(trucks);
   };
 
   return (

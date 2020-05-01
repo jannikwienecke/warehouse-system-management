@@ -25,7 +25,6 @@ export const useQueryBuilder = (
 
   const __schema = useSelector((state) => state.base.__schema);
   const schema = useSelector((state) => state.base.currentSchema);
-
   useEffect(() => {
     if (queryList && queryList.length > 0 && queryType) {
       loopQueries();
@@ -40,9 +39,6 @@ export const useQueryBuilder = (
         if (isNaN(val) === false) {
           val = parseInt(val);
         }
-        // if (String(val_) !== "NaN") {
-        //   val = val_;
-        // }
       }
 
       if (typeof val === "number" && isNaN(val)) {
@@ -57,9 +53,7 @@ export const useQueryBuilder = (
     if (!parameter) return queryStr;
     Object.keys(parameter).forEach((key) => {
       var val = parameter[key];
-      console.log("BEFORE= ", val, key);
       val = _validateVal(val);
-      console.log("VAL = ", val);
 
       if (val === undefined) return;
 
@@ -177,7 +171,7 @@ export const useQueryBuilder = (
 
       var returnString = createReturnString(returnValues_);
     }
-    let queryAlias = queryType + "_" + "counter";
+    // let queryAlias = queryType + "_" + "counter";
 
     let aliasStr = alias ? `${alias}: ` : "";
 
@@ -234,6 +228,8 @@ export const useQueryBuilder = (
     };
 
     var listBuiltQueries = [];
+    // console.log("querylist", queryList);
+
     if (!queryList[0].modelName) {
       setQuery(queryType === "get" ? nullQuery : nullMutation);
       setQuery(queryType === "get" ? nullQuery : nullMutation);
@@ -244,14 +240,13 @@ export const useQueryBuilder = (
 
       // console.log("mode", modelName);
       // console.log("para", parameter);
+      // console.log("alias", alias);
 
       const queryName = getQueryName(modelName, queryType);
-      // console.log("queryname", queryName);
 
       const queryStr = setQueryString(parameter, modelName);
 
       const builtQuery = buildQuery(queryName, queryStr, modelName, alias);
-      // console.log(builtQuery);
 
       listBuiltQueries.push(builtQuery);
     });
@@ -261,9 +256,3 @@ export const useQueryBuilder = (
 
   return query;
 };
-
-// '---------------------------------------'
-// '---------------------------------------'
-// '---------------------------------------'
-// '---------------------------------------'
-// '---------------------------------------'

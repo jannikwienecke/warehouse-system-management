@@ -10,11 +10,13 @@ export const FormChooseTruck = ({ setVehicle, indexLkw, vehicles }) => {
 
   const setDefaultVehicle = () => {
     if (!arrInput) return;
+
     arrInput.forEach((input) => {
+      input.size = 12;
       if (input.name === "vehicles") {
         input.default = {
-          name: vehicles[0].name,
-          id: vehicles[0].id,
+          name: vehicles[indexLkw % vehicles.length].name,
+          id: vehicles[indexLkw % vehicles.length].id,
         };
       }
     });

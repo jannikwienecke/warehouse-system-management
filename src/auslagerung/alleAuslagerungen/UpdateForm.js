@@ -12,7 +12,7 @@ import { useSelector } from "react-redux";
 
 export const UpdateForm = (props) => {
   const { setValues, setRow, dataType, arrInput, values } = props;
-  const [updateParameter, setUpdateParamter] = useState();
+  const [updateParameter, setUpdateParamter] = useState(null);
   const [validateDelete, setValidateDelete] = useState(null);
   const [formHasError, setFormHasError] = useState(null);
   const rows = useSelector((state) => state.base.rows);
@@ -22,9 +22,7 @@ export const UpdateForm = (props) => {
     dataType,
   });
 
-  const { updateElement, query, errorParameter } = useUpdate(
-    mutationParammeter
-  );
+  const { updateElement, query } = useUpdate(mutationParammeter);
 
   useEffect(() => {
     if (isQuery(query)) {
