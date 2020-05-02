@@ -44,7 +44,7 @@ export const unpackPalletGroups = (pallets) => {
   var pallets_ = [];
   // debugger;
   pallets.forEach((pallet, index) => {
-    return [...Array(pallet.quantity).keys()].forEach((i) => {
+    return [...Array(Math.ceil(pallet.quantity)).keys()].forEach((i) => {
       pallet.id = `${index}_${i}`;
 
       pallets_.push(JSON.parse(JSON.stringify(pallet)));

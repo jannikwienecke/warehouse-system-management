@@ -13,8 +13,49 @@ inputQuantity.name = "quantity";
 
 export const OrderForm = ({ delivery, setDelivery }) => {
   const [formHasError, setFormHasError] = useState(null);
+  const products = useSelector((state) => state.base.products);
+
+  const codenseProduct = (newOrder) => {
+    const product = products.find(
+      (product) => product.id === newOrder.products.id
+    );
+    // let quantityProductOrders = 0;
+    // if (delivery) {
+    //   let ordersProduct = [];
+    //   let ordersOtherProducts = [];
+
+    //   delivery.forEach((order, index) => {
+    //     if (order.productId === product.id) ordersProduct.push(order);
+    //     else ordersOtherProducts.push(order);
+    //   });
+
+    //   ordersProduct.forEach(
+    //     (order) => (quantityProductOrders += order.quantity)
+    //   );
+
+    //   console.log("quan", quantityProductOrders);
+
+    //   const totalQuantity = quantityProductOrders + newOrder.productItems;
+    //   const spaces = Math.floor(totalQuantity / product.unitsPerTruckSpace);
+    //   const leftOvers = totalQuantity % product.unitsPerTruckSpace;
+
+    //   debugger;
+    // } else {
+    // debugger;
+    const spaces = Math.floor(newOrder.quantity / product.unitsPerTruckSpace);
+    const leftOvers = newOrder.quantity % product.unitsPerTruckSpace;
+    newOrder.productItems = newOrder.quantity;
+    newOrder.quantity = spaces + (leftOvers ? 1 : 0);
+    // }
+  };
+
   const addOrderElement = (data) => {
     if (data.quantity <= 0) return;
+
+    codenseProduct(data);
+
+    console.log("data = ", data);
+
     const newOrder = {
       id: delivery ? delivery.length + 1 : 1,
       packagingId: data.products.packaging.id,
@@ -25,6 +66,7 @@ export const OrderForm = ({ delivery, setDelivery }) => {
       productId: data.products.id,
       threeInRow: data.products.threeInRow,
       quantity: data.quantity,
+      productItems: data.productItems,
       factoryId: data.symbuildings.symfactory.id,
       factoryName: data.symbuildings.symfactory.name,
       buildingId: data.symbuildings.id,
@@ -76,6 +118,14 @@ export const Form = (props) => {
     return options;
   };
 
+  const getAvailableUnits = (row) => {
+    if (!row) return 0;
+    const product = products.find(
+      (product) => row.product && product.id == row.product.id
+    );
+    if (!product) return 0;
+    return row.stock / product.quantityUnit;
+  };
   const getQuantityProductDelivery = (row) => {
     let quantity = 0;
     if (!props.delivery) return quantity;
@@ -92,7 +142,8 @@ export const Form = (props) => {
       if (!option.product || !formData || !formData.products) return;
       if (option.product.id === formData.products.id) {
         const quantityProductDelivery = getQuantityProductDelivery(option);
-        const tempStock = option.stock - quantityProductDelivery;
+        const units = getAvailableUnits(option);
+        const tempStock = units - quantityProductDelivery; //hier quantity
         if (tempStock <= 0) return;
         return true;
       }
@@ -119,13 +170,16 @@ export const Form = (props) => {
 
   const validate = (parameter) => {
     if (!parameter) return;
+    console.log("para", parameter);
+
     const productIsInCurrentRow = () => {
       if (parameter.rows && parameter.rows.id) {
         let currentRow = rows.find((row) => row.id === parameter.rows.id);
 
         if (currentRow && currentRow.product.id === parameter.products.id) {
+          const units = getAvailableUnits(currentRow);
           const hasProductInStock =
-            currentRow.stock - getQuantityProductDelivery(currentRow);
+            units - getQuantityProductDelivery(currentRow); // hier quantity
           if (hasProductInStock) return true;
         }
         let row = findRowContainsProduct();
@@ -138,7 +192,8 @@ export const Form = (props) => {
         if (row.product && row.product.id !== parameter.products.id)
           return false;
 
-        const hasProductInStock = row.stock - getQuantityProductDelivery(row);
+        const units = getAvailableUnits(row);
+        const hasProductInStock = units - getQuantityProductDelivery(row); //hier quantity
         if (hasProductInStock) return true;
       });
     };
@@ -156,10 +211,16 @@ export const Form = (props) => {
     const validateQunatity = () => {
       if (!parameter.rows) return;
       let row = rows.find((row) => row.id === parameter.rows.id);
-      if (row && parameter.quantity > row.stock) {
-        props.setError(true);
+      if (row) {
+        const units = getAvailableUnits(row);
+        const quantityDelivery = getQuantityProductDelivery(row);
+        if (parameter.quantity + quantityDelivery > units) {
+          props.setError(true);
+        } else {
+          props.setError(false);
+        }
       } else {
-        props.setError(false);
+        props.setError(true);
       }
     };
 
@@ -185,8 +246,12 @@ export const Form = (props) => {
       let row = rows.find((row) => row.id === formData.rows.id);
       if (!row) return;
       arrInput.forEach((input) => {
-        if (input.name === "quantity")
-          input.max = row.stock - getQuantityProductDelivery(row);
+        if (input.name === "quantity") {
+          const quantityDelivery = getQuantityProductDelivery(row);
+          const units = getAvailableUnits(row);
+
+          input.max = units - quantityDelivery;
+        }
       });
     };
 

@@ -9,7 +9,13 @@ export const condenseTruckLoading = (trucks) => {
     currentTruck["condensedOrders"] = Object.keys(orders).map((key) => {
       var order = orders[key];
       var orderItem = copy(order[0]);
-      orderItem["quantity"] = order.length;
+      orderItem.quantity = order.length;
+
+      orderItem.productItems = order
+        .filter((sub_ord) => sub_ord.id.includes("_0"))
+        .reduce((prev, current) => {
+          return prev + current.productItems;
+        }, 0);
       orderItem["id"] = key;
       return orderItem;
     });
@@ -27,6 +33,8 @@ export const condenseTruckLoading = (trucks) => {
 
   var orders = {};
   var currentTruck = null;
+  console.log("trucks = ", trucks);
+
   trucks.forEach((truck) => {
     currentTruck = truck;
     truck.pallets
@@ -34,8 +42,11 @@ export const condenseTruckLoading = (trucks) => {
       .forEach((pallet) => {
         condense(pallet);
       });
+    console.log("orders = ", orders);
+
     updateTruck();
     orders = {};
+    console.log("trucks after = ", trucks);
   });
 
   return trucks;

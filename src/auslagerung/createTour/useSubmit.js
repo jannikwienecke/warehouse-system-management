@@ -15,15 +15,12 @@ export const useSubmit = () => {
       if ("createTour_0" in data) {
         createWithdrawals(data);
       } else if ("createWithdrawal_0_0" in data) {
-        console.log("data = ", data);
         setCompleted(true);
       }
     }
   }, [data]);
 
   useEffect(() => {
-    console.log("query = ", query);
-
     if (isQuery(query)) {
       updateElement();
     }
@@ -42,7 +39,7 @@ export const useSubmit = () => {
           modelName: "withdrawals",
           parameter: {
             tours: { id: newTours["createTour_" + indexNewTour].id },
-            quantity: order.quantity,
+            quantity: order.productItems,
             symbuildings: { id: order.buildingId },
             products: { id: order.productId },
             rows: { id: order.rowId },
@@ -70,8 +67,6 @@ export const useSubmit = () => {
 
   const submit = (tours) => {
     setTours(tours);
-    console.log("submit...tours = ", tours);
-
     const queryList = tours.map((tour, index) => {
       return {
         modelName: "tours",

@@ -27,6 +27,9 @@ function useFormValidation(
   const handleChange = (e, type) => {
     if (type && type === "number") {
       var val = parseInt(e.target.value);
+      if (isNaN(val)) {
+        val = parseFloat(e.target.value);
+      }
     } else {
       var val = e.target.value;
     }
